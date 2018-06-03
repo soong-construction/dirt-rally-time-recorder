@@ -12,6 +12,7 @@ Steps to run:
   - ``python timerecord.py``
 - Start DiRT Rally
 
+___
 OUTDATED:
 This software records your stage times for Dirt Rally online (and locally in a sqlite db). You can see an example here: http://dirtrally.marcoz.org/showTimes.php?u=f62bfefb1035
 
