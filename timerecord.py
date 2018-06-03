@@ -31,6 +31,7 @@ class Receiver(asyncore.dispatcher):
     def __init__(self, address, sender, speed_units, db, approot, userArray):
         asyncore.dispatcher.__init__(self)
         self.sender = sender
+        self.speed_units = speed_units
         self.speed_modifier = speed_units == 'mph' and 0.6214 or 1
         self.address = address
         self.reconnect()
@@ -110,7 +111,7 @@ class Receiver(asyncore.dispatcher):
                 data="dirtrally.%s.%s.%s.finished:1|c" % (self.userArray[0],self.track,self.car)
                 print(data)
                 #sock.sendto(data.encode(), (statsd,8125))
-                data="dirtrally.%s.%s.%s.topspeed:%s|ms" % (self.userArray[0],self.track,self.car,self.topspeed)
+                data="dirtrally.%s.%s.%s.topspeed:%s|%s" % (self.userArray[0],self.track,self.car,self.topspeed,self.speed_units)
 				# TODO Record topspeed?
 				# TODO Record timestamp
                 print(data)
