@@ -1,4 +1,4 @@
-speed_units: mph # or kph
+speed_units: kph # or mph
 arduino_port: COM5
 telemetry_server:
     host: 127.0.0.1
