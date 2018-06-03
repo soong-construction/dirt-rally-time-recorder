@@ -1,3 +1,13 @@
+Steps to run:
+- Clone repo
+- Install Python3 plus pip
+- ``pip install PyYAML==3.11``
+- Setup car and track tables, e.g. with sqlite shell: https://www.sqlite.org/cli.html
+-- ``.read tracks.sql`` 
+-- ``.read cars.sql``
+- ``python timerecord.py`
+
+OUTDATED:
 This software records your stage times for Dirt Rally online (and locally in a sqlite db). You can see an example here: http://dirtrally.marcoz.org/showTimes.php?u=f62bfefb1035
 
 To install:
