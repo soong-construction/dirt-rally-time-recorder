@@ -3,7 +3,7 @@ Steps to run:
 - Install Python3 plus pip
 - Install dependencies
   - ``pip install PyYAML==3.11``
-Setup SQLite database with car and track tables, e.g. using sqlite shell: https://www.sqlite.org/cli.html
+- Setup SQLite database with car and track tables, e.g. using sqlite shell: https://www.sqlite.org/cli.html
   - ``.open --new dirtrally-lb.db`` 
   - ``.read tracks.sql`` 
   - ``.read cars.sql``
