@@ -1,4 +1,5 @@
 import sqlite3
+import time
 
 
 class Database:
@@ -30,7 +31,7 @@ class Database:
         except (Exception) as exc:
             try:
                 print("Trying to init the db", exc)
-                lapdb.execute('CREATE TABLE laptimes (Track INTEGER, Car INTEGER, Time REAL);')
+                lapdb.execute('CREATE TABLE laptimes (Track INTEGER, Car INTEGER, Timestamp INTEGER, Time REAL);')
                 lapdb.execute('CREATE TABLE user (user TEXT, pass TEXT);')
                 # TODO Read username from config.yml
                 lapdb.execute('INSERT INTO user VALUES (?, ?)', ('defaultuser', 'defaultpassword'))
@@ -91,10 +92,9 @@ class Database:
         try:
             lapconn = sqlite3.connect(self.approot + self.laptimesDb)
             lapdb = lapconn.cursor()
-            lapdb.execute('INSERT INTO laptimes (Track, Car, Time) VALUES (?, ?, ?)', (self.track, self.car, laptime))
+            lapdb.execute('INSERT INTO laptimes (Track, Car, Timestamp, Time) VALUES (?, ?, ?, ?)', (self.track, self.car, time.time(), laptime))
             lapconn.commit()
             lapconn.close()
             # TODO Record topspeed?
-            # TODO Record timestamp
         except (Exception) as exc:
             print("Error connecting to database:", exc)

@@ -16,7 +16,7 @@
 - Start DiRT Rally and finish a stage
 - List your times from SQLite database
   - ``.open dirtrally-laptimes.db``
-  - ``select t.name, c.name, l.time from tracks t, cars c, laptimes l where t.id=l.track and c.id=l.car;``
+  - ``select t.name, c.name, strftime('%Y-%m-%d %H:%M:%S', datetime(l.timestamp, 'unixepoch', 'localtime')), l.time from tracks t, cars c, laptimes l where t.id=l.track and c.id=l.car;``
 
 ## Troubleshooting
 Note: Since this is still WIP, consider dropping your *.db files if you encounter errors, thus starting over.  
