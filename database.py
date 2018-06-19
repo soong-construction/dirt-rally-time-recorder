@@ -6,7 +6,10 @@ class Database:
     laptimesDb = '\dirtrally-laptimes.db'
     
     def __init__(self, approot):
+        self.approot = approot
         self.db = self.checkSetup(approot)
+        self.track = None
+        self.car = None
     
     def checkSetup(self, approot):
         try:
@@ -17,9 +20,9 @@ class Database:
             # TODO Set it up with tracks.sql and cars.sql
             print("Error connecting to database:", exc)
 
-    def initializeLaptimesDb(self, approot):
+    def initializeLaptimesDb(self):
         try:
-            lapconn = sqlite3.connect(approot + self.laptimesDb)
+            lapconn = sqlite3.connect(self.approot + self.laptimesDb)
             lapdb = lapconn.cursor()
             lapdb.execute('SELECT user,pass FROM user;')
             res = lapdb.fetchall()
@@ -59,7 +62,8 @@ class Database:
         else:
             self.track = -1
             print("Failed to get track: " + str(tracklength) + " / " + str(z))
-
+        return self.track
+    
     def identifyCar(self, rpm, max_rpm):
         self.db.execute('SELECT id, name FROM cars WHERE abs(maxrpm - ?) < 0.01 AND abs(startrpm - ?) < 0.01', (max_rpm, rpm))
         car = self.db.fetchall()
@@ -81,6 +85,7 @@ class Database:
             if (self.track <= 1000):
                 self.car = -1
             print("Failed to get car name: " + str(max_rpm) + " / " + str(rpm))
+        return self.car
 
     def recordResults(self, laptime):
         try:
@@ -89,8 +94,6 @@ class Database:
             lapdb.execute('INSERT INTO laptimes (Track, Car, Time) VALUES (?, ?, ?)', (self.track, self.car, laptime))
             lapconn.commit()
             lapconn.close()
-            self.finished = True
-            self.printResults(laptime)
             # TODO Record topspeed?
             # TODO Record timestamp
         except (Exception) as exc:

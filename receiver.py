@@ -13,13 +13,12 @@ class Receiver(asyncore.dispatcher):
         self.reconnect()
         self.approot = approot
         self.finished = False
-        self.started = False
         self.track = 0
         self.car = 0
         self.topspeed = 0
         self.currentgear = 0
         self.database = Database(approot)
-        self.userArray = self.database.initializeLaptimesDb(approot)
+        self.userArray = self.database.initializeLaptimesDb()
 
     def reconnect(self):
         self.received_data = False
@@ -75,21 +74,18 @@ class Receiver(asyncore.dispatcher):
         
         if not self.finished and totallap == lap:
             self.database.recordResults(laptime)
+            self.printResults(laptime)
+            self.finished = True
 
         # TODO Identify car at start (!started) and only use restriction < 0.5 to record continuous data (top speed, gear changes) 
         if time < 0.5:
             # We assume this is the start of race
             self.finished = False
-            self.started = False
             self.topspeed = 0
             
-            self.database.identifyTrack(z, tracklength)
-            self.database.identifyCar(rpm, max_rpm)
+            self.track = self.database.identifyTrack(z, tracklength)
+            self.car = self.database.identifyCar(rpm, max_rpm)
         else:
-            if not self.started:
-                data = "dirtrally.%s.%s.%s.started:1|c" % (self.userArray[0], self.track, self.car)
-                print(data)
-                self.started = True
             if gear > self.currentgear:
                 pass
                 # TODO Count gear changes. Count H-Shifting differently?
