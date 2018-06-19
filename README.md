@@ -16,6 +16,8 @@ Steps to run:
   - ``.open dirtrally-laptimes.db``
   - ``select t.name, c.name, l.time from tracks t, cars c, laptimes l where t.id=l.track and c.id=l.car;``
 
+Note: Since this is still WIP, consider dropping your *.db files if you encounter errors, thus starting over.  
+
 Tested with DiRT Rally v1.22
 
 Based on https://github.com/Slocan/timerecord
