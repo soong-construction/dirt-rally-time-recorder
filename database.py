@@ -70,7 +70,7 @@ class Database:
         if (len(car) == 1):
             index, name = car[0]
             self.car = index
-            print("Car: " + name)
+            print("Car: " + name + ": " + str(max_rpm) + " / " + str(rpm))
         elif (len(car) == 2):
             # Peugeot T16 Rally and Hillclimb cars have identical RPMs
             self.car = 0

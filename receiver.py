@@ -76,15 +76,21 @@ class Receiver(asyncore.dispatcher):
             self.database.recordResults(laptime)
             self.printResults(laptime)
             self.finished = True
+            self.track = 0
+            self.car = 0
 
-        # TODO Identify car at start (!started) and only use restriction < 0.5 to record continuous data (top speed, gear changes) 
-        if time < 0.5:
-            # We assume this is the start of race
+        # TODO Use restriction like time < 0.5 to record continuous data (top speed, gear changes) 
+        elif time < 0.5:
             self.finished = False
             self.topspeed = 0
             
-            self.track = self.database.identifyTrack(z, tracklength)
-            self.car = self.database.identifyCar(rpm, max_rpm)
+            track, car = (self.database.identifyTrack(z, tracklength), self.database.identifyCar(rpm, max_rpm))
+            if (self.track == 0):
+                self.track = track
+                self.car = car
+
+                data = "dirtrally.%s.%s.%s.started:1|c" % (self.userArray[0], self.track, self.car)
+                print(data)
         else:
             if gear > self.currentgear:
                 pass
