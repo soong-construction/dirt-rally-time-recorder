@@ -17,6 +17,7 @@ class Receiver(asyncore.dispatcher):
         self.car = 0
         self.topspeed = 0
         self.currentgear = 0
+        self.maxWheelDelta = 0
         self.database = Database(approot)
         self.userArray = self.database.initializeLaptimesDb()
 
@@ -55,12 +56,21 @@ class Receiver(asyncore.dispatcher):
         data = "dirtrally.%s.%s.%s.topspeed:%s|%s" % (self.userArray[0], self.track, self.car, self.topspeed, self.speed_units)
         print(data)
 
+
+    def approachingStart(self, distance):
+        return distance > -15 and distance < -2
+
+
+    def isRallyStage(self):
+        return self.track < 1000
+
     def parse(self, data):
         stats = struct.unpack('64f', data[0:256])
-
+        
         time = stats[0]
         gear = stats[33]
         rpm = stats[37]  # *10 to get real value
+        # TODO Does this change with upgrades!? E.g. Delta HF Integrale
         max_rpm = stats[63]  # *10 to get real value
         z = stats[6]
         tracklength = stats[61]
@@ -83,12 +93,13 @@ class Receiver(asyncore.dispatcher):
         elif time < 0.5:
             self.finished = False
             self.topspeed = 0
+            self.maxWheelDelta = 0
             
             track, car = (self.database.identifyTrack(z, tracklength), self.database.identifyCar(rpm, max_rpm))
             if (self.track == 0):
                 self.track = track
                 self.car = car
-
+                
                 data = "dirtrally.%s.%s.%s.started:1|c" % (self.userArray[0], self.track, self.car)
                 print(data)
         else:
@@ -96,3 +107,12 @@ class Receiver(asyncore.dispatcher):
                 pass
                 # TODO Count gear changes. Count H-Shifting differently?
         self.currentgear = gear
+        
+        distance = stats[2]
+        if (self.approachingStart(distance) and self.isRallyStage()):
+            # Approaching the start line
+            wheelStats = list( stats[i] for i in [25, 26, 27, 28] )
+            wheelDelta = wheelStats[0] - wheelStats[3] # Delta between rear and front left wheel
+            if (wheelDelta > self.maxWheelDelta):
+                self.maxWheelDelta = wheelDelta
+                print("maxWheelDelta: %s" % self.maxWheelDelta)
