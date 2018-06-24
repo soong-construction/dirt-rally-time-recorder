@@ -20,13 +20,18 @@ INSERT INTO cars (id, name, maxrpm, startrpm) VALUES (7, 'BMW E30 Evo Rally', 94
 INSERT INTO cars (id, name, maxrpm, startrpm) VALUES (8, 'Ford Sierra Cosworth RS500', 785.398, 125.664);
 INSERT INTO cars (id, name, maxrpm, startrpm) VALUES (209, 'Renault 5 Turbo', 806.3421630859375, 130.89968872070312);
 
+-- Group B (4WD)
 INSERT INTO cars (id, name, maxrpm, startrpm) VALUES (9, 'MG Metro 6R4', 1099.56, 157.08);
 INSERT INTO cars (id, name, maxrpm, startrpm) VALUES (10, 'Audi Sport Quattro Rallye', 733.038, 115.192);
 INSERT INTO cars (id, name, maxrpm, startrpm) VALUES (11, 'Ford RS200 / Lancia 037 Evo 2', 890.118, 125.664);
 INSERT INTO cars (id, name, maxrpm, startrpm) VALUES (12, 'Peugeot 205 T16 Evo 2 ', 837.758, 209.439);
 INSERT INTO cars (id, name, maxrpm, startrpm) VALUES (13, 'Lancia Delta S4', 890.118, 104.72);
-INSERT INTO cars (id, name, maxrpm, startrpm) VALUES (14, 'Delta HF Integrale / Ford Escort RS Cosworth', 785.398, 104.72);
+
+-- Group A
+INSERT INTO cars (id, name, maxrpm, startrpm) VALUES (14, 'Delta HF Integrale', 785.398193359375, 183.25953674316406);
 INSERT INTO cars (id, name, maxrpm, startrpm) VALUES (15, 'Subaru Impreza 1995', 785.398, 125.664);
+INSERT INTO cars (id, name, maxrpm, startrpm) VALUES (316, 'Ford Escort RS Cosworth', 785.398193359375, 178.0236053466797);
+
 INSERT INTO cars (id, name, maxrpm, startrpm) VALUES (17, 'Seat Ibiza Kitcar', 942.478, 136.136);
 INSERT INTO cars (id, name, maxrpm, startrpm) VALUES (18, 'Peugeot 306 Maxi', 1151.92, 146.607);
 INSERT INTO cars (id, name, maxrpm, startrpm) VALUES (19, 'Mini Countryman Rally Edition', 785.398, 157.08);
