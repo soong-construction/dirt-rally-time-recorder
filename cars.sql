@@ -40,6 +40,7 @@ INSERT INTO cars (id, name, maxrpm, startrpm) VALUES (21, 'Opel Manta 400', 837.
 INSERT INTO cars (id, name, maxrpm, startrpm) VALUES (1000, 'Peugeot 205 T16 Pikes Peak', 837.758, 209.439);
 INSERT INTO cars (id, name, maxrpm, startrpm) VALUES (1001, 'Peugeot 405 T16 Pikes Peak', 837.758, 157.08);
 INSERT INTO cars (id, name, maxrpm, startrpm) VALUES (1002, 'Audi Sport Quattro S1 PP', 863.938, 141.372);
+INSERT INTO cars (id, name, maxrpm, startrpm) VALUES (1003, 'Peugeot 208 T16 Pikes Peak', 816.81396484375, 188.49559020996094);
 
 
 COMMIT TRANSACTION;
