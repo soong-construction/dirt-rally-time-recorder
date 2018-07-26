@@ -16,10 +16,13 @@
 - Start DiRT Rally and finish a stage
 - List your times from SQLite database
   - ``.open dirtrally-laptimes.db``
-  - ``select t.name, c.name, l.time from tracks t, cars c, laptimes l where t.id=l.track and c.id=l.car;``
+  - ``attach 'dirtrally-lb.db' as base;``
+  - ``select t.name, c.name, strftime('%Y-%m-%d %H:%M:%S', datetime(l.timestamp, 'unixepoch', 'localtime')), l.time from base.tracks t, base.cars c, laptimes l where t.id=l.track and c.id=l.car;``
 
 ## Troubleshooting
-Note: Since this is still WIP, consider dropping your *.db files if you encounter errors, thus starting over.  
+Note: Since this is still WIP, have a look at ``migrate.sql`` to find instructions how to migrate your data when updating this tool.
+
+Consider dropping your *.db files if you encounter errors, thus starting over. Feel free to open an issue.  
 
 ## Resources
 UDP telemetry documentation:  
