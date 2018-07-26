@@ -67,12 +67,13 @@ class Database:
     def identifyCar(self, rpm, max_rpm):
         self.db.execute('SELECT id, name FROM cars WHERE abs(maxrpm - ?) < 0.01 AND abs(startrpm - ?) < 0.01', (max_rpm, rpm))
         car = self.db.fetchall()
+        # TODO #1 Use maxWheelDelta to distinguish Ford RS200 and Lancia Evo. Refactor towards strategies? 
         if (len(car) == 1):
             index, name = car[0]
             self.car = index
             print("Car: " + name + ": " + str(max_rpm) + " / " + str(rpm))
         elif (len(car) == 2):
-            # Peugeot T16 Rally and Hillclimb cars have identical RPMs
+            # Peugeot 205 T16 Rally and Hillclimb cars have identical RPMs
             self.car = 0
             for index, name in car:
                 if (self.track >= 1000 and index >= 1000):
@@ -82,6 +83,7 @@ class Database:
         
         else:
             # If we're on Pikes Peak, we try to keep the previous car index (bug with 2nd run)
+            # FIXME Possibly bug, keeps previous track/car when next rally car cannot be determined
             if (self.track <= 1000):
                 self.car = -1
             print("Failed to get car name: " + str(max_rpm) + " / " + str(rpm))
