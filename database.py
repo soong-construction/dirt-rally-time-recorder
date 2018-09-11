@@ -75,8 +75,9 @@ class Database:
         # Some more delta allowed for startrpm as 2nd Pikes Peak run seems to simulate worn/warmed up engine
         self.db.execute('SELECT id, name FROM cars WHERE abs(maxrpm - ?) < 0.01 AND abs(startrpm - ?) < 2.0', (max_rpm, rpm))
         car = self.db.fetchall()
-        # TODO Equivalent cars: Ford RS200/Lancia Evo, Renault Alpine/Mini Countryman, Fors RS500/Impreza 1995
-        # TODO #1 Use maxWheelDelta to distinguish equivalent cars. Refactor towards strategies? 
+        # TODO Equivalent cars: Ford RS200/Lancia Evo, Renault Alpine/Mini Countryman, Ford RS500/Impreza 1995 and many modern 4WD cars...
+        # TODO #1 maxWheelDelta not helpful to distinguish 4WD cars. 
+        # Take car[0]. For car[1:] log warnings like "ambigious car data" plus suggest "update laptimes set car=X where timestamp=Y"  
         if (len(car) == 1):
             index, name = car[0]
             self.saveCar(rpm, max_rpm, index, name)
