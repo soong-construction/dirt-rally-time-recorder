@@ -50,44 +50,48 @@ class Database:
     def identifyTrack(self, z, tracklength):
         self.db.execute('SELECT id, name, startz FROM Tracks WHERE abs(length - ?) < 0.000000001', (tracklength,))
         track = self.db.fetchall()
+
         if (len(track) == 1):
             index, name, startz = track[0]
             self.track = index
-            print("Track: " + name)
+            print("Track: %s" % str(name))
         elif (len(track) > 1):
             for index, name, startz in track:
                 if abs(z - startz) < 50:
                     self.track = index
-                    print("Track: " + str(name) + " Z: " + str(z))
+                    print("Track: %s (Z: %s)" % (str(name), str(z)))
         
         else:
             self.track = -1
-            print("Failed to get track: " + str(tracklength) + " / " + str(z))
+            print("Failed to identify track: %s (Z: %s)" % (str(tracklength), str(z)))
         return self.track
     
+
+    def saveCar(self, rpm, max_rpm, index, name):
+        self.car = index
+        print("Car: %s (%s - %s)" % (name, str(rpm), str(max_rpm)))
+
     def identifyCar(self, rpm, max_rpm):
-        self.db.execute('SELECT id, name FROM cars WHERE abs(maxrpm - ?) < 0.01 AND abs(startrpm - ?) < 0.01', (max_rpm, rpm))
+        # Some more delta allowed for startrpm as 2nd Pikes Peak run seems to simulate worn/warmed up engine
+        self.db.execute('SELECT id, name FROM cars WHERE abs(maxrpm - ?) < 0.01 AND abs(startrpm - ?) < 2.0', (max_rpm, rpm))
         car = self.db.fetchall()
-        # TODO #1 Use maxWheelDelta to distinguish Ford RS200 and Lancia Evo. Refactor towards strategies? 
+        # TODO Equivalent cars: Ford RS200/Lancia Evo, Renault Alpine/Mini Countryman, Fors RS500/Impreza 1995
+        # TODO #1 Use maxWheelDelta to distinguish equivalent cars. Refactor towards strategies? 
         if (len(car) == 1):
             index, name = car[0]
-            self.car = index
-            print("Car: " + name + ": " + str(max_rpm) + " / " + str(rpm))
+            self.saveCar(rpm, max_rpm, index, name)
         elif (len(car) == 2):
             # Peugeot 205 T16 Rally and Hillclimb cars have identical RPMs
             self.car = 0
             for index, name in car:
                 if (self.track >= 1000 and index >= 1000):
-                    self.car = index
+                    self.saveCar(rpm, max_rpm, index, name)
                 if (self.track < 1000 and index < 1000):
-                    self.car = index
+                    self.saveCar(rpm, max_rpm, index, name)
         
         else:
-            # If we're on Pikes Peak, we try to keep the previous car index (bug with 2nd run)
-            # FIXME Possibly bug, keeps previous track/car when next rally car cannot be determined
-            if (self.track <= 1000):
-                self.car = -1
-            print("Failed to get car name: " + str(max_rpm) + " / " + str(rpm))
+            self.car = -1
+            print("Failed to identify car: %s - %s" % (str(rpm), str(max_rpm)))
         return self.car
 
     def recordResults(self, laptime):
