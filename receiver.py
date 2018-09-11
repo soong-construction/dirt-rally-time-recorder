@@ -97,12 +97,12 @@ class Receiver(asyncore.dispatcher):
             # New event for which track/car must be reset 
             self.track = 0
             self.car = 0
+            self.maxWheelDelta = 0
             
         elif distance <= self.goLineDistance:
             # Reset stage data when finishing stage
             self.finished = False
             self.topspeed = 0
-            self.maxWheelDelta = 0
             
             if (self.track == 0):
                 track, car = (self.database.identifyTrack(z, tracklength), self.database.identifyCar(rpm, max_rpm))

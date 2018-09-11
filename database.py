@@ -77,7 +77,7 @@ class Database:
         car = self.db.fetchall()
         # TODO Equivalent cars: Ford RS200/Lancia Evo, Renault Alpine/Mini Countryman, Ford RS500/Impreza 1995 and many modern 4WD cars...
         # TODO #1 maxWheelDelta not helpful to distinguish 4WD cars. 
-        # Take car[0]. For car[1:] log warnings like "ambigious car data" plus suggest "update laptimes set car=X where timestamp=Y"  
+        # Take -1. For c in car log warnings like "ambigious car data" plus suggest "update laptimes set car=X where timestamp=Y"  
         if (len(car) == 1):
             index, name = car[0]
             self.saveCar(rpm, max_rpm, index, name)
