@@ -5,6 +5,8 @@ from database import Database
 
 class Receiver(asyncore.dispatcher):
 
+    goLineDistance = 0.0
+    
     def __init__(self, address, speed_units, approot):
         asyncore.dispatcher.__init__(self)
         self.speed_units = speed_units
@@ -20,6 +22,7 @@ class Receiver(asyncore.dispatcher):
         self.maxWheelDelta = 0
         self.database = Database(approot)
         self.userArray = self.database.initializeLaptimesDb()
+        self.previousTime = 0
 
     def reconnect(self):
         self.received_data = False
@@ -58,7 +61,8 @@ class Receiver(asyncore.dispatcher):
 
 
     def approachingStart(self, distance):
-        return distance > -15 and distance < -2
+        # Careful: Distance never < 0 in Värmland
+        return distance > -15 and distance <= self.goLineDistance
 
 
     def isRallyStage(self):
@@ -81,22 +85,30 @@ class Receiver(asyncore.dispatcher):
         lap = stats[59]
         totallap = stats[60]
         laptime = stats[62]
+
+        distance = stats[2]
+        # DEBUG
+        print("time: %s" % time)
+        print("distance: %s" % distance)
         
         if not self.finished and totallap == lap:
             self.database.recordResults(laptime)
             self.printResults(laptime)
             self.finished = True
+
+        # Looks like time is not reset when restarting events (but for: fresh/proceeding events, second runs on PP). TODO But when proceeding to next event??
+        elif time < self.previousTime:
+            # New event for which track/car must be reset 
             self.track = 0
             self.car = 0
-
-        # TODO Use restriction like time < 0.5 to record continuous data (top speed, gear changes) 
-        elif time < 0.5:
+            
+        elif distance <= self.goLineDistance:
             self.finished = False
             self.topspeed = 0
             self.maxWheelDelta = 0
             
-            track, car = (self.database.identifyTrack(z, tracklength), self.database.identifyCar(rpm, max_rpm))
             if (self.track == 0):
+                track, car = (self.database.identifyTrack(z, tracklength), self.database.identifyCar(rpm, max_rpm))
                 self.track = track
                 self.car = car
                 
@@ -108,7 +120,8 @@ class Receiver(asyncore.dispatcher):
                 # TODO Count gear changes. Count H-Shifting differently?
         self.currentgear = gear
         
-        distance = stats[2]
+        self.previousTime = time
+        
         if (self.approachingStart(distance) and self.isRallyStage()):
             # Approaching the start line
             wheelStats = list( stats[i] for i in [25, 26, 27, 28] )
