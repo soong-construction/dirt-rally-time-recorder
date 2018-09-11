@@ -62,7 +62,7 @@ class Receiver(asyncore.dispatcher):
 
     def approachingStart(self, distance):
         # Careful: Distance never < 0 in Värmland
-        return distance > -15 and distance <= self.goLineDistance
+        return distance <= self.goLineDistance
 
 
     def isRallyStage(self):
@@ -85,11 +85,7 @@ class Receiver(asyncore.dispatcher):
         lap = stats[59]
         totallap = stats[60]
         laptime = stats[62]
-
         distance = stats[2]
-        # DEBUG
-        print("time: %s" % time)
-        print("distance: %s" % distance)
         
         if not self.finished and totallap == lap:
             self.database.recordResults(laptime)
@@ -103,6 +99,7 @@ class Receiver(asyncore.dispatcher):
             self.car = 0
             
         elif distance <= self.goLineDistance:
+            # Reset stage data when finishing stage
             self.finished = False
             self.topspeed = 0
             self.maxWheelDelta = 0
@@ -114,10 +111,8 @@ class Receiver(asyncore.dispatcher):
                 
                 data = "dirtrally.%s.%s.%s.started:1|c" % (self.userArray[0], self.track, self.car)
                 print(data)
-        else:
-            if gear > self.currentgear:
-                pass
-                # TODO Count gear changes. Count H-Shifting differently?
+
+        # TODO Count gear changes. Count H-Shifting differently?
         self.currentgear = gear
         
         self.previousTime = time
