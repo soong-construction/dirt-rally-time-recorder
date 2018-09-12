@@ -5,6 +5,7 @@ BEGIN TRANSACTION;
 CREATE TABLE Tracks (id INTEGER PRIMARY KEY UNIQUE, name text, length real, startz real);
 
 -- Argolis, Greece
+-- FIXME Imprecise numbers? Does no longer match after recreating dirtrally-lb.db
 INSERT INTO Tracks (id, name, length, startz) VALUES (1, 'Ampelonas Ormi', 4860.19, '');
 INSERT INTO Tracks (id, name, length, startz) VALUES (2, 'Kathodo Leontiou', 9665.99, '');
 INSERT INTO Tracks (id, name, length, startz) VALUES (3, 'Pomono Ekrixi', 5086.83, '');

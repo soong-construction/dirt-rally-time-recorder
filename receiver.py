@@ -92,7 +92,7 @@ class Receiver(asyncore.dispatcher):
             self.printResults(laptime)
             self.finished = True
 
-        # Looks like time is not reset when restarting events (but for: fresh/proceeding events, second runs on PP). TODO But when proceeding to next event??
+        # Looks like time is not reset when restarting events (but for: fresh/proceeding events, second runs on PP).
         elif time < self.previousTime:
             # New event for which track/car must be reset 
             self.track = 0
