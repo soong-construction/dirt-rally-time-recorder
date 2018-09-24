@@ -48,7 +48,7 @@ class Database:
         return userArray
 
     def identifyTrack(self, z, tracklength):
-        self.db.execute('SELECT id, name, startz FROM Tracks WHERE abs(length - ?) < 0.000000001', (tracklength,))
+        self.db.execute('SELECT id, name, startz FROM Tracks WHERE abs(length - ?) < 0.001', (tracklength,))
         track = self.db.fetchall()
 
         if (len(track) == 1):
