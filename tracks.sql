@@ -35,7 +35,7 @@ INSERT INTO Tracks (id, name, length, startz) VALUES (32, 'Frauenberg', 11684.22
 -- Monte Carlo, Monaco
 -- TODO Z mismatch: Failed to identify track: 10805.220703125 (Z: 1275.6722412109375)
 INSERT INTO Tracks (id, name, length, startz) VALUES (41, 'Route de Turini', 10805.2207, 1290.45);
-INSERT INTO Tracks (id, name, length, startz) VALUES (42, 'Valee descendante', 10866.8604, -2358.05);
+INSERT INTO Tracks (id, name, length, startz) VALUES (42, 'Vallee descendante', 10866.8604, -2358.05);
 INSERT INTO Tracks (id, name, length, startz) VALUES (43, 'Col de Turini – Sprint en descente', 4730.02, 298.587);
 INSERT INTO Tracks (id, name, length, startz) VALUES (44, 'Col de Turini sprint en Montee', 4729.54, -209.405);
 INSERT INTO Tracks (id, name, length, startz) VALUES (45, 'Col de Turini – Descente', 5175.9102, -120.206);
