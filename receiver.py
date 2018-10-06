@@ -1,6 +1,7 @@
 import asyncore
 import socket
 import struct
+from databaseAccess import DatabaseAccess
 from database import Database
 
 class Receiver(asyncore.dispatcher):
@@ -21,6 +22,7 @@ class Receiver(asyncore.dispatcher):
         self.currentgear = 0
         self.maxWheelDelta = 0
         self.database = Database(approot)
+        self.databaseAccess = DatabaseAccess(self.database)
         self.userArray = self.database.initializeLaptimesDb()
         self.previousTime = 0
 
@@ -54,9 +56,9 @@ class Receiver(asyncore.dispatcher):
         self.parse(data)
         
     def printResults(self, laptime):
-        data = "dirtrally.%s.%s.%s.time:%f|ms" % (self.userArray[0], self.track, self.car, laptime * 1000)
+        data = "dirtrally.%s.%s.%s.time:%f|ms" % (self.userArray[0], self.track, self.uniqueCarId(), laptime * 1000)
         print(data)
-        data = "dirtrally.%s.%s.%s.topspeed:%s|%s" % (self.userArray[0], self.track, self.car, self.topspeed, self.speed_units)
+        data = "dirtrally.%s.%s.%s.topspeed:%s|%s" % (self.userArray[0], self.track, self.uniqueCarId(), self.topspeed, self.speed_units)
         print(data)
 
 
@@ -67,6 +69,10 @@ class Receiver(asyncore.dispatcher):
 
     def isRallyStage(self):
         return self.track < 1000
+
+
+    def uniqueCarId(self):
+        return -1 if isinstance(self.car, (list,)) else self.car
 
     def parse(self, data):
         stats = struct.unpack('64f', data[0:256])
@@ -87,8 +93,8 @@ class Receiver(asyncore.dispatcher):
         laptime = stats[62]
         distance = stats[2]
         
-        if not self.finished and totallap == lap:
-            self.database.recordResults(laptime)
+        if not self.finished and (totallap == lap):
+            self.databaseAccess.recordResults(self.track, self.car, laptime)
             self.printResults(laptime)
             self.finished = True
 
@@ -105,11 +111,10 @@ class Receiver(asyncore.dispatcher):
             self.topspeed = 0
             
             if (self.track == 0):
-                track, car = (self.database.identifyTrack(z, tracklength), self.database.identifyCar(rpm, max_rpm))
-                self.track = track
-                self.car = car
+                self.track = self.databaseAccess.identifyTrack(z, tracklength)
+                self.car = self.databaseAccess.identifyCar(rpm, max_rpm)
                 
-                data = "dirtrally.%s.%s.%s.started:1|c" % (self.userArray[0], self.track, self.car)
+                data = "dirtrally.%s.%s.%s.started:1|c" % (self.userArray[0], self.track, self.uniqueCarId())
                 print(data)
 
         # TODO Count gear changes. Count H-Shifting differently?
@@ -123,4 +128,4 @@ class Receiver(asyncore.dispatcher):
             wheelDelta = wheelStats[0] - wheelStats[3] # Delta between rear and front left wheel
             if (wheelDelta > self.maxWheelDelta):
                 self.maxWheelDelta = wheelDelta
-                print("maxWheelDelta: %s" % self.maxWheelDelta)
+                #print("maxWheelDelta: %s" % self.maxWheelDelta)
