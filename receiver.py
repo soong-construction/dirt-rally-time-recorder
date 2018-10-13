@@ -20,7 +20,6 @@ class Receiver(asyncore.dispatcher):
         self.car = 0
         self.topspeed = 0
         self.currentgear = 0
-        self.maxWheelDelta = 0
         self.database = Database(approot)
         self.databaseAccess = DatabaseAccess(self.database)
         self.userArray = self.database.initializeLaptimesDb()
@@ -61,14 +60,6 @@ class Receiver(asyncore.dispatcher):
         data = "dirtrally.%s.%s.%s.topspeed:%s|%s" % (self.userArray[0], self.track, self.uniqueCarId(), self.topspeed, self.speed_units)
         print(data)
 
-
-    def approachingStart(self, distance):
-        # Careful: Distance never < 0 in Värmland
-        return distance <= self.goLineDistance
-
-
-    def isRallyStage(self):
-        return self.track < 1000
 
 
     def uniqueCarId(self):
@@ -121,11 +112,3 @@ class Receiver(asyncore.dispatcher):
         self.currentgear = gear
         
         self.previousTime = time
-        
-        if (self.approachingStart(distance) and self.isRallyStage()):
-            # Approaching the start line
-            wheelStats = list( stats[i] for i in [25, 26, 27, 28] )
-            wheelDelta = wheelStats[0] - wheelStats[3] # Delta between rear and front left wheel
-            if (wheelDelta > self.maxWheelDelta):
-                self.maxWheelDelta = wheelDelta
-                #print("maxWheelDelta: %s" % self.maxWheelDelta)
