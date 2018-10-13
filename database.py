@@ -1,6 +1,4 @@
 import sqlite3
-import time
-
 
 class Database:
     
@@ -9,8 +7,6 @@ class Database:
     def __init__(self, approot):
         self.approot = approot
         self.db = self.checkSetup(approot)
-        self.track = None
-        self.car = None
     
     def checkSetup(self, approot):
         try:
@@ -47,54 +43,33 @@ class Database:
         
         return userArray
 
-    def identifyTrack(self, z, tracklength):
+    def loadTracks(self, tracklength):
         self.db.execute('SELECT id, name, startz FROM Tracks WHERE abs(length - ?) < 0.001', (tracklength,))
-        track = self.db.fetchall()
-        if (len(track) == 1):
-            index, name, startz = track[0]
-            self.track = index
-            print("Track: " + name)
-        elif (len(track) > 1):
-            for index, name, startz in track:
-                if abs(z - startz) < 50:
-                    self.track = index
-                    print("Track: " + str(name) + " Z: " + str(z))
-        
-        else:
-            self.track = -1
-            print("Failed to get track: " + str(tracklength) + " / " + str(z))
-        return self.track
-    
-    def identifyCar(self, rpm, max_rpm):
-        self.db.execute('SELECT id, name FROM cars WHERE abs(maxrpm - ?) < 0.01 AND abs(startrpm - ?) < 0.01', (max_rpm, rpm))
-        car = self.db.fetchall()
-        if (len(car) == 1):
-            index, name = car[0]
-            self.car = index
-            print("Car: " + name + ": " + str(max_rpm) + " / " + str(rpm))
-        elif (len(car) == 2):
-            # Peugeot T16 Rally and Hillclimb cars have identical RPMs
-            self.car = 0
-            for index, name in car:
-                if (self.track >= 1000 and index >= 1000):
-                    self.car = index
-                if (self.track < 1000 and index < 1000):
-                    self.car = index
-        
-        else:
-            # If we're on Pikes Peak, we try to keep the previous car index (bug with 2nd run)
-            if (self.track <= 1000):
-                self.car = -1
-            print("Failed to get car name: " + str(max_rpm) + " / " + str(rpm))
-        return self.car
+        return self.db.fetchall()
 
-    def recordResults(self, laptime):
+    def loadCars(self, rpm, max_rpm):
+        # Some more delta allowed for startrpm as 2nd Pikes Peak run seems to simulate worn/warmed up engine
+        self.db.execute('SELECT id, name FROM cars WHERE abs(maxrpm - ?) < 0.01 AND abs(startrpm - ?) < 2.0', (max_rpm, rpm))
+        return self.db.fetchall()
+
+    def recordResults(self, track, car, timestamp, laptime):
         try:
             lapconn = sqlite3.connect(self.approot + self.laptimesDb)
             lapdb = lapconn.cursor()
-            lapdb.execute('INSERT INTO laptimes (Track, Car, Timestamp, Time) VALUES (?, ?, ?, ?)', (self.track, self.car, time.time(), laptime))
+            lapdb.execute('INSERT INTO laptimes (Track, Car, Timestamp, Time) VALUES (?, ?, ?, ?)', (track, car, timestamp, laptime))
             lapconn.commit()
             lapconn.close()
             # TODO Record topspeed?
         except (Exception) as exc:
             print("Error connecting to database:", exc)
+            
+    def getUpdateStatements(self, timestamp, cars):
+        result = []
+        for index in cars:
+            result.append('UPDATE laptimes SET Car=%s WHERE Timestamp="%s";' % (index, timestamp))
+        
+        return result
+    
+    def getCarName(self, car):
+        self.db.execute('SELECT name FROM cars WHERE id = ?', (car,))
+        return self.db.fetchone()[0]
