@@ -13,4 +13,3 @@ DROP TABLE cars;
 .open dirtrally-lb.db
 DROP TABLE tracks;
 .read tracks.sql
-.read tracks.sql
