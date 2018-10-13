@@ -54,3 +54,7 @@ class DatabaseAccess:
                 carId = car[index]
                 carName = self.database.getCarName(carId)
                 print("%s ==> %s" % (carName, update))
+
+    def hasHandbrake(self, car):
+        hasHandbrake = self.database.loadHandbrakeData(car)
+        return hasHandbrake

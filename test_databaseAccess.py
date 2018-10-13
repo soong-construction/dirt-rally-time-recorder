@@ -68,6 +68,14 @@ class TestDatabaseAccess(unittest.TestCase):
         self.database.getCarName = MagicMock(side_effect=list(name for (_,name) in cars))
         
         self.thing.recordResults(100, cars, 234.44)
+        
+    def testHasHandbrake(self):
+        data = [(1), (0), (None)]
+        self.database.loadHandbrakeData = MagicMock(side_effect=data)
+        
+        self.assertEqual(self.thing.hasHandbrake(1), True)
+        self.assertEqual(self.thing.hasHandbrake(2), False)
+        self.assertEqual(self.thing.hasHandbrake(-1), None)
 
 
 if __name__ == "__main__":

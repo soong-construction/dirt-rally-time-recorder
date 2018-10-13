@@ -65,6 +65,12 @@ class Receiver(asyncore.dispatcher):
     def uniqueCarId(self):
         return -1 if isinstance(self.car, (list,)) else self.car
 
+
+    def showCarControlInformation(self):
+        handbrake = self.databaseAccess.hasHandbrake(self.uniqueCarId())
+        if (handbrake != None):
+            print('Handbrake: ' + 'YES' if handbrake else 'NO')
+
     def parse(self, data):
         stats = struct.unpack('64f', data[0:256])
         
@@ -107,6 +113,8 @@ class Receiver(asyncore.dispatcher):
                 
                 data = "dirtrally.%s.%s.%s.started:1|c" % (self.userArray[0], self.track, self.uniqueCarId())
                 print(data)
+                
+                self.showCarControlInformation()
 
         # TODO Count gear changes. Count H-Shifting differently?
         self.currentgear = gear

@@ -7,6 +7,7 @@
   - ``.open --new dirtrally-lb.db`` 
   - ``.read tracks.sql`` 
   - ``.read cars.sql``
+  - ``.read controls.sql``
 - Enable UDP telemetry in [home-or-documents-dir]\My Games\DiRT Rally\hardwaresettings\hardware_settings_config.xml
   - ``<udp enabled="true" ...``
   
