@@ -13,3 +13,8 @@ DROP TABLE cars;
 .open dirtrally-lb.db
 DROP TABLE tracks;
 .read tracks.sql
+
+-- Commit d9574d73f07efde6dc98502cdc628164cbcd444c
+.open dirtrally-lb.db
+.read controls.sql
+
