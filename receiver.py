@@ -69,7 +69,7 @@ class Receiver(asyncore.dispatcher):
     def showCarControlInformation(self):
         handbrake = self.databaseAccess.hasHandbrake(self.uniqueCarId())
         if (handbrake != None):
-            print('Handbrake: ' + 'YES' if handbrake else 'NO')
+            print('Handbrake: ' + ('YES' if handbrake else 'NO'))
 
     def parse(self, data):
         stats = struct.unpack('64f', data[0:256])
