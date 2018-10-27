@@ -11,10 +11,10 @@ CREATE TABLE controls(id INTEGER PRIMARY KEY UNIQUE, handbrake integer);
 -- INSERT INTO controls(id, handbrake) VALUES (1, 'Mini Cooper S', 733.038, 104.72);
 
 -- 1970s
--- INSERT INTO controls(id, handbrake) VALUES (3, 'Opel Kadett GT/E 16v', 869.174, 125.664);
--- INSERT INTO controls(id, handbrake) VALUES (4, 'Fiat 131 Abarth', 884.882, 150.796);
--- INSERT INTO controls(id, handbrake) VALUES (5, 'Ford Escort Mk II', 942.478, 104.72);
--- INSERT INTO controls(id, handbrake) VALUES (6, 'Lancia Stratos', 837.758056640625, 167.55160522460938);
+INSERT INTO controls(id, handbrake) VALUES (3, 1);
+INSERT INTO controls(id, handbrake) VALUES (4, 1);
+INSERT INTO controls(id, handbrake) VALUES (5, 1);
+INSERT INTO controls(id, handbrake) VALUES (6, 1);
 
 -- 1980s
 INSERT INTO controls(id, handbrake) VALUES (7, 1);
