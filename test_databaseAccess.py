@@ -76,8 +76,38 @@ class TestDatabaseAccess(unittest.TestCase):
         self.assertEqual(self.thing.hasHandbrake(1), True)
         self.assertEqual(self.thing.hasHandbrake(2), False)
         self.assertEqual(self.thing.hasHandbrake(-1), None)
+    
+    def testGetCarInterfacesStatementWithoutData(self):
+        handbrakeData = [(None)]
+        self.database.loadHandbrakeData = MagicMock(side_effect=handbrakeData)
+        carNames = ["Unknown Car"]
+        noneData = [(None)]
+        self.database.loadShiftingData = MagicMock(side_effect=noneData)
+        self.database.loadGearsData = MagicMock(side_effect=noneData)
+        
+        self.database.getCarName = MagicMock(side_effect=carNames)
+        
+        self.assertEqual(self.thing.describeCarInterfaces([1]), "Unknown Car: NO CONTROL DATA")
 
+    def testGetCarInterfacesStatementAllControls(self):
+        handbrakeData = [(1)]
+        self.database.loadHandbrakeData = MagicMock(side_effect=handbrakeData)
+        shiftingData = [('H-PATTERN')]
+        self.database.loadShiftingData = MagicMock(side_effect=shiftingData)
+        carNames = ["Classic Car"]
+        self.database.getCarName = MagicMock(side_effect=carNames)
+        gearsData = [(4)]
+        self.database.loadGearsData = MagicMock(side_effect=gearsData)
+        
+        carInterfaceLines = self.thing.describeCarInterfaces([1])
 
+        self.assertEqual(carInterfaceLines, "Classic Car: H-PATTERN shifting, 4 speed, with HANDBRAKE")
+        
+    def testDemoOutput(self):
+        print("Ford Focus RS Rally 2007: PADDLE shifting, 6 speed, with HANDBRAKE")
+        print("Audi Sport Quattro Rallye: H-PATTERN shifting, clutch PEDAL, 5 speed")
+
+    
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'TestDatabaseAccess.testIdentifyTrackUnambiguous']
     unittest.main()
