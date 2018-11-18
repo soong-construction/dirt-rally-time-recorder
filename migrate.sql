@@ -18,3 +18,8 @@ DROP TABLE tracks;
 .open dirtrally-lb.db
 .read controls.sql
 
+-- Commit b78fcfaedfad1814c57242dace6a4b84e8a143ea
+.open dirtrally-lb.db
+DROP TABLE controls;
+.read controls.sql
+
