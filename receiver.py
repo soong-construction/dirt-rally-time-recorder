@@ -19,7 +19,6 @@ class Receiver(asyncore.dispatcher):
         self.track = 0
         self.car = 0
         self.topspeed = 0
-        self.currentgear = 0
         self.database = Database(approot)
         self.databaseAccess = DatabaseAccess(self.database)
         self.userArray = self.database.initializeLaptimesDb()
@@ -108,7 +107,4 @@ class Receiver(asyncore.dispatcher):
                 data = "dirtrally.%s.%s.%s.started:1|c" % (self.userArray[0], self.track, self.uniqueCarId())
                 print(data)
 
-        # TODO Count gear changes. Count H-Shifting differently?
-        self.currentgear = gear
-        
         self.previousTime = time

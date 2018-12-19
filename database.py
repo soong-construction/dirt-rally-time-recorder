@@ -59,7 +59,6 @@ class Database:
             lapdb.execute('INSERT INTO laptimes (Track, Car, Timestamp, Time) VALUES (?, ?, ?, ?)', (track, car, timestamp, laptime))
             lapconn.commit()
             lapconn.close()
-            # TODO Record topspeed?
         except (Exception) as exc:
             print("Error connecting to database:", exc)
             
