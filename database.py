@@ -1,39 +1,45 @@
 import sqlite3
+import getpass
+import time
 
 class Database:
     
-    laptimesDb = '\dirtrally-laptimes.db'
+    laptimesDb = '/dirtrally-laptimes.db'
+    baseDb = '/dirtrally-lb.db'
     
     def __init__(self, approot):
         self.approot = approot
-        self.db = self.checkSetup(approot)
     
-    def checkSetup(self, approot):
+    def setup(self):
         try:
-            conn = sqlite3.connect(approot + '/dirtrally-lb.db')
+            conn = sqlite3.connect(self.approot + self.baseDb)
             db = conn.cursor()
-            return db
+            trackCount = db.execute('SELECT count(*) FROM Tracks').fetchall()[0]
+            carCount = db.execute('SELECT count(*) FROM cars').fetchall()[0]
+            print('Found %s tracks and %s cars' % (trackCount[0], carCount[0]))
+            self.db = db
+            return self
         except (Exception) as exc:
-            # TODO Set it up with tracks.sql and cars.sql
-            print("Error connecting to database:", exc)
+            print("Error when reading from %s, please check set-up instructions in the README" % (self.baseDb))
+            raise exc
 
     def initializeLaptimesDb(self):
         try:
             lapconn = sqlite3.connect(self.approot + self.laptimesDb)
             lapdb = lapconn.cursor()
-            lapdb.execute('SELECT user,pass FROM user;')
+            lapdb.execute('SELECT user FROM user;')
             res = lapdb.fetchall()
             userArray = res[0]
         except (Exception) as exc:
             try:
-                print("Trying to init the db", exc)
+                print("First run, setting up recording tables")
                 lapdb.execute('CREATE TABLE laptimes (Track INTEGER, Car INTEGER, Timestamp INTEGER, Time REAL);')
-                lapdb.execute('CREATE TABLE user (user TEXT, pass TEXT);')
-                # TODO Read username from config.yml
-                lapdb.execute('INSERT INTO user VALUES (?, ?)', ('defaultuser', 'defaultpassword'))
+                
+                lapdb.execute('CREATE TABLE user (user TEXT);')
+                userId = self.createUserId()
+                lapdb.execute('INSERT INTO user VALUES (?)', (userId, ))
                 lapconn.commit()
-                # TODO Drop password?
-                lapdb.execute('SELECT user,pass FROM user;')
+                lapdb.execute('SELECT user FROM user;')
                 res = lapdb.fetchall()
                 userArray = res[0]
             except (Exception) as exc:
@@ -42,6 +48,12 @@ class Database:
             lapconn.close()
         
         return userArray
+    
+    def createUserId(self):
+        user = getpass.getuser()
+        user = 'defaultuser' if (user == None) else user
+        epoch = int(time.time())
+        return str(user) + str(epoch)
 
     def loadTracks(self, tracklength):
         self.db.execute('SELECT id, name, startz FROM Tracks WHERE abs(length - ?) < 0.001', (tracklength,))
@@ -59,7 +71,6 @@ class Database:
             lapdb.execute('INSERT INTO laptimes (Track, Car, Timestamp, Time) VALUES (?, ?, ?, ?)', (track, car, timestamp, laptime))
             lapconn.commit()
             lapconn.close()
-            # TODO Record topspeed?
         except (Exception) as exc:
             print("Error connecting to database:", exc)
             

@@ -10,13 +10,13 @@ class DatabaseAccess:
 
         if (len(tracks) == 1):
             index, name, startz = tracks[0]
-            print("Track: %s" % str(name))
+            print("TRACK: %s" % str(name))
             return index
         
         elif (len(tracks) > 1):
             for index, name, startz in tracks:
                 if abs(z - startz) < 50:
-                    print("Track: %s (Z: %s)" % (str(name), str(z)))
+                    print("TRACK: %s (Z: %s)" % (str(name), str(z)))
                     return index
         
         else:
@@ -25,7 +25,7 @@ class DatabaseAccess:
         return -1
     
     def logCar(self, rpm, max_rpm, name):
-        print("Car: %s (%s - %s)" % (name, str(rpm), str(max_rpm)))
+        print("CAR: %s (%s - %s)" % (name, str(rpm), str(max_rpm)))
 
     def identifyCar(self, rpm, max_rpm):
         cars = self.database.loadCars(rpm, max_rpm)
