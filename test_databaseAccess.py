@@ -9,11 +9,11 @@ class TestDatabaseAccess(unittest.TestCase):
 
     def setUp(self):
         self.database = Database('test')
+        self.database.recordResults = MagicMock()
         self.thing = DatabaseAccess(self.database)
 
     def tearDown(self):
         pass
-
 
     def testIdentifyTrackUnambiguous(self):
         tracks = [(1, 'track1', 10)]
