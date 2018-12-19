@@ -13,16 +13,16 @@ class Receiver(asyncore.dispatcher):
         self.speed_units = speed_units
         self.speed_modifier = speed_units == 'mph' and 0.6214 or 1
         self.address = address
-        self.reconnect()
         self.approot = approot
         self.finished = False
         self.track = 0
         self.car = 0
         self.topspeed = 0
+        self.previousTime = 0
         self.database = Database(approot)
         self.databaseAccess = DatabaseAccess(self.database)
         self.userArray = self.database.initializeLaptimesDb()
-        self.previousTime = 0
+        self.reconnect()
 
     def reconnect(self):
         self.received_data = False

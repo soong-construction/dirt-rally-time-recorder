@@ -26,7 +26,7 @@ class Database:
             userArray = res[0]
         except (Exception) as exc:
             try:
-                print("Trying to init the db", exc)
+                print("First run, setting up recording tables")
                 lapdb.execute('CREATE TABLE laptimes (Track INTEGER, Car INTEGER, Timestamp INTEGER, Time REAL);')
                 lapdb.execute('CREATE TABLE user (user TEXT, pass TEXT);')
                 # TODO Read username from config.yml
