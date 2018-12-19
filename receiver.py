@@ -19,7 +19,7 @@ class Receiver(asyncore.dispatcher):
         self.car = 0
         self.topspeed = 0
         self.previousTime = 0
-        self.database = Database(approot)
+        self.database = Database(approot).setup()
         self.databaseAccess = DatabaseAccess(self.database)
         self.userArray = self.database.initializeLaptimesDb()
         self.reconnect()
