@@ -1,4 +1,6 @@
 import sqlite3
+import getpass
+import time
 
 class Database:
     
@@ -29,8 +31,8 @@ class Database:
                 print("First run, setting up recording tables")
                 lapdb.execute('CREATE TABLE laptimes (Track INTEGER, Car INTEGER, Timestamp INTEGER, Time REAL);')
                 lapdb.execute('CREATE TABLE user (user TEXT, pass TEXT);')
-                # TODO Read username from config.yml
-                lapdb.execute('INSERT INTO user VALUES (?, ?)', ('defaultuser', 'defaultpassword'))
+                userId = self.createUserId()
+                lapdb.execute('INSERT INTO user VALUES (?, ?)', (userId, 'defaultpassword'))
                 lapconn.commit()
                 # TODO Drop password?
                 lapdb.execute('SELECT user,pass FROM user;')
@@ -42,6 +44,12 @@ class Database:
             lapconn.close()
         
         return userArray
+    
+    def createUserId(self):
+        user = getpass.getuser()
+        user = 'defaultuser' if (user == None) else user
+        epoch = int(time.time())
+        return str(user) + str(epoch)
 
     def loadTracks(self, tracklength):
         self.db.execute('SELECT id, name, startz FROM Tracks WHERE abs(length - ?) < 0.001', (tracklength,))
