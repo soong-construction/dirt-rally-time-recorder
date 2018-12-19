@@ -3,7 +3,7 @@ This tool allows you to track your stage times in DiRT Rally and browse them, wh
 
 Time tracking works for stage rallies and Hillclimb events.   
 
-## Set up
+## First time set up
 - Clone this repo or download its zip file
 - Install Python3: https://wiki.python.org/moin/BeginnersGuide/Download
   - If Python was installed already, ensure [pip is set up properly](https://packaging.python.org/tutorials/installing-packages/#ensure-you-can-run-pip-from-the-command-line) 
