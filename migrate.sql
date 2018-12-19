@@ -13,3 +13,5 @@ DROP TABLE cars;
 .open dirtrally-lb.db
 DROP TABLE tracks;
 .read tracks.sql
+
+-- TODO Remove password from table user

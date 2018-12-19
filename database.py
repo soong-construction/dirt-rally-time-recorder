@@ -23,19 +23,18 @@ class Database:
         try:
             lapconn = sqlite3.connect(self.approot + self.laptimesDb)
             lapdb = lapconn.cursor()
-            lapdb.execute('SELECT user,pass FROM user;')
+            lapdb.execute('SELECT user FROM user;')
             res = lapdb.fetchall()
             userArray = res[0]
         except (Exception) as exc:
             try:
                 print("First run, setting up recording tables")
                 lapdb.execute('CREATE TABLE laptimes (Track INTEGER, Car INTEGER, Timestamp INTEGER, Time REAL);')
-                lapdb.execute('CREATE TABLE user (user TEXT, pass TEXT);')
+                lapdb.execute('CREATE TABLE user (user TEXT);')
                 userId = self.createUserId()
-                lapdb.execute('INSERT INTO user VALUES (?, ?)', (userId, 'defaultpassword'))
+                lapdb.execute('INSERT INTO user VALUES (?)', (userId, ))
                 lapconn.commit()
-                # TODO Drop password?
-                lapdb.execute('SELECT user,pass FROM user;')
+                lapdb.execute('SELECT user FROM user;')
                 res = lapdb.fetchall()
                 userArray = res[0]
             except (Exception) as exc:
