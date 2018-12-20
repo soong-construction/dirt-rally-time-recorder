@@ -74,15 +74,31 @@ INSERT INTO Tracks (id, name, length, startz) VALUES (90, 'Järvenkylä', 8147.4
 INSERT INTO Tracks (id, name, length, startz) VALUES (91, 'Kontinjärvi', 15041.48046875, 30.879966735839844);
 INSERT INTO Tracks (id, name, length, startz) VALUES (92, 'Hämelahti', 14954.6796875, -208.6311798095703);
 
+-- Värmland, Sweden
+INSERT INTO Tracks (id, name, length, startz) VALUES (101, 'Älgsjön', 7054.830078125, -1633.27197265625);
+INSERT INTO Tracks (id, name, length, startz) VALUES (102, 'Östra Hinnsjön', 4911.22998046875, -1730.606689453125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (103, 'Stor-jangen Sprint', 6666.27978515625, -2144.06689453125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (104, 'Stor-jangen Sprint Reverse', 6692.23974609375, 552.0279541015625);
+INSERT INTO Tracks (id, name, length, startz) VALUES (105, 'Björklangen', 4932.33984375, -5107.74365234375);
+INSERT INTO Tracks (id, name, length, startz) VALUES (106, 'Ransbysäter', 11920.2802734375, -4330.77490234375);
+INSERT INTO Tracks (id, name, length, startz) VALUES (107, 'Hamra', 12122.2001953125, 2713.06494140625);
+INSERT INTO Tracks (id, name, length, startz) VALUES (108, 'Lysvik', 12122.009765625, -5107.564453125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (109, 'Norraskoga', 11500.720703125, 552.0166625976562);
+INSERT INTO Tracks (id, name, length, startz) VALUES (110, 'Älgsjön Sprint', 5247.4599609375, -4330.759765625);
+INSERT INTO Tracks (id, name, length, startz) VALUES (111, 'Elgsjön', 7057.25, 2713.06494140625);
+INSERT INTO Tracks (id, name, length, startz) VALUES (112, 'Skogsrallyt', 4802.4599609375, -2143.044677734375);
+
 -- Pikes Peak, USA
 INSERT INTO Tracks (id, name, length, startz) VALUES (1001, 'Pikes Peak - Full Course', 19476.4688, -4701.25);
 INSERT INTO Tracks (id, name, length, startz) VALUES (1002, 'Pikes Peak - Sector 1', 6327.6899, -4700.96);
 INSERT INTO Tracks (id, name, length, startz) VALUES (1003, 'Pikes Peak - Sector 2', 6456.3604, -1122.07);
 INSERT INTO Tracks (id, name, length, startz) VALUES (1004, 'Pikes Peak - Sector 3', 7077.2002, 1397.84);
-INSERT INTO Tracks (id, name, length, startz) VALUES (1005, 'Pikes Peak (Mixed Surface) - Full Course', 19476.5, -4701.11);
-INSERT INTO Tracks (id, name, length, startz) VALUES (1006, 'Pikes Peak (Mixed Surface) - Sector 1', 6327.7002, -4700.94);
-INSERT INTO Tracks (id, name, length, startz) VALUES (1007, 'Pikes Peak (Mixed Surface) - Sector 2', 6456.3702, -1122.23);
-INSERT INTO Tracks (id, name, length, startz) VALUES (1008, 'Pikes Peak (Mixed Surface) - Sector 3', 7077.21, 1397.82);
+-- Note: The telemetry doesn't allow to distinguish Pikes Peak gravel from mixed surface events, and recorded times are not necessarily comparable! For now, only asphalt tracks are recognized   
+INSERT INTO Tracks (id, name, length, startz) VALUES (1005, 'Pikes Peak (Gravel or Mixed Surface) - Full Course', null, null);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1006, 'Pikes Peak (Gravel or Mixed Surface) - Sector 1', null, null);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1007, 'Pikes Peak (Gravel or Mixed Surface) - Sector 2', null, null);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1008, 'Pikes Peak (Gravel or Mixed Surface) - Sector 3', null, null);
+-- TODO #2 Pikes Peak (Gravel) and (Mixed) have same telemetry, must find a way to resolve this 
 
 COMMIT TRANSACTION;
 PRAGMA foreign_keys = on;

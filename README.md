@@ -1,7 +1,7 @@
 ## Goal
 This tool allows you to track your stage times in DiRT Rally and browse them, which the game itself does not allow.  
 
-Time tracking works for stage rallies and Hillclimb events.   
+Time tracking works for stage rallies and the Pikes Peak events (Asphalt only).   
 
 ## First time set up
 *These steps refer to Windows, Linux users will know how to use their package manager appropriately*
