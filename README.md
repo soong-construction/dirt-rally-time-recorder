@@ -43,6 +43,8 @@ In order to do so, use SQLite to
 
 When you import the CSV snapshot file as a spreadsheet, make sure to select UTF-8 encoding.   
 
+If you encounter an error message talking about sockets, understand that this tool cannot run in parallel, but only in a single instance at the same time.  
+
 In case you modified the telemetry ip or port in *hardware_settings_config.xml*, adapt ``config.yml`` to these.
 
 Note: Since this is still WIP, have a look at ``migrate.sql`` to find instructions how to migrate your data when updating this tool.    
