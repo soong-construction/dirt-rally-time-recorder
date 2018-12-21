@@ -1,7 +1,7 @@
 ## Goal
 This tool allows you to track your stage times in DiRT Rally and browse them, which the game itself does not allow.  
 
-Time tracking works for stage rallies and the Pikes Peak events (Asphalt only).   
+Time tracking works for stage rallies and the Pikes Peak events (for now, Asphalt only).   
 
 ## First time set up
 *These steps refer to Windows, Linux users will know how to use their package manager appropriately*
@@ -48,7 +48,7 @@ If you encounter an error message talking about sockets, understand that this to
 In case you modified the telemetry ip or port in *hardware_settings_config.xml*, adapt ``config.yml`` to these.
 
 Note: Since this is still WIP, have a look at ``migrate.sql`` to find instructions how to migrate your data when updating this tool.    
-Consider dropping your *.db files if you encounter errors, thus starting over (time tracking data is lost).  
+Consider dropping your ``*.db`` files if you encounter errors, thus starting over (time tracking data is lost).  
 
 Feel free to open an issue.  
 
