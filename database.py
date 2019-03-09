@@ -2,6 +2,8 @@ import sqlite3
 import getpass
 import time
 
+UPDATE_STATEMENT = 'UPDATE laptimes SET %s=%s WHERE Timestamp="%s";'
+
 class Database:
     
     laptimesDb = '/dirtrally-laptimes.db'
@@ -74,13 +76,24 @@ class Database:
         except (Exception) as exc:
             print("Error connecting to database:", exc)
             
-    def getUpdateStatements(self, timestamp, cars):
+    def getCarUpdateStatements(self, timestamp, cars):
         result = []
         for index in cars:
-            result.append('UPDATE laptimes SET Car=%s WHERE Timestamp="%s";' % (index, timestamp))
+            result.append(UPDATE_STATEMENT % ('Car', index, timestamp))
         
         return result
     
+    def getTrackUpdateStatements(self, timestamp, tracks):
+        result = []
+        for index in tracks:
+            result.append(UPDATE_STATEMENT % ('Track', index, timestamp))
+        
+        return result
+
     def getCarName(self, car):
         self.db.execute('SELECT name FROM cars WHERE id = ?', (car,))
+        return self.db.fetchone()[0]
+    
+    def getTrackName(self, track):
+        self.db.execute('SELECT name FROM Tracks WHERE id = ?', (track,))
         return self.db.fetchone()[0]

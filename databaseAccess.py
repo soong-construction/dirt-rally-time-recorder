@@ -44,18 +44,33 @@ class DatabaseAccess:
             print("Ambiguous car data, %s matches: %s - %s" % (len(cars), str(rpm), str(max_rpm)))
             return list(index for (index, name) in cars)
 
+
+    def printCarUpdates(self, car, timestamp):
+        updates = self.database.getCarUpdateStatements(timestamp, car)
+        print("Please update the recorded laptimes according to the correct car:")
+        for index, update in enumerate(updates):
+            elementId = car[index]
+            carName = self.database.getCarName(elementId)
+            print("%s ==> %s" % (carName, update))
+
+
+    def printTrackUpdates(self, track, timestamp):
+        updates = self.database.getTrackUpdateStatements(timestamp, track)
+        print("Please update the recorded laptimes according to the correct track:")
+        for index, update in enumerate(updates):
+            elementId = track[index]
+            trackName = self.database.getTrackName(elementId)
+            print("%s ==> %s" % (trackName, update))
+
     def recordResults(self, track, car, laptime):
         timestamp = time.time()
-        self.database.recordResults(track, self.identify(car), timestamp, laptime)
+        self.database.recordResults(self.identify(track), self.identify(car), timestamp, laptime)
         
         if isinstance(car, (list,)):
-            updates = self.database.getUpdateStatements(timestamp, car)
-            print("Please update the recorded laptimes according to the correct car:")
-            
-            for index, update in enumerate(updates):
-                carId = car[index]
-                carName = self.database.getCarName(carId)
-                print("%s ==> %s" % (carName, update))
+            self.printCarUpdates(car, timestamp)
+                
+        if isinstance(track, (list,)):
+            self.printTrackUpdates(track, timestamp)
 
     def identify(self, element):
         return element if isinstance(element, int) else -1

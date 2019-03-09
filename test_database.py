@@ -12,15 +12,20 @@ class TestDatabaseAccess(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def testGetSingleUpdateStatement(self):
-        statements = self.thing.getUpdateStatements(123456, [1])
+    def testGetSingleCarUpdateStatement(self):
+        statements = self.thing.getCarUpdateStatements(123456, [1])
 
         self.assertEqual(statements, ['UPDATE laptimes SET Car=1 WHERE Timestamp="123456";'])
 
-    def testGetMultipleUpdateStatements(self):
-        statements = self.thing.getUpdateStatements(123456, [1, 5])
+    def testGetMultipleCarUpdateStatements(self):
+        statements = self.thing.getCarUpdateStatements(123456, [1, 5])
 
         self.assertEqual(statements, ['UPDATE laptimes SET Car=1 WHERE Timestamp="123456";', 'UPDATE laptimes SET Car=5 WHERE Timestamp="123456";'])
+
+    def testGetMultipleTrackUpdateStatements(self):
+        statements = self.thing.getTrackUpdateStatements(123456, [1, 5])
+
+        self.assertEqual(statements, ['UPDATE laptimes SET Track=1 WHERE Timestamp="123456";', 'UPDATE laptimes SET Track=5 WHERE Timestamp="123456";'])
 
     def testGetUserId(self):
         userId = self.thing.createUserId();
@@ -34,5 +39,5 @@ class TestDatabaseAccess(unittest.TestCase):
         self.assertNotEqual(userId1, userId2, "userId must differ over time")
         
 if __name__ == "__main__":
-    #import sys;sys.argv = ['', 'TestDatabaseAccess.testGetSingleUpdateStatement']
+    #import sys;sys.argv = ['', 'TestDatabaseAccess.testGetSingleCarUpdateStatement']
     unittest.main()
