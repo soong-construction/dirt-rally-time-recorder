@@ -8,7 +8,11 @@ class DatabaseAccess:
     def identifyTrack(self, z, tracklength):
         tracks = self.database.loadTracks(tracklength)
 
-        if (len(tracks) == 1):
+        if (len(tracks) == 0):
+            print("Failed to identify track: %s" % (str(tracklength)))
+            return []
+        
+        elif (len(tracks) == 1):
             index, name, startz = tracks[0]
             print("TRACK: %s" % str(name))
             return index
@@ -19,10 +23,8 @@ class DatabaseAccess:
                     print("TRACK: %s (Z: %s)" % (str(name), str(z)))
                     return index
         
-        else:
-            print("Failed to identify track: %s (Z: %s)" % (str(tracklength), str(z)))
-        
-        return -1
+            print("Ambiguous track data, %s matches: %s (Z: %s)" % (len(tracks), str(tracklength), str(z)))
+            return list(index for (index, name, startz) in tracks)
     
     def logCar(self, rpm, max_rpm, name):
         print("CAR: %s (%s - %s)" % (name, str(rpm), str(max_rpm)))
@@ -44,7 +46,7 @@ class DatabaseAccess:
 
     def recordResults(self, track, car, laptime):
         timestamp = time.time()
-        self.database.recordResults(track, car if isinstance(car, int) else -1, timestamp, laptime)
+        self.database.recordResults(track, self.identify(car), timestamp, laptime)
         
         if isinstance(car, (list,)):
             updates = self.database.getUpdateStatements(timestamp, car)
@@ -54,3 +56,7 @@ class DatabaseAccess:
                 carId = car[index]
                 carName = self.database.getCarName(carId)
                 print("%s ==> %s" % (carName, update))
+
+    def identify(self, element):
+        return element if isinstance(element, int) else -1
+

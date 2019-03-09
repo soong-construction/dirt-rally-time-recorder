@@ -15,6 +15,14 @@ class TestDatabaseAccess(unittest.TestCase):
     def tearDown(self):
         pass
 
+    def testIdentifyTrackNoResult(self):
+        tracks = []
+        self.database.loadTracks = MagicMock(return_value=tracks)
+        
+        loadedTrack = self.thing.identifyTrack(10, 10000)
+
+        self.assertEqual(loadedTrack, [], "Shouldn't identify track")
+
     def testIdentifyTrackUnambiguous(self):
         tracks = [(1, 'track1', 10)]
         self.database.loadTracks = MagicMock(return_value=tracks)
@@ -37,7 +45,7 @@ class TestDatabaseAccess(unittest.TestCase):
         
         loadedTrack = self.thing.identifyTrack(10, 10000)
 
-        self.assertEqual(loadedTrack, -1, "Shouldn't identify track")
+        self.assertEqual(loadedTrack, [1, 2], "Should return all cars")
 
     def testIdentifyCarUnambiguous(self):
         cars = [(1, 'car1')]

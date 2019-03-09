@@ -54,15 +54,12 @@ class Receiver(asyncore.dispatcher):
         self.parse(data)
         
     def printResults(self, laptime):
-        data = "dirtrally.%s.%s.%s.time:%f|ms" % (self.userArray[0], self.track, self.uniqueCarId(), laptime * 1000)
+        dbAccess = self.databaseAccess
+        data = "dirtrally.%s.%s.%s.time:%f|ms" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car), laptime * 1000)
         print(data)
-        data = "dirtrally.%s.%s.%s.topspeed:%s|%s" % (self.userArray[0], self.track, self.uniqueCarId(), self.topspeed, self.speed_units)
+        data = "dirtrally.%s.%s.%s.topspeed:%s|%s" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car), self.topspeed, self.speed_units)
         print(data)
 
-
-
-    def uniqueCarId(self):
-        return -1 if isinstance(self.car, (list,)) else self.car
 
     def parse(self, data):
         stats = struct.unpack('64f', data[0:256])
@@ -83,8 +80,10 @@ class Receiver(asyncore.dispatcher):
         laptime = stats[62]
         distance = stats[2]
         
+        dbAccess = self.databaseAccess
+        
         if not self.finished and (totallap == lap):
-            self.databaseAccess.recordResults(self.track, self.car, laptime)
+            dbAccess.recordResults(self.track, self.car, laptime)
             self.printResults(laptime)
             self.finished = True
 
@@ -101,10 +100,10 @@ class Receiver(asyncore.dispatcher):
             self.topspeed = 0
             
             if (self.track == 0):
-                self.track = self.databaseAccess.identifyTrack(z, tracklength)
-                self.car = self.databaseAccess.identifyCar(rpm, max_rpm)
+                self.track = dbAccess.identifyTrack(z, tracklength)
+                self.car = dbAccess.identifyCar(rpm, max_rpm)
                 
-                data = "dirtrally.%s.%s.%s.started:1|c" % (self.userArray[0], self.track, self.uniqueCarId())
+                data = "dirtrally.%s.%s.%s.started:1|c" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car))
                 print(data)
 
         self.previousTime = time
