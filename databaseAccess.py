@@ -19,7 +19,8 @@ class DatabaseAccess:
         
         elif (len(tracks) > 1):
             for index, name, startz in tracks:
-                if abs(z - startz) < 50:
+                # TODO #2 This check must consider identical Pikes Peak tracks properly! 
+                if index < 1000 and abs(z - startz) < 50:
                     print("TRACK: %s (Z: %s)" % (str(name), str(z)))
                     return index
         
