@@ -20,6 +20,7 @@ Time tracking works for stage rallies and the Pikes Peak events.
   - ``.open --new dirtrally-lb.db`` 
   - ``.read tracks.sql`` 
   - ``.read cars.sql``
+  - ``.read controls.sql``
 - Configure UDP telemetry in *[home-or-documents-dir]\My Games\DiRT Rally\hardwaresettings\hardware_settings_config.xml*
   - Enable telemetry and request extradata by adapting the appropriate line as follows: ``<udp enabled="true" extradata="3" ...``
   

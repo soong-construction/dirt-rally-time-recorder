@@ -82,3 +82,30 @@ class DatabaseAccess:
     def identify(self, element):
         return element if isinstance(element, int) else -1
 
+    def describeHandbrake(self, car):
+        hasHandbrake = self.database.loadHandbrakeData(car)
+        if (hasHandbrake):
+            return "with HANDBRAKE" + ", "
+        return ""
+
+    def describeShifting(self, car):
+        shiftingData = self.database.loadShiftingData(car)
+        return shiftingData + " shifting, " if shiftingData else ""
+
+    def describeGears(self, car):
+        gearData = self.database.loadGearsData(car)
+        return str(gearData) + " speed, " if gearData else ""
+
+    # TODO #6 Include clutch
+    def describeCarInterfaces(self, car):
+        line = ""
+        line += self.describeShifting(car)
+        line += self.describeGears(car)
+        line += self.describeHandbrake(car)
+        
+        if (line == ""):
+            line = "NO CONTROL DATA"
+        else:
+            line = line[:-2]
+            
+        return self.database.getCarName(car) + ": " + line

@@ -84,8 +84,35 @@ class TestDatabaseAccess(unittest.TestCase):
         self.database.getCarName = MagicMock(side_effect=list(name for (_,name) in cars))
         
         self.thing.recordResults(100, cars, 234.44)
+        
+    def testGetCarInterfacesStatementWithoutData(self):
+        handbrakeData = [(None)]
+        self.database.loadHandbrakeData = MagicMock(side_effect=handbrakeData)
+        carNames = ["Unknown Car"]
+        noneData = [(None)]
+        self.database.loadShiftingData = MagicMock(side_effect=noneData)
+        self.database.loadGearsData = MagicMock(side_effect=noneData)
+        
+        self.database.getCarName = MagicMock(side_effect=carNames)
+        
+        self.assertEqual(self.thing.describeCarInterfaces([1]), "Unknown Car: NO CONTROL DATA")
 
+    def testGetCarInterfacesStatements(self):
+        handbrakeData = [(0), (1)]
+        self.database.loadHandbrakeData = MagicMock(side_effect=handbrakeData)
+        shiftingData = [('H-PATTERN'), ('2 PADDLES')]
+        self.database.loadShiftingData = MagicMock(side_effect=shiftingData)
+        carNames = ['Classic Car', 'Modern Car']
+        self.database.getCarName = MagicMock(side_effect=carNames)
+        gearsData = [(4), (6)]
+        self.database.loadGearsData = MagicMock(side_effect=gearsData)
+        
+        firstCarInterface = self.thing.describeCarInterfaces(1)
+        self.assertEqual(firstCarInterface, "Classic Car: H-PATTERN shifting, 4 speed")
 
+        secondCarInterface = self.thing.describeCarInterfaces(2)
+        self.assertEqual(secondCarInterface, "Modern Car: 2 PADDLES shifting, 6 speed, with HANDBRAKE")
+        
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'TestDatabaseAccess.testIdentifyTrackUnambiguous']
     unittest.main()
