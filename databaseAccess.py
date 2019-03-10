@@ -55,14 +55,8 @@ class DatabaseAccess:
                 carName = self.database.getCarName(carId)
                 print("%s ==> %s" % (carName, update))
 
-    # TODO #6 Get rid of it
-    def hasHandbrake(self, car):
-        hasHandbrake = self.database.loadHandbrakeData(car)
-        return hasHandbrake
-    
-
     def describeHandbrake(self, car):
-        hasHandbrake = self.hasHandbrake(car)
+        hasHandbrake = self.database.loadHandbrakeData(car)
         if (hasHandbrake):
             return "with HANDBRAKE" + ", "
         return ""
