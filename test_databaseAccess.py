@@ -39,13 +39,21 @@ class TestDatabaseAccess(unittest.TestCase):
 
         self.assertEqual(loadedTrack, 2, "Wrong ID")
 
-    def testIdentifyTrackByAmbiguous(self):
+    def testCannotIdentifyTrackByZValueIfIdentical(self):
+        tracks = [(1, 'track1', 100), (2, 'track2', 100)]
+        self.database.loadTracks = MagicMock(return_value=tracks)
+        
+        loadedTrack = self.thing.identifyTrack(100, 10000)
+
+        self.assertEqual(loadedTrack, [1, 2], "Should return all tracks")
+
+    def testIdentifyTrackAmbiguous(self):
         tracks = [(1, 'track1', 100), (2, 'track2', 100)]
         self.database.loadTracks = MagicMock(return_value=tracks)
         
         loadedTrack = self.thing.identifyTrack(10, 10000)
 
-        self.assertEqual(loadedTrack, [1, 2], "Should return all cars")
+        self.assertEqual(loadedTrack, [1, 2], "Should return all tracks")
 
     def testIdentifyCarUnambiguous(self):
         cars = [(1, 'car1')]
