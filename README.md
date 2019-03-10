@@ -2,7 +2,7 @@
 ## Goal
 This tool allows you to track your stage times in DiRT Rally and browse them, which the game itself does not allow.  
 
-Time tracking works for stage rallies and the Pikes Peak events (for now, Asphalt only).   
+Time tracking works for stage rallies and the Pikes Peak events.   
 
 ## First time set up
 *These steps refer to Windows, Linux users will know how to use their package manager appropriately*
@@ -28,7 +28,8 @@ Time tracking works for stage rallies and the Pikes Peak events (for now, Asphal
   - open a command prompt (e.g. via the work folder context menu, this saves you from moving to this directory manually) and run ``python timerecord.py``
   - It should tell you to be *Waiting for data...*, otherwise check the set up or take a look at the Troubleshooting section   
 - Start DiRT Rally and finish a stage  
-  - the tool runs in the background, reporting the car and the track it identifies from the telemetry
+  - the tool runs in the background, reporting the car and the track it identifies from the telemetry  
+  - for cars, it will display control interface information such as the transmission type  
   - on stage completion, it reports your top speed and saves your time 
 - List your times with SQLite  
   - ``.open dirtrally-laptimes.db``
@@ -37,10 +38,10 @@ Time tracking works for stage rallies and the Pikes Peak events (for now, Asphal
   - ``select t.name, c.name, strftime('%Y-%m-%d %H:%M:%S', datetime(l.timestamp, 'unixepoch', 'localtime')), l.time from base.tracks t, base.cars c, laptimes l where t.id=l.track and c.id=l.car;``
 
 ## Troubleshooting
-Since DiRT Rally telemetry data doesn't allow to clearly identify every available car, this tool will sometimes ask you to resolve this after completing a stage.  
+Since DiRT Rally telemetry data doesn't allow to clearly identify every available car and track, this tool will sometimes ask you to resolve this after completing a stage.  
 In order to do so, use SQLite to 
 - ``.open dirtrally-laptimes.db``
-- and run the ``UPDATE laptimes...`` statement that matches the actual car you drove
+- and run the ``UPDATE laptimes...`` statement that matches the actual car or track you drove
 
 When you import the CSV snapshot file as a spreadsheet, make sure to select UTF-8 encoding.   
 

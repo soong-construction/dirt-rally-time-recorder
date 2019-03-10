@@ -93,12 +93,6 @@ INSERT INTO Tracks (id, name, length, startz) VALUES (1001, 'Pikes Peak - Full C
 INSERT INTO Tracks (id, name, length, startz) VALUES (1002, 'Pikes Peak - Sector 1', 6327.6899, -4700.96);
 INSERT INTO Tracks (id, name, length, startz) VALUES (1003, 'Pikes Peak - Sector 2', 6456.3604, -1122.07);
 INSERT INTO Tracks (id, name, length, startz) VALUES (1004, 'Pikes Peak - Sector 3', 7077.2002, 1397.84);
--- Note: The telemetry doesn't allow to distinguish Pikes Peak gravel from mixed surface events, and recorded times are not necessarily comparable! For now, only asphalt tracks are recognized   
-INSERT INTO Tracks (id, name, length, startz) VALUES (1005, 'Pikes Peak (Gravel or Mixed Surface) - Full Course', null, null);
-INSERT INTO Tracks (id, name, length, startz) VALUES (1006, 'Pikes Peak (Gravel or Mixed Surface) - Sector 1', null, null);
-INSERT INTO Tracks (id, name, length, startz) VALUES (1007, 'Pikes Peak (Gravel or Mixed Surface) - Sector 2', null, null);
-INSERT INTO Tracks (id, name, length, startz) VALUES (1008, 'Pikes Peak (Gravel or Mixed Surface) - Sector 3', null, null);
--- TODO #2 Drop inserts above, add update to migrate.sql: (1005-1008)->-1 
 INSERT INTO Tracks (id, name, length, startz) VALUES (1009, 'Pikes Peak (Mixed Surface) - Full Course', 19476.5, -4701.11);
 INSERT INTO Tracks (id, name, length, startz) VALUES (1010, 'Pikes Peak (Mixed Surface) - Sector 1', 6327.7002, -4700.94);
 INSERT INTO Tracks (id, name, length, startz) VALUES (1011, 'Pikes Peak (Mixed Surface) - Sector 2', 6456.3702, -1122.23);
