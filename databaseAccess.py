@@ -19,14 +19,17 @@ class DatabaseAccess:
         
         elif (len(tracks) == 2):
             
+            matchingTrack = None
             lastZ = None
             for index, name, startZ in tracks:
                 # Cannot distinguish Pikes Peak tracks which are identical 
                 tracksDiffer = lastZ != startZ
                 matchingZ = tracksDiffer and abs(z - startZ) < 50
+                matchingTrack = (index, name) if matchingZ else matchingTrack
                 lastZ = startZ
                 
-            if matchingZ:
+            if matchingTrack and tracksDiffer:
+                index, name = matchingTrack
                 print("TRACK: %s" % (str(name)))
                 return index
         

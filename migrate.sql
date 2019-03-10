@@ -11,10 +11,7 @@ ALTER TABLE laptimes ADD COLUMN timestamp INTEGER DEFAULT NULL;
 DROP TABLE cars;
 .read cars.sql
 
--- Commit 9b78c5a42aa0febd30e05256cf61484b4d66e812
-.open dirtrally-lb.db
-DROP TABLE tracks;
-.read tracks.sql
+-- If you used this tool prior to version 1.1.0
 
 -- Commit d9574d73f07efde6dc98502cdc628164cbcd444c
 .open dirtrally-lb.db
@@ -24,4 +21,9 @@ DROP TABLE tracks;
 .open dirtrally-lb.db
 DROP TABLE controls;
 .read controls.sql
+
+-- Commit 2a3071e64ae986c51873f68b000ca475375afed6
+.open dirtrally-lb.db
+DROP TABLE tracks;
+.read tracks.sql
 
