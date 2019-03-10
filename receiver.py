@@ -64,6 +64,14 @@ class Receiver(asyncore.dispatcher):
     def uniqueCarId(self):
         return -1 if isinstance(self.car, (list,)) else self.car
 
+
+    def showCarControlInformation(self):
+        if isinstance(self.car, (list,)):
+            for car in self.car:
+                print(self.databaseAccess.describeCarInterfaces(car))
+        else:
+            print(self.databaseAccess.describeCarInterfaces(self.car))
+
     def parse(self, data):
         stats = struct.unpack('64f', data[0:256])
         
@@ -106,5 +114,7 @@ class Receiver(asyncore.dispatcher):
                 
                 data = "dirtrally.%s.%s.%s.started:1|c" % (self.userArray[0], self.track, self.uniqueCarId())
                 print(data)
+                
+                self.showCarControlInformation()
 
         self.previousTime = time

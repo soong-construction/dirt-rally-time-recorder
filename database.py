@@ -84,3 +84,18 @@ class Database:
     def getCarName(self, car):
         self.db.execute('SELECT name FROM cars WHERE id = ?', (car,))
         return self.db.fetchone()[0]
+    
+    def loadHandbrakeData(self, car):
+        self.db.execute('SELECT handbrake FROM controls WHERE id = ?', (car,))
+        fetch = self.db.fetchone()
+        return bool(fetch[0]) if fetch else None
+    
+    def loadShiftingData(self, car):
+        self.db.execute('SELECT shifting FROM controls WHERE id = ?', (car,))
+        fetch = self.db.fetchone()
+        return fetch[0] if fetch else None
+
+    def loadGearsData(self, car):
+        self.db.execute('SELECT forwardgears FROM controls WHERE id = ?', (car,))
+        fetch = self.db.fetchone()
+        return fetch[0] if fetch else None

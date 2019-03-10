@@ -16,3 +16,12 @@ DROP TABLE cars;
 DROP TABLE tracks;
 .read tracks.sql
 
+-- Commit d9574d73f07efde6dc98502cdc628164cbcd444c
+.open dirtrally-lb.db
+.read controls.sql
+
+-- Commit b78fcfaedfad1814c57242dace6a4b84e8a143ea
+.open dirtrally-lb.db
+DROP TABLE controls;
+.read controls.sql
+
