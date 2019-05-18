@@ -75,6 +75,15 @@ class Receiver(asyncore.dispatcher):
         gear = stats[33]
         rpm = stats[37]  # *10 to get real value
         max_rpm = stats[63]  # *10 to get real value
+
+        # TODO Might help to find an identifier for the running game - e.g., some field always 0.0 in DR1... Although either car or track should tell which game. 
+        if (time < 1):
+            print(stats)
+
+        # TODO [Sample-mode] Generate INSERT templates for this car data and add it to cars_sampling.sql for editing
+        
+        # TODO [Sample-mode] Build dictionary (rmp+max_rpm -> car-id), persist it in some file and warn if a new car-id creates ambiguity 
+        
         z = stats[6]
         tracklength = stats[61]
         speed = int(stats[7] * 3.6)
