@@ -74,7 +74,6 @@ class Receiver(asyncore.dispatcher):
         time = stats[0]
         gear = stats[33]
         rpm = stats[37]  # *10 to get real value
-        # TODO Does this change with upgrades!? E.g. Delta HF Integrale
         max_rpm = stats[63]  # *10 to get real value
         z = stats[6]
         tracklength = stats[61]
