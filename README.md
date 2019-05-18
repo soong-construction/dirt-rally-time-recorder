@@ -30,7 +30,7 @@ Time tracking works for stage rallies and the Pikes Peak events.
   - It should tell you to be *Waiting for data...*, otherwise check the set up or take a look at the Troubleshooting section   
 - Start DiRT Rally and finish a stage  
   - the tool runs in the background, reporting the car and the track it identifies from the telemetry  
-  - for cars, it will display control interface information such as the transmission type  
+  - for cars, it will display control interface information such as the transmission type (based on [this discussion](http://forums.codemasters.com/discussion/7071/dirt-rally-handbrake-and-transmission-information))  
   - on stage completion, it reports your top speed and saves your time 
 - List your times with SQLite  
   - ``.open dirtrally-laptimes.db``
