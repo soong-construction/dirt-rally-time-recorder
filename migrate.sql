@@ -17,13 +17,14 @@ DROP TABLE cars;
 .open dirtrally-lb.db
 .read controls.sql
 
--- Commit b78fcfaedfad1814c57242dace6a4b84e8a143ea
-.open dirtrally-lb.db
-DROP TABLE controls;
-.read controls.sql
-
 -- Commit 2a3071e64ae986c51873f68b000ca475375afed6
 .open dirtrally-lb.db
 DROP TABLE tracks;
 .read tracks.sql
 
+-- If you used this tool prior to version 1.2.0
+
+-- Commit 5846c3dae24554d017a17d7e48fb3cea18d9144e
+.open dirtrally-lb.db
+DROP TABLE controls;
+.read controls.sql
