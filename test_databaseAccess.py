@@ -92,6 +92,7 @@ class TestDatabaseAccess(unittest.TestCase):
         noneData = [(None)]
         self.database.loadShiftingData = MagicMock(side_effect=noneData)
         self.database.loadGearsData = MagicMock(side_effect=noneData)
+        self.database.loadClutchData = MagicMock(side_effect=noneData)
         
         self.database.getCarName = MagicMock(side_effect=carNames)
         
@@ -106,9 +107,11 @@ class TestDatabaseAccess(unittest.TestCase):
         self.database.getCarName = MagicMock(side_effect=carNames)
         gearsData = [(4), (6)]
         self.database.loadGearsData = MagicMock(side_effect=gearsData)
+        clutchData = [(1), (0)]
+        self.database.loadClutchData = MagicMock(side_effect=clutchData)
         
         firstCarInterface = self.thing.describeCarInterfaces(1)
-        self.assertEqual(firstCarInterface, "Classic Car: H-PATTERN shifting, 4 speed")
+        self.assertEqual(firstCarInterface, "Classic Car: H-PATTERN shifting, 4 speed, with manual CLUTCH")
 
         secondCarInterface = self.thing.describeCarInterfaces(2)
         self.assertEqual(secondCarInterface, "Modern Car: 2 PADDLES shifting, 6 speed, with HANDBRAKE")

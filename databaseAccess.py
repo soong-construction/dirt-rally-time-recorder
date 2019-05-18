@@ -99,11 +99,17 @@ class DatabaseAccess:
         gearData = self.database.loadGearsData(car)
         return str(gearData) + " speed, " if gearData else ""
 
-    # TODO #6 Include clutch
+    def describeClutch(self, car):
+        hasClutchPedal = self.database.loadClutchData(car)
+        if (hasClutchPedal):
+            return "with manual CLUTCH" + ", "
+        return ""
+
     def describeCarInterfaces(self, car):
         line = ""
         line += self.describeShifting(car)
         line += self.describeGears(car)
+        line += self.describeClutch(car)
         line += self.describeHandbrake(car)
         
         if (line == ""):

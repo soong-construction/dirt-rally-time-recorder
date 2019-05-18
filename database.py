@@ -108,6 +108,11 @@ class Database:
         fetch = self.db.fetchone()
         return fetch[0] if fetch else None
 
+    def loadClutchData(self, car):
+        self.db.execute('SELECT manualclutch FROM controls WHERE id = ?', (car,))
+        fetch = self.db.fetchone()
+        return bool(fetch[0]) if fetch else None
+
     def loadGearsData(self, car):
         self.db.execute('SELECT forwardgears FROM controls WHERE id = ?', (car,))
         fetch = self.db.fetchone()
