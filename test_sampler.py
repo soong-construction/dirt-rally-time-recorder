@@ -1,6 +1,9 @@
-import unittest
-from sampler import Sampler
 import os
+import shelve
+import unittest
+
+from sampler import Sampler
+
 
 class TestSampler(unittest.TestCase):
     
@@ -12,8 +15,9 @@ class TestSampler(unittest.TestCase):
         self.sampler = Sampler('test-files' + self.dict)
 
     def tearDown(self):
-        os.remove(self.testFolder + self.dict + '.dat')
-        pass
+        d = shelve.open(self.testFolder + self.dict)
+        d.clear()
+        d.close()
 
     def testNotExistsForFirstValue(self):
         found = self.sampler.sample(100)
