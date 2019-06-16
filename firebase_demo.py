@@ -9,6 +9,10 @@ from firebase_admin import credentials, messaging
 cred = credentials.Certificate("service-account-key.json")
 firebase_admin.initialize_app(cred)
 
+# TODO #6 Implement setting up client for FCM, see qrcode_demo
+
+# TODO #6 Post to FCM, e.g. when new car is identified
+ 
 # The topic name can be optionally prefixed with "/topics/".
 topic = 'weather'
 
