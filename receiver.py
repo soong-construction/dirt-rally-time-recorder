@@ -3,6 +3,7 @@ import socket
 import struct
 from databaseAccess import DatabaseAccess
 from database import Database
+from sampler import Sampler
 
 class Receiver(asyncore.dispatcher):
 
@@ -22,6 +23,9 @@ class Receiver(asyncore.dispatcher):
         self.database = Database(approot).setup()
         self.databaseAccess = DatabaseAccess(self.database)
         self.userArray = self.database.initializeLaptimesDb()
+        
+        self.sampler = Sampler('sampling/dr2')
+        
         self.reconnect()
 
     def reconnect(self):
@@ -68,6 +72,16 @@ class Receiver(asyncore.dispatcher):
         else:
             print(self.databaseAccess.describeCarInterfaces(self.car))
 
+
+    def sampleCar(self, rpm, max_rpm):
+        ambiguousSample = self.sampler.sample(rpm, max_rpm)
+        if (ambiguousSample):
+            print("ambiguous sample for rpm:%s max_rpm:%s" % (rpm, max_rpm))
+        else:
+            print("stored sample for rpm:%s max_rpm:%s" % (rpm, max_rpm))
+        insertFile = open(file='car_inserts.sql', mode='a', encoding='utf-8', newline='\n')
+        insertFile.write('INSERT INTO cars (id, name, maxrpm, startrpm) VALUES (ID, \'CAR_NAME\', %s, %s);\n' % (max_rpm, rpm))
+
     def parse(self, data):
         stats = struct.unpack('64f', data[0:256])
         
@@ -77,11 +91,9 @@ class Receiver(asyncore.dispatcher):
         max_rpm = stats[63]  # *10 to get real value
 
         # TODO Might help to find an identifier for the running game - e.g., some field always 0.0 in DR1... Although either car or track should tell which game. 
-        if (time < 1):
+        if (time < 10):
             print(stats)
 
-        # TODO [Sample-mode] Generate INSERT templates for this car data and add it to cars_sampling.sql for editing
-        
         # TODO [Sample-mode] Build dictionary (rmp+max_rpm -> car-id), persist it in some file and warn if a new car-id creates ambiguity 
         
         z = stats[6]
@@ -118,6 +130,8 @@ class Receiver(asyncore.dispatcher):
                 self.track = dbAccess.identifyTrack(z, tracklength)
                 self.car = dbAccess.identifyCar(rpm, max_rpm)
                 
+                self.sampleCar(rpm, max_rpm)
+
                 data = "dirtrally.%s.%s.%s.started:1|c" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car))
                 print(data)
                 
