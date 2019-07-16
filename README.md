@@ -1,10 +1,18 @@
 [![Build Status](https://travis-ci.com/soong-construction/dirt-rally-time-recorder.svg?branch=master)](https://travis-ci.com/soong-construction/dirt-rally-time-recorder)
 ## Goal
-This tool allows you to track your stage times in DiRT Rally and browse them, which the game itself does not allow.  
+This tool allows you to track your stage times in DiRT Rally and DiRT Rally 2.0 and browse them, which the game itself does not allow.  
 
-Time tracking works for stage rallies and the Pikes Peak events.   
+Time tracking works for stage rallies and the Pikes Peak events of the original DiRT Rally.   
 
 ## First time set up
+You can choose to download and unzip a ready-to-use bundle (tested to work on Windows 10 x64). If you don't trust pre-built .exe files, set up *dirt-rally-time-recorder* from scratch 
+
+### Ready-to-use bundle
+- Download the latest release for either the original DiRT Rally or 2.0 and unzip it somewhere
+- Start ``timerecord.exe``
+  - It should tell you to be *Waiting for data...*, otherwise take a look at the Troubleshooting section
+
+### Set up from scratch  
 *These steps refer to Windows, Linux users will know how to use their package manager appropriately*
 
 - Clone this repo or download and unpack its zip file to your disk
@@ -19,14 +27,16 @@ Time tracking works for stage rallies and the Pikes Peak events.
 - Setup database with car and track tables with SQLite  (TODO Combine to one *.sql for DR1 and DR2 each)
   - ``.open --new dirtrally-lb.db`` 
   - ``.read setup-dr1.sql`` 
-- Configure UDP telemetry in *[home-or-documents-dir]\My Games\DiRT Rally\hardwaresettings\hardware_settings_config.xml*
-  - Enable telemetry and request extradata by adapting the appropriate line as follows: ``<udp enabled="true" extradata="3" ...``
-  
-## Record stage times
 - Start time tracking  
   - open a command prompt (e.g. via the work folder context menu, this saves you from moving to this directory manually) and run ``python timerecord.py``
   - It should tell you to be *Waiting for data...*, otherwise check the set up or take a look at the Troubleshooting section   
-- Start DiRT Rally and finish a stage  
+  
+## Enable game telemetry
+- Configure UDP telemetry in *[home-or-documents-dir]\My Games\DiRT Rally [2.0]\hardwaresettings\hardware_settings_config.xml*
+  - Enable telemetry and request extradata by adapting the appropriate line as follows: ``<udp enabled="true" extradata="3" ...``
+  
+## Record stage times
+- Start DiRT Rally [2.0] and finish a stage  
   - the tool runs in the background, reporting the car and the track it identifies from the telemetry  
   - for cars, it will display control interface information such as the transmission type (based on [this discussion](http://forums.codemasters.com/discussion/7071/dirt-rally-handbrake-and-transmission-information))  
   - on stage completion, it reports your top speed and saves your time 
@@ -34,7 +44,7 @@ Time tracking works for stage rallies and the Pikes Peak events.
   - to create a CSV file consumable by your favorite spreadsheet editor, run ``export-laptimes.bat``  
 
 ## Troubleshooting
-Since DiRT Rally telemetry data doesn't allow to clearly identify every available car and track, this tool will sometimes ask you to resolve this after completing a stage.  
+Since DiRT Rally [2.0] telemetry data doesn't allow to clearly identify every available car and track, this tool will sometimes ask you to resolve this after completing a stage.  
 In order to do so, use SQLite to 
 - ``.open dirtrally-laptimes.db``
 - and run the ``UPDATE laptimes...`` statement that matches the actual car or track you drove
@@ -56,7 +66,7 @@ UDP telemetry documentation:
 [https://docs.google.com/spreadsheets/d/1O2_I-lGVDpDrhzcAlWCiVTHonUvn3rXfQGOVjOYLeB8/edit?usp=sharing]
 
 ## Remainder
-Tested with DiRT Rally v1.22
+Tested with DiRT Rally v1.22 and DiRT Rally 2.0 v1.9
 
 Thanks to Slocan for the initial version: https://github.com/Slocan/timerecord
 
