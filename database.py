@@ -6,6 +6,7 @@ UPDATE_STATEMENT = 'UPDATE laptimes SET %s=%s WHERE Timestamp="%s";'
 
 class Database:
     
+    # TODO #8 In the end, we need separate *.db files for DR1 and DR2 
     laptimesDb = '/dirtrally-laptimes.db'
     baseDb = '/dirtrally-lb.db'
     

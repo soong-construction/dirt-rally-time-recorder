@@ -16,7 +16,7 @@ Time tracking works for stage rallies and the Pikes Peak events.
 - Install SQLite: https://www.sqlite.org/cli.html  
   - choose the ``sqlite-tools-win32-x86-XXXXXX.zip`` package
   - extract ``sqlite3.exe`` to your work folder, i.e. next to ``timerecord.py``    
-- Setup database with car and track tables with SQLite  
+- Setup database with car and track tables with SQLite  (TODO Combine to one *.sql for DR1 and DR2 each)
   - ``.open --new dirtrally-lb.db`` 
   - ``.read tracks.sql`` 
   - ``.read cars.sql``

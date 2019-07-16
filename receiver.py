@@ -24,7 +24,8 @@ class Receiver(asyncore.dispatcher):
         self.databaseAccess = DatabaseAccess(self.database)
         self.userArray = self.database.initializeLaptimesDb()
         
-        self.sampler = Sampler('sampling/dr2')
+        self.carSampler = Sampler('sampling/dr2')
+        self.tracksSampler = Sampler('sampling/dr2_tracks')
         
         self.reconnect()
 
@@ -73,8 +74,17 @@ class Receiver(asyncore.dispatcher):
             print(self.databaseAccess.describeCarInterfaces(self.car))
 
 
+    def sampleTrack(self, z, tracklength):
+        ambiguousSample = self.carSampler.sample(z, tracklength)
+        if (ambiguousSample):
+            print("ambiguous sample for z:%s tracklength:%s" % (z, tracklength))
+        else:
+            print("stored sample for z:%s tracklength:%s" % (z, tracklength))
+        insertFile = open(file='tracks_inserts.sql', mode='a', encoding='utf-8', newline='\n')
+        insertFile.write('INSERT INTO Tracks (id, name, length, startz) VALUES (ID, \'TRACK_NAME\', %s, %s);\n' % (tracklength, z))
+
     def sampleCar(self, rpm, max_rpm):
-        ambiguousSample = self.sampler.sample(rpm, max_rpm)
+        ambiguousSample = self.carSampler.sample(rpm, max_rpm)
         if (ambiguousSample):
             print("ambiguous sample for rpm:%s max_rpm:%s" % (rpm, max_rpm))
         else:
@@ -130,11 +140,14 @@ class Receiver(asyncore.dispatcher):
                 self.track = dbAccess.identifyTrack(z, tracklength)
                 self.car = dbAccess.identifyCar(rpm, max_rpm)
                 
-                self.sampleCar(rpm, max_rpm)
+                self.sampleTrack(z, tracklength)
+                # TODO Don't sample both simultaneously
+                # self.sampleCar(rpm, max_rpm)
 
                 data = "dirtrally.%s.%s.%s.started:1|c" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car))
                 print(data)
                 
-                self.showCarControlInformation()
+                # TODO #8 Include DR2 cars
+                # self.showCarControlInformation()
 
         self.previousTime = time
