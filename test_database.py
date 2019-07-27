@@ -12,7 +12,7 @@ class TestDatabaseAccess(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def testGetSingleCarUpdateStatement(self):
+    def testResetStage(self):
         statements = self.thing.getCarUpdateStatements(123456, [1])
 
         self.assertEqual(statements, ['UPDATE laptimes SET Car=1 WHERE Timestamp="123456";'])
@@ -39,5 +39,5 @@ class TestDatabaseAccess(unittest.TestCase):
         self.assertNotEqual(userId1, userId2, "userId must differ over time")
         
 if __name__ == "__main__":
-    #import sys;sys.argv = ['', 'TestDatabaseAccess.testGetSingleCarUpdateStatement']
+    #import sys;sys.argv = ['', 'TestDatabaseAccess.testResetStage']
     unittest.main()

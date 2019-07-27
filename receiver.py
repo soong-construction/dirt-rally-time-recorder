@@ -4,11 +4,11 @@ import struct
 from databaseAccess import DatabaseAccess
 from database import Database
 from sampler import Sampler
+import time as python_time
+from statsProcessor import StatsProcessor
 
 class Receiver(asyncore.dispatcher):
 
-    goLineDistance = 0.0
-    
     def __init__(self, address, speed_units, approot):
         asyncore.dispatcher.__init__(self)
         self.speed_units = speed_units
@@ -20,12 +20,15 @@ class Receiver(asyncore.dispatcher):
         self.car = 0
         self.topspeed = 0
         self.previousTime = 0
+        
         self.database = Database(approot).setup()
         self.databaseAccess = DatabaseAccess(self.database)
         self.userArray = self.database.initializeLaptimesDb()
+        self.statsProcessor = StatsProcessor(self)
         
         self.carSampler = Sampler('sampling/dr2')
         self.tracksSampler = Sampler('sampling/dr2_tracks')
+        self.last_time = 0
         
         self.reconnect()
 
@@ -96,58 +99,57 @@ class Receiver(asyncore.dispatcher):
         stats = struct.unpack('64f', data[0:256])
         
         time = stats[0]
-        gear = stats[33]
-        rpm = stats[37]  # *10 to get real value
-        max_rpm = stats[63]  # *10 to get real value
-
-        # TODO Might help to find an identifier for the running game - e.g., some field always 0.0 in DR1... Although either car or track should tell which game. 
-        if (time < 10):
-            print(stats)
-
-        # TODO [Sample-mode] Build dictionary (rmp+max_rpm -> car-id), persist it in some file and warn if a new car-id creates ambiguity 
+        lap = stats[59]
+        distance = stats[2]
         
-        z = stats[6]
-        tracklength = stats[61]
         speed = int(stats[7] * 3.6)
         if self.topspeed < speed:
             self.topspeed = speed
 
-        lap = stats[59]
-        totallap = stats[60]
-        laptime = stats[62]
-        distance = stats[2]
-        
-        dbAccess = self.databaseAccess
-        
-        if not self.finished and (totallap == lap):
-            dbAccess.recordResults(self.track, self.car, laptime)
-            self.printResults(laptime)
-            self.finished = True
-
-        # Looks like time is not reset when restarting events (but for: fresh/proceeding events, second runs on PP).
-        elif time < self.previousTime:
-            # New event for which track/car must be reset 
-            self.track = 0
-            self.car = 0
-            self.maxWheelDelta = 0
+        # TODO #8 Debugging
+        tracklength = stats[61]
+        time_now = int(python_time.time())
+        if (time_now - self.last_time > 2):
+            print('distance %s, tracklength %s' % (distance, tracklength))
+            self.last_time = time_now
             
-        elif distance <= self.goLineDistance:
-            # Reset stage data when finishing stage
-            self.finished = False
-            self.topspeed = 0
-            
-            if (self.track == 0):
-                self.track = dbAccess.identifyTrack(z, tracklength)
-                self.car = dbAccess.identifyCar(rpm, max_rpm)
-                
-                self.sampleTrack(z, tracklength)
-                # TODO Don't sample both simultaneously
-                # self.sampleCar(rpm, max_rpm)
-
-                data = "dirtrally.%s.%s.%s.started:1|c" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car))
-                print(data)
-                
-                # TODO #8 Include DR2 cars
-                # self.showCarControlInformation()
+        self.statsProcessor.handleGameState(self.inStage(), self.finished, lap, time, self.previousTime, distance, stats)
 
         self.previousTime = time
+
+    def resetStage(self):
+        self.track = 0
+        self.car = 0
+        
+    def inStage(self):
+        return self.track != 0 and self.car != 0
+
+    def prepareStage(self):
+        self.finished = False
+        self.topspeed = 0
+        
+    def startStage(self, stats):
+        rpm = stats[37]  # *10 to get real value
+        max_rpm = stats[63]  # *10 to get real value
+        z = stats[6]
+        tracklength = stats[61]
+
+        dbAccess = self.databaseAccess
+        self.track = dbAccess.identifyTrack(z, tracklength)
+        self.car = dbAccess.identifyCar(rpm, max_rpm)
+        
+        # self.sampleTrack(z, tracklength)
+        # TODO Don't sample both simultaneously
+        # self.sampleCar(rpm, max_rpm)
+
+        data = "dirtrally.%s.%s.%s.started:1|c" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car))
+        print(data)
+        
+        # TODO #8 Include DR2 cars
+        # self.showCarControlInformation()
+
+    def finishStage(self, stats):
+        laptime = stats[62]
+        self.databaseAccess.recordResults(self.track, self.car, laptime)
+        self.printResults(laptime)
+        self.finished = True
