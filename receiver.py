@@ -29,6 +29,7 @@ class Receiver(asyncore.dispatcher):
         self.carSampler = Sampler('sampling/dr2')
         self.tracksSampler = Sampler('sampling/dr2_tracks')
         self.last_time = 0
+        self.previousDistance = 0
         
         self.reconnect()
 
@@ -116,6 +117,7 @@ class Receiver(asyncore.dispatcher):
         self.statsProcessor.handleGameState(self.inStage(), self.finished, lap, time, self.previousTime, distance, stats)
 
         self.previousTime = time
+        self.previousDistance = distance
 
     def resetStage(self):
         self.track = 0
@@ -153,3 +155,4 @@ class Receiver(asyncore.dispatcher):
         self.databaseAccess.recordResults(self.track, self.car, laptime)
         self.printResults(laptime)
         self.finished = True
+        print('final distance: %s' % (self.previousDistance))
