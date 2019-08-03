@@ -77,6 +77,9 @@ class Receiver(asyncore.dispatcher):
         else:
             print(self.databaseAccess.describeCarInterfaces(self.car))
 
+    def appendInsert(self, file_param, line):
+        insertFile = open(file=file_param, mode='a', encoding='utf-8', newline='\n')
+        insertFile.write(line)
 
     def sampleTrack(self, z, tracklength):
         ambiguousSample = self.carSampler.sample(z, tracklength)
@@ -84,8 +87,9 @@ class Receiver(asyncore.dispatcher):
             print("ambiguous sample for z:%s tracklength:%s" % (z, tracklength))
         else:
             print("stored sample for z:%s tracklength:%s" % (z, tracklength))
-        insertFile = open(file='tracks_inserts.sql', mode='a', encoding='utf-8', newline='\n')
-        insertFile.write('INSERT INTO Tracks (id, name, length, startz) VALUES (ID, \'TRACK_NAME\', %s, %s);\n' % (tracklength, z))
+        line = 'INSERT INTO Tracks (id, name, length, startz, finish_distance) VALUES (ID, \'TRACK_NAME\', %s, %s' % (tracklength, z)
+        self.appendInsert('tracks_inserts.sql', line)
+        
 
     def sampleCar(self, rpm, max_rpm):
         ambiguousSample = self.carSampler.sample(rpm, max_rpm)
@@ -93,8 +97,8 @@ class Receiver(asyncore.dispatcher):
             print("ambiguous sample for rpm:%s max_rpm:%s" % (rpm, max_rpm))
         else:
             print("stored sample for rpm:%s max_rpm:%s" % (rpm, max_rpm))
-        insertFile = open(file='car_inserts.sql', mode='a', encoding='utf-8', newline='\n')
-        insertFile.write('INSERT INTO cars (id, name, maxrpm, startrpm) VALUES (ID, \'CAR_NAME\', %s, %s);\n' % (max_rpm, rpm))
+        line = 'INSERT INTO cars (id, name, maxrpm, startrpm) VALUES (ID, \'CAR_NAME\', %s, %s);\n' % (max_rpm, rpm)
+        self.appendInsert('car_inserts.sql', line)
 
     def parse(self, data):
         stats = struct.unpack('64f', data[0:256])
@@ -140,7 +144,7 @@ class Receiver(asyncore.dispatcher):
         self.track = dbAccess.identifyTrack(z, tracklength)
         self.car = dbAccess.identifyCar(rpm, max_rpm)
         
-        # self.sampleTrack(z, tracklength)
+        self.sampleTrack(z, tracklength)
         # TODO Don't sample both simultaneously
         # self.sampleCar(rpm, max_rpm)
 
@@ -156,3 +160,4 @@ class Receiver(asyncore.dispatcher):
         self.printResults(laptime)
         self.finished = True
         print('final distance: %s' % (self.previousDistance))
+        self.appendInsert('tracks_inserts.sql', ', %s);\n' % (self.previousDistance))

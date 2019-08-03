@@ -19,6 +19,7 @@ class TestStatsProcessor(unittest.TestCase):
         self.receiver.finishStage = MagicMock()
         
         self.stats = range(0, 256)
+        self.allZeroStats = [0.0] * 256
         
         self.thing = StatsProcessor(self.receiver)
         
@@ -42,6 +43,14 @@ class TestStatsProcessor(unittest.TestCase):
         self.assertFalse(self.receiver.startStage.called, 'Actually called unexpected receiver method')
         self.assertFalse(self.receiver.finishStage.called, 'Actually called unexpected receiver method')
         
+    def testStatsAfterAStageLeadToResetButNotStartStage(self):
+        self.thing.handleGameState(True, True, 0, 0, 900, 0, self.allZeroStats)
+    
+        self.assertTrue(self.receiver.resetStage.called, 'Never called expected receiver method')
+        self.assertFalse(self.receiver.prepareStage.called, 'Actually called unexpected receiver method')
+        self.assertFalse(self.receiver.startStage.called, 'Actually called unexpected receiver method')
+        self.assertFalse(self.receiver.finishStage.called, 'Actually called unexpected receiver method')
+        
     def testResetStage(self):
         self.thing.handleGameState(False, True, 0, 0, 900, 40, self.stats)
 
@@ -59,8 +68,7 @@ class TestStatsProcessor(unittest.TestCase):
         self.assertTrue(self.receiver.finishStage.called, 'Never called expected receiver method')
 
     def testFinishStageInDR2(self):
-        allZeroStats = [0.0] * 256
-        self.thing.handleGameState(True, False, 0, 1888, 1854, 12202, allZeroStats)
+        self.thing.handleGameState(True, False, 0, 1888, 1854, 12202, self.allZeroStats)
 
         self.assertFalse(self.receiver.resetStage.called, 'Actually called unexpected receiver method')
         self.assertFalse(self.receiver.prepareStage.called, 'Actually called unexpected receiver method')
