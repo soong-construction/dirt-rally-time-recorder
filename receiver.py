@@ -112,10 +112,10 @@ class Receiver(asyncore.dispatcher):
             self.topspeed = speed
 
         # TODO #8 Debugging
-        tracklength = stats[61]
+        currentlap1 = stats[36]
         time_now = int(python_time.time())
         if (time_now - self.last_time > 2):
-            print('distance %s, tracklength %s' % (distance, tracklength))
+            print('currentlap1 %s, currentlap2 %s' % (currentlap1, lap))
             self.last_time = time_now
             
         self.statsProcessor.handleGameState(self.inStage(), self.finished, lap, time, self.previousTime, distance, stats)
