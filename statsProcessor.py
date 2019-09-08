@@ -9,9 +9,8 @@ class StatsProcessor():
     def statsWithTelemetry(self, stats):
         return stats.count(0) != len(stats)
 
+    # TODO Are shakedowns and test drives ignored properly?
     def handleGameState(self, inStage, finished, lap, time, previousTime, distance, stats):
-        # TODO #8 lap always 0 for DR2... but all fields 0.0 after stage completes
-        # TODO Test if lap == 1 also works for second PP run
         if not finished and (lap == 1 or not self.statsWithTelemetry(stats)):
             self.receiver.finishStage(stats)
         
