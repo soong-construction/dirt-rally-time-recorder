@@ -1,17 +1,22 @@
+
+
 class StatsProcessor():
     
     goLineDistance = 0.0
+    completionTrackProgress = 0.999
     
     def __init__(self, receiver):
         self.receiver = receiver
         
+    def finishedDR2TimeTrial(self, stats, trackProgess):
+        return not self.statsWithTelemetry(stats) and trackProgess >= self.completionTrackProgress
 
     def statsWithTelemetry(self, stats):
         return stats.count(0) != len(stats)
 
     # TODO Are shakedowns and test drives ignored properly?
-    def handleGameState(self, inStage, finished, lap, time, previousTime, distance, stats):
-        if not finished and (lap == 1 or not self.statsWithTelemetry(stats)):
+    def handleGameState(self, inStage, finished, lap, time, previousTime, distance, trackProgress, stats):
+        if not finished and (lap == 1 or self.finishedDR2TimeTrial(stats, trackProgress)):
             self.receiver.finishStage(stats)
         
         elif time < previousTime:

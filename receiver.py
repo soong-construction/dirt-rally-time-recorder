@@ -30,7 +30,7 @@ class Receiver(asyncore.dispatcher):
         self.tracksSampler = Sampler('sampling/dr2_tracks')
         self.last_time = 0
         self.previousDistance = 0
-        self.tracklength = 0
+        self.tracklength = -1
         
         self.reconnect()
 
@@ -119,7 +119,8 @@ class Receiver(asyncore.dispatcher):
             print('currentlap1 %s, currentlap2 %s' % (currentlap1, lap))
             self.last_time = time_now
             
-        self.statsProcessor.handleGameState(self.inStage(), self.finished, lap, time, self.previousTime, distance, stats)
+        trackProgress = distance / self.tracklength
+        self.statsProcessor.handleGameState(self.inStage(), self.finished, lap, time, self.previousTime, distance, trackProgress, stats)
 
         self.previousTime = time
         self.previousDistance = distance
