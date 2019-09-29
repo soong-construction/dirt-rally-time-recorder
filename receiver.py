@@ -4,7 +4,6 @@ import struct
 from databaseAccess import DatabaseAccess
 from database import Database
 from sampler import Sampler
-import time as python_time
 from statsProcessor import StatsProcessor
 
 class Receiver(asyncore.dispatcher):
@@ -28,7 +27,6 @@ class Receiver(asyncore.dispatcher):
         
         self.carSampler = Sampler('sampling/dr2')
         self.tracksSampler = Sampler('sampling/dr2_tracks')
-        self.last_time = 0
         self.previousDistance = 0
         self.tracklength = -1
         
@@ -112,13 +110,6 @@ class Receiver(asyncore.dispatcher):
         if self.topspeed < speed:
             self.topspeed = speed
 
-        # TODO #8 Debugging
-        currentlap1 = stats[36]
-        time_now = int(python_time.time())
-        if (time_now - self.last_time > 2):
-            print('currentlap1 %s, currentlap2 %s' % (currentlap1, lap))
-            self.last_time = time_now
-            
         trackProgress = distance / self.tracklength
         self.statsProcessor.handleGameState(self.inStage(), self.finished, lap, time, self.previousTime, distance, trackProgress, stats)
 
