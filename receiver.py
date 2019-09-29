@@ -30,6 +30,7 @@ class Receiver(asyncore.dispatcher):
         self.tracksSampler = Sampler('sampling/dr2_tracks')
         self.last_time = 0
         self.previousDistance = 0
+        self.tracklength = 0
         
         self.reconnect()
 
@@ -144,6 +145,7 @@ class Receiver(asyncore.dispatcher):
         self.track = dbAccess.identifyTrack(z, tracklength)
         self.car = dbAccess.identifyCar(rpm, max_rpm)
         
+        self.tracklength = tracklength
         self.sampleTrack(z, tracklength)
         # TODO Don't sample both simultaneously
         # self.sampleCar(rpm, max_rpm)
@@ -159,5 +161,5 @@ class Receiver(asyncore.dispatcher):
         self.databaseAccess.recordResults(self.track, self.car, laptime)
         self.printResults(laptime)
         self.finished = True
-        print('final distance: %s' % (self.previousDistance))
+        print('final distance: %s at: %s' % (self.previousDistance, self.previousDistance / self.tracklength))
         self.appendInsert('tracks_inserts.sql', ', %s);\n' % (self.previousDistance))
