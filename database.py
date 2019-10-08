@@ -64,6 +64,7 @@ class Database:
 
     def loadCars(self, rpm, max_rpm):
         # Some more delta allowed for startrpm as 2nd Pikes Peak run seems to simulate worn/warmed up engine
+        # TODO #8 Is car after service reporting higher RPMs than without?
         self.db.execute('SELECT id, name FROM cars WHERE abs(maxrpm - ?) < 0.01 AND abs(startrpm - ?) < 2.0', (max_rpm, rpm))
         return self.db.fetchall()
 
@@ -86,6 +87,8 @@ class Database:
     
     def getTrackUpdateStatements(self, timestamp, tracks):
         result = []
+        if len(tracks) == 0:
+            result.append(UPDATE_STATEMENT % ('Track', '-1', timestamp))
         for index in tracks:
             result.append(UPDATE_STATEMENT % ('Track', index, timestamp))
         

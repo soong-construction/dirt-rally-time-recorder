@@ -3,7 +3,7 @@ import unittest
 from database import Database
 import time
 
-class TestDatabaseAccess(unittest.TestCase):
+class TestDatabase(unittest.TestCase):
 
 
     def setUp(self):
@@ -26,6 +26,11 @@ class TestDatabaseAccess(unittest.TestCase):
         statements = self.thing.getTrackUpdateStatements(123456, [1, 5])
 
         self.assertEqual(statements, ['UPDATE laptimes SET Track=1 WHERE Timestamp="123456";', 'UPDATE laptimes SET Track=5 WHERE Timestamp="123456";'])
+
+    def testUnidentifiedTrackUpdateStatements(self):
+        statements = self.thing.getTrackUpdateStatements(123456, [])
+
+        self.assertEqual(statements, ['UPDATE laptimes SET Track=-1 WHERE Timestamp="123456";'])
 
     def testGetUserId(self):
         userId = self.thing.createUserId();
