@@ -24,7 +24,7 @@ You can choose to download and unzip a ready-to-use bundle (tested to work on Wi
 - Install SQLite: https://www.sqlite.org/cli.html  
   - choose the ``sqlite-tools-win32-x86-XXXXXX.zip`` package
   - extract ``sqlite3.exe`` to your work folder, i.e. next to ``timerecord.py``    
-- Setup database with car and track tables with SQLite  (TODO Combine to one *.sql for DR1 and DR2 each)
+- Setup database with car and track tables with SQLite  
   - ``.open --new dirtrally-lb.db`` 
   - ``.read setup-dr1.sql`` 
 - Start time tracking  

@@ -4,9 +4,15 @@ block_cipher = None
 
 
 a = Analysis(['timerecord.py'],
-             pathex=['G:\\git-repos\\dirt-rally-time-recorder'],
+             pathex=['.'],
              binaries=[],
-             datas=[('config.yml', '.')],
+             datas=[
+             	('config.yml', '.'),
+             	('dirtrally-lb.db', '.'),
+             	('LICENSE', '.'),
+             	('VERSION', '.'),
+             	('README.md', '.')
+             ],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
