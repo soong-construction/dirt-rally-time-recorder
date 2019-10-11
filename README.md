@@ -18,9 +18,7 @@ Time tracking works for stage rallies and the Pikes Peak events.
   - extract ``sqlite3.exe`` to your work folder, i.e. next to ``timerecord.py``    
 - Setup database with car and track tables with SQLite  (TODO Combine to one *.sql for DR1 and DR2 each)
   - ``.open --new dirtrally-lb.db`` 
-  - ``.read tracks.sql`` 
-  - ``.read cars.sql``
-  - ``.read controls.sql``
+  - ``.read setup-dr1.sql`` 
 - Configure UDP telemetry in *[home-or-documents-dir]\My Games\DiRT Rally\hardwaresettings\hardware_settings_config.xml*
   - Enable telemetry and request extradata by adapting the appropriate line as follows: ``<udp enabled="true" extradata="3" ...``
   
