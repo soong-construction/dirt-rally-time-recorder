@@ -138,9 +138,12 @@ class Receiver(asyncore.dispatcher):
         self.car = dbAccess.identifyCar(rpm, max_rpm)
         
         self.tracklength = tracklength
-        self.sampleTrack(z, tracklength)
+        
+        if (dbAccess.identify(self.track) <= 0):
+            self.sampleTrack(z, tracklength)
         # TODO Don't sample both simultaneously
-        # self.sampleCar(rpm, max_rpm)
+        if (dbAccess.identify(self.car) <= 0):
+            self.sampleCar(rpm, max_rpm)
 
         data = "dirtrally.%s.%s.%s.started:1|c" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car))
         print(data)
