@@ -1,6 +1,7 @@
 class AmbiguousResultHandler(object):
     
     def __init__(self):
+        # TODO #9 This requires bundling sqlite3
         self.scriptTemplate = 'sqlite3 dirtrally-laptimes.db "%s"'
         pass
 
@@ -15,6 +16,7 @@ class AmbiguousResultHandler(object):
         
         fileName =self.buildFileName(track, car, timestamp)
         
+        # TODO #4 Clean up: Remove <epoch-prefix>* files older than 7 days on start up 
         insertFile = open(file=fileName, mode='w', encoding='utf-8', newline='\n')
         insertFile.write(self.buildScript(updateStatement))
         

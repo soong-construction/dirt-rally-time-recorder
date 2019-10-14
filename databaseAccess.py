@@ -57,6 +57,7 @@ class DatabaseAccess:
             return list(index for (index, name) in cars)
 
 
+    # TODO #4 Same as with tracks
     def printCarUpdates(self, car, timestamp):
         updates = self.database.getCarUpdateStatements(timestamp, car)
         print("Please update the recorded laptimes according to the correct car:")
@@ -68,7 +69,7 @@ class DatabaseAccess:
 
     def handleTrackUpdates(self, track, timestamp, car):
         updates = self.database.getTrackUpdateStatements(timestamp, track)
-        print("Please update the recorded laptimes according to the correct track:")
+        print("Please run one of the scripts below to link the recorded laptime to the correct track:")
         for index, update in enumerate(updates):
             elementId = track[index]
             trackName = self.database.getTrackName(elementId)
@@ -76,7 +77,7 @@ class DatabaseAccess:
             
             script = self.ambiguousResultHandler.handleUpdateStatement(trackName, carName, timestamp, update)
             
-            print("%s ==> run %s" % (trackName, script))
+            print(" ==> %s" % (script, ))
 
     def recordResults(self, track, car, laptime):
         timestamp = time.time()
