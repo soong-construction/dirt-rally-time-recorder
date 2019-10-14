@@ -32,11 +32,8 @@ Time tracking works for stage rallies and the Pikes Peak events.
   - the tool runs in the background, reporting the car and the track it identifies from the telemetry  
   - for cars, it will display control interface information such as the transmission type (based on [this discussion](http://forums.codemasters.com/discussion/7071/dirt-rally-handbrake-and-transmission-information))  
   - on stage completion, it reports your top speed and saves your time 
-- List your times with SQLite  
-  - ``.open dirtrally-laptimes.db``
-  - ``attach 'dirtrally-lb.db' as base;``
-  - to create a CSV file consumable by your favorite spreadsheet editor, run ``.once snapshot.csv`` (don't if you prefer direct output)
-  - ``select t.name, c.name, strftime('%Y-%m-%d %H:%M:%S', datetime(l.timestamp, 'unixepoch', 'localtime')), l.time from base.tracks t, base.cars c, laptimes l where t.id=l.track and c.id=l.car;``
+- to quickly list your times with SQLite, run ``list-laptimes.bat``  
+  - to create a CSV file consumable by your favorite spreadsheet editor, run ``export-laptimes.bat``  
 
 ## Troubleshooting
 Since DiRT Rally telemetry data doesn't allow to clearly identify every available car and track, this tool will sometimes ask you to resolve this after completing a stage.  
