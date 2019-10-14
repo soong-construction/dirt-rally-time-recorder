@@ -1,9 +1,11 @@
 import time
+from ambiguousResultHandler import AmbiguousResultHandler
 
 class DatabaseAccess:
     
     def __init__(self, database):
         self.database = database
+        self.ambiguousResultHandler = AmbiguousResultHandler()
     
     def identifyTrack(self, z, tracklength):
         tracks = self.database.loadTracks(tracklength)
@@ -64,23 +66,27 @@ class DatabaseAccess:
             print("%s ==> %s" % (carName, update))
 
 
-    def printTrackUpdates(self, track, timestamp):
+    def handleTrackUpdates(self, track, timestamp, car):
         updates = self.database.getTrackUpdateStatements(timestamp, track)
         print("Please update the recorded laptimes according to the correct track:")
         for index, update in enumerate(updates):
             elementId = track[index]
             trackName = self.database.getTrackName(elementId)
-            print("%s ==> %s" % (trackName, update))
+            carName = self.database.getCarName(car) if self.identify(car) != -1 else '???'
+            
+            script = self.ambiguousResultHandler.handleUpdateStatement(trackName, carName, timestamp, update)
+            
+            print("%s ==> run %s" % (trackName, script))
 
     def recordResults(self, track, car, laptime):
         timestamp = time.time()
         self.database.recordResults(self.identify(track), self.identify(car), timestamp, laptime)
         
         if isinstance(car, (list,)):
-            self.printCarUpdates(car, timestamp)
+            self.printCarUpdates(car, timestamp, track)
                 
         if isinstance(track, (list,)):
-            self.printTrackUpdates(track, timestamp)
+            self.handleTrackUpdates(track, timestamp, car)
 
     def identify(self, element):
         return element if isinstance(element, int) else -1
