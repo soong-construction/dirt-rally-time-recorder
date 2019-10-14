@@ -84,7 +84,7 @@ class DatabaseAccess:
         self.database.recordResults(self.identify(track), self.identify(car), timestamp, laptime)
         
         if isinstance(car, (list,)):
-            self.printCarUpdates(car, timestamp, track)
+            self.printCarUpdates(car, timestamp)
                 
         if isinstance(track, (list,)):
             self.handleTrackUpdates(track, timestamp, car)

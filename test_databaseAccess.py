@@ -83,7 +83,7 @@ class TestDatabaseAccess(unittest.TestCase):
         
         self.database.getCarName = MagicMock(side_effect=list(name for (_,name) in cars))
         
-        self.thing.recordResults(100, cars, 234.44)
+        self.thing.recordResults(100, cars, 234.44, )
         
     def testGetCarInterfacesStatementWithoutData(self):
         handbrakeData = [(None)]
