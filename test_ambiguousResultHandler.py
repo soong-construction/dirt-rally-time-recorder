@@ -17,5 +17,5 @@ class TestAmbiguousResultHandler(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    # import sys;sys.argv = ['', 'TestAmbiguousResultHandler.testSingleUpdateStatement']
+    # import sys;sys.argv = ['', 'TestAmbiguousResultHandler.testBuildFileName']
     unittest.main()
