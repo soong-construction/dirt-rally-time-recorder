@@ -86,7 +86,7 @@ class Receiver(asyncore.dispatcher):
             print("ambiguous sample for z:%s tracklength:%s" % (z, tracklength))
         else:
             print("stored sample for z:%s tracklength:%s" % (z, tracklength))
-        line = 'INSERT INTO Tracks (id, name, length, startz VALUES (ID, \'TRACK_NAME\', %s, %s);\n' % (tracklength, z)
+        line = 'INSERT INTO Tracks (id, name, length, startz) VALUES (ID, \'TRACK_NAME\', %s, %s);\n' % (tracklength, z)
         self.appendInsert('tracks_inserts.sql', line)
         
 
