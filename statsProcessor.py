@@ -14,7 +14,6 @@ class StatsProcessor():
     def statsWithTelemetry(self, stats):
         return stats.count(0) != len(stats)
 
-    # TODO Are shakedowns and test drives ignored properly?
     def handleGameState(self, inStage, finished, lap, time, previousTime, distance, trackProgress, stats):
         if not finished and (lap == 1 or self.finishedDR2TimeTrial(stats, trackProgress)):
             self.receiver.finishStage(stats)

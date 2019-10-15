@@ -4,6 +4,10 @@ This tool allows you to track your stage times in DiRT Rally and DiRT Rally 2.0 
 
 Time tracking works for stage rallies and the Pikes Peak events of the original DiRT Rally.   
 
+## Enable game telemetry
+- Configure UDP telemetry in *[home-or-documents-dir]\My Games\DiRT Rally [2.0]\hardwaresettings\hardware_settings_config.xml*
+  - Enable telemetry and request extradata by adapting the appropriate line as follows: ``<udp enabled="true" extradata="3" ...``
+  
 ## First time set up
 You can choose to download and unzip a ready-to-use bundle (tested to work on Windows 10 x64). If you don't trust pre-built .exe files, set up *dirt-rally-time-recorder* from scratch 
 
@@ -31,14 +35,10 @@ You can choose to download and unzip a ready-to-use bundle (tested to work on Wi
   - open a command prompt (e.g. via the work folder context menu, this saves you from moving to this directory manually) and run ``python timerecord.py``
   - It should tell you to be *Waiting for data...*, otherwise check the set up or take a look at the Troubleshooting section   
   
-## Enable game telemetry
-- Configure UDP telemetry in *[home-or-documents-dir]\My Games\DiRT Rally [2.0]\hardwaresettings\hardware_settings_config.xml*
-  - Enable telemetry and request extradata by adapting the appropriate line as follows: ``<udp enabled="true" extradata="3" ...``
-  
 ## Record stage times
 - Start DiRT Rally [2.0] and finish a stage  
   - the tool runs in the background, reporting the car and the track it identifies from the telemetry  
-  - for cars, it will display control interface information such as the transmission type (based on [this discussion](http://forums.codemasters.com/discussion/7071/dirt-rally-handbrake-and-transmission-information))  
+  - for cars, it will display control interface information such as the transmission type (based on [this discussion](http://forums.codemasters.com/discussion/7071/dirt-rally-handbrake-and-transmission-information)) (TODO Toggle off for DR2)  
   - on stage completion, it reports your top speed and saves your time 
 - to quickly list your times with SQLite, run ``list-laptimes.bat``  
   - to create a CSV file consumable by your favorite spreadsheet editor, run ``export-laptimes.bat``  
