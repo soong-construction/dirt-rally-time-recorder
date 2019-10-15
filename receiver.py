@@ -86,7 +86,7 @@ class Receiver(asyncore.dispatcher):
             print("ambiguous sample for z:%s tracklength:%s" % (z, tracklength))
         else:
             print("stored sample for z:%s tracklength:%s" % (z, tracklength))
-        line = 'INSERT INTO Tracks (id, name, length, startz, finish_distance) VALUES (ID, \'TRACK_NAME\', %s, %s' % (tracklength, z)
+        line = 'INSERT INTO Tracks (id, name, length, startz VALUES (ID, \'TRACK_NAME\', %s, %s);\n' % (tracklength, z)
         self.appendInsert('tracks_inserts.sql', line)
         
 
@@ -156,5 +156,5 @@ class Receiver(asyncore.dispatcher):
         self.databaseAccess.recordResults(self.track, self.car, laptime)
         self.printResults(laptime)
         self.finished = True
+        # TODO #8 Remove when done with issue
         print('final distance: %s at: %s' % (self.previousDistance, self.previousDistance / self.tracklength))
-        self.appendInsert('tracks_inserts.sql', ', %s);\n' % (self.previousDistance))

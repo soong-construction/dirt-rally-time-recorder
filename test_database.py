@@ -30,7 +30,7 @@ class TestDatabase(unittest.TestCase):
     def testUnidentifiedTrackUpdateStatements(self):
         statements = self.thing.getTrackUpdateStatements(123456, [])
 
-        self.assertEqual(statements, ['UPDATE laptimes SET Track=-1 WHERE Timestamp="123456";'])
+        self.assertEqual(statements, [])
 
     def testGetUserId(self):
         userId = self.thing.createUserId();
