@@ -30,7 +30,7 @@ You can choose to download and unzip a ready-to-use bundle (tested to work on Wi
   - extract ``sqlite3.exe`` to your work folder, i.e. next to ``timerecord.py``    
 - Setup database with car and track tables with SQLite  
   - ``.open --new dirtrally-lb.db`` 
-  - ``.read setup-dr1.sql`` 
+  - ``.read setup-dr1.sql`` (or ``setup-dr2.sql``)
 - Start time tracking  
   - open a command prompt (e.g. via the work folder context menu, this saves you from moving to this directory manually) and run ``python timerecord.py``
   - It should tell you to be *Waiting for data...*, otherwise check the set up or take a look at the Troubleshooting section   
