@@ -86,11 +86,13 @@ class Database:
         return result
     
     def getTrackUpdateStatements(self, timestamp, tracks):
-        result = []
+        # TODO #8 Debug
         if len(tracks) == 0:
-            result.append(UPDATE_STATEMENT % ('Track', '-1', timestamp))
-        for index in tracks:
-            result.append(UPDATE_STATEMENT % ('Track', index, timestamp))
+            print(UPDATE_STATEMENT % ('Track', 'NEW-ID', timestamp))
+
+        result = []
+        for track in tracks:
+            result.append(UPDATE_STATEMENT % ('Track', track, timestamp))
         
         return result
 
