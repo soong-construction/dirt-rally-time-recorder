@@ -56,9 +56,9 @@ If you encounter an error message talking about sockets, understand that this to
 In case you modified the telemetry ip or port in *hardware_settings_config.xml*, adapt ``config.yml`` to these.
 
 Note: Since this is still WIP, have a look at ``migrate.sql`` to find instructions how to migrate your data when updating this tool.    
-Consider dropping your ``*.db`` files if you encounter errors, thus starting over (time tracking data is lost).  
+Consider deleting your ``*.db`` files if you encounter errors, thus starting over (time tracking data is lost).  
 
-Feel free to open an issue.  
+Feel free to [open an issue](https://github.com/soong-construction/dirt-rally-time-recorder/issues/new).  
 
 
 ## Resources
