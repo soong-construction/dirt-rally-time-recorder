@@ -4,6 +4,7 @@ import time
 
 UPDATE_STATEMENT = 'UPDATE laptimes SET %s=%s WHERE Timestamp="%s";'
 
+
 class Database:
     
     laptimesDb = '/dirtrally-laptimes.db'
@@ -39,7 +40,7 @@ class Database:
                 
                 lapdb.execute('CREATE TABLE user (user TEXT);')
                 userId = self.createUserId()
-                lapdb.execute('INSERT INTO user VALUES (?)', (userId, ))
+                lapdb.execute('INSERT INTO user VALUES (?)', (userId,))
                 lapconn.commit()
                 lapdb.execute('SELECT user FROM user;')
                 res = lapdb.fetchall()
@@ -63,9 +64,16 @@ class Database:
 
     def loadCars(self, rpm, max_rpm):
         # Some more delta allowed for startrpm as 2nd Pikes Peak run seems to simulate worn/warmed up engine
-        # TODO #8 Is car after service reporting higher RPMs than without?
-        self.db.execute('SELECT id, name FROM cars WHERE abs(maxrpm - ?) < 0.01 AND abs(startrpm - ?) < 2.0', (max_rpm, rpm))
-        return self.db.fetchall()
+        # (1.0 - ?) = deviation rate. To account for varying rpm reported via UDP (DR2), allow some slack
+        carSelectStatement = 'SELECT id, name FROM cars WHERE abs(maxrpm - ?) < 0.01 AND startrpm > (1.0 - ?) * ? AND startrpm <= ?'
+        self.db.execute(carSelectStatement, (max_rpm, 0.01, rpm, rpm))
+        result = self.db.fetchall()
+        if (len(result) == 0):
+            fuzzyFactor = 0.2
+            print("No car matched, trying to fuzzy match (%s deviation)..." % (fuzzyFactor, ))
+            self.db.execute(carSelectStatement, (max_rpm, fuzzyFactor, rpm, rpm))
+            result = self.db.fetchall()
+        return result
 
     def recordResults(self, track, car, timestamp, laptime):
         try:
