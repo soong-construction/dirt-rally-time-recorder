@@ -6,7 +6,7 @@ class TestAmbiguousResultHandler(unittest.TestCase):
 
     def setUp(self):
         self.some_time = datetime(2019, 10, 14, tzinfo=timezone.utc)
-        self.thing = AmbiguousResultHandler()
+        self.thing = AmbiguousResultHandler('db')
 
     def tearDown(self):
         pass

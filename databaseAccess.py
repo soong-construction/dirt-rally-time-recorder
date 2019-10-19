@@ -1,11 +1,11 @@
 import time
-from ambiguousResultHandler import AmbiguousResultHandler
+
 
 class DatabaseAccess:
     
-    def __init__(self, database):
+    def __init__(self, database, ambiguousResultHandler):
         self.database = database
-        self.ambiguousResultHandler = AmbiguousResultHandler()
+        self.ambiguousResultHandler = ambiguousResultHandler
     
     def identifyTrack(self, z, tracklength):
         tracks = self.database.loadTracks(tracklength)
@@ -57,15 +57,17 @@ class DatabaseAccess:
             return list(index for (index, name) in cars)
 
 
-    # TODO #4 Same as with tracks
-    def printCarUpdates(self, car, timestamp):
+    def printCarUpdates(self, car, timestamp, track):
         updates = self.database.getCarUpdateStatements(timestamp, car)
-        print("Please update the recorded laptimes according to the correct car:")
+        print("Please run one of the scripts below to link the recorded laptime to the correct car:")
         for index, update in enumerate(updates):
             elementId = car[index]
             carName = self.database.getCarName(elementId)
-            print("%s ==> %s" % (carName, update))
-
+            trackName = self.database.getTrackName(track) if self.identify(track) != -1 else '???'
+            
+            script = self.ambiguousResultHandler.handleUpdateStatement(trackName, carName, timestamp, update)
+            
+            print(" ==> %s" % (script, ))
 
     def handleTrackUpdates(self, track, timestamp, car):
         updates = self.database.getTrackUpdateStatements(timestamp, track)
@@ -84,7 +86,7 @@ class DatabaseAccess:
         self.database.recordResults(self.identify(track), self.identify(car), timestamp, laptime)
         
         if isinstance(car, (list,)):
-            self.printCarUpdates(car, timestamp)
+            self.printCarUpdates(car, timestamp, track)
                 
         if isinstance(track, (list,)):
             self.handleTrackUpdates(track, timestamp, car)

@@ -10,7 +10,8 @@ class TestDatabaseAccess(unittest.TestCase):
     def setUp(self):
         self.database = Database('test')
         self.database.recordResults = MagicMock()
-        self.thing = DatabaseAccess(self.database)
+        self.ambiguousResultHandler = MagicMock()
+        self.thing = DatabaseAccess(self.database, self.ambiguousResultHandler)
 
     def tearDown(self):
         pass
@@ -82,8 +83,11 @@ class TestDatabaseAccess(unittest.TestCase):
         cars = [(1, 'car1'), (2, 'car2')]
         
         self.database.getCarName = MagicMock(side_effect=list(name for (_,name) in cars))
+        self.database.getTrackName = MagicMock(returnValue = 'track')
         
         self.thing.recordResults(100, cars, 234.44, )
+        
+        # TODO assert missing
         
     def testGetCarInterfacesStatementWithoutData(self):
         handbrakeData = [(None)]

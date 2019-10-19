@@ -7,7 +7,8 @@ UPDATE_STATEMENT = 'UPDATE laptimes SET %s=%s WHERE Timestamp="%s";'
 
 class Database:
     
-    laptimesDb = '/dirtrally-laptimes.db'
+    laptimesDbName = 'dirtrally-laptimes.db'
+    laptimesDb = '/' + laptimesDbName
     baseDb = '/dirtrally-lb.db'
     
     def __init__(self, approot):

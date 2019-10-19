@@ -5,6 +5,7 @@ from databaseAccess import DatabaseAccess
 from database import Database
 from sampler import Sampler
 from statsProcessor import StatsProcessor
+from ambiguousResultHandler import AmbiguousResultHandler
 
 class Receiver(asyncore.dispatcher):
 
@@ -21,7 +22,8 @@ class Receiver(asyncore.dispatcher):
         self.previousTime = 0
         
         self.database = Database(approot).setup()
-        self.databaseAccess = DatabaseAccess(self.database)
+        self.ambiguousResultHandler = AmbiguousResultHandler(Database.laptimesDbName)
+        self.databaseAccess = DatabaseAccess(self.database, self.ambiguousResultHandler)
         self.userArray = self.database.initializeLaptimesDb()
         self.statsProcessor = StatsProcessor(self)
         
