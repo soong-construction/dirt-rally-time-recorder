@@ -62,8 +62,9 @@ Feel free to [open an issue](https://github.com/soong-construction/dirt-rally-ti
 
 
 ## Resources
-UDP telemetry documentation:  
-[https://docs.google.com/spreadsheets/d/1O2_I-lGVDpDrhzcAlWCiVTHonUvn3rXfQGOVjOYLeB8/edit?usp=sharing]
+UDP telemetry documentation (cf. DiRT 4 for DiRT Rally 2.0):  
+[https://docs.google.com/spreadsheets/d/1UTgeE7vbnGIzDz-URRk2eBIPc_LR1vWcZklp7xD9N0Y/edit#gid=0]
+
 
 ## Remainder
 Tested with DiRT Rally v1.22 and DiRT Rally 2.0 v1.9
