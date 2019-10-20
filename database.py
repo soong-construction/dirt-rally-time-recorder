@@ -87,6 +87,10 @@ class Database:
             print("Error connecting to database:", exc)
             
     def getCarUpdateStatements(self, timestamp, cars):
+        # TODO #8 Debug
+        if len(cars) == 0:
+            print(UPDATE_STATEMENT % ('Track', 'NEW-ID', timestamp))
+        
         result = []
         for index in cars:
             result.append(UPDATE_STATEMENT % ('Car', index, timestamp))
