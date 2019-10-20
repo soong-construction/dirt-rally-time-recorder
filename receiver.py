@@ -134,6 +134,14 @@ class Receiver(asyncore.dispatcher):
         max_rpm = stats[63]  # *10 to get real value
         z = stats[6]
         tracklength = stats[61]
+        
+        # TODO #8 I didn't see there seem to be fields for max. gear and idle rpm in DR2!
+        
+        # Adapt self.recv and struct.unpack calls accordingly
+#         idle_rpm = stats[64]
+#         top_gear = stats[65]
+#         print('rpm %s, idle_rpm ' % (rpm, idle_rpm))
+#         print('top_gear %s' % (top_gear, ))
 
         dbAccess = self.databaseAccess
         self.track = dbAccess.identifyTrack(z, tracklength)
@@ -150,8 +158,8 @@ class Receiver(asyncore.dispatcher):
         data = "dirtrally.%s.%s.%s.started:1|c" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car))
         print(data)
         
-        # TODO #8 Include DR2 cars
-        # self.showCarControlInformation()
+        # TODO #8 Include DR2 cars: https://docs.google.com/spreadsheets/d/1B0MNyHmtHrl0PN2R18tQ4mBkaqnouWR_dm6MPHu3qhE/edit#gid=296137675
+        self.showCarControlInformation()
 
     def finishStage(self, stats):
         laptime = stats[62]
