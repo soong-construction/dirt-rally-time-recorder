@@ -5,6 +5,6 @@ attach 'dirtrally-lb.db' as base;
 select t.name, 
 		c.name, 
 		strftime('%Y-%m-%d %H:%M:%S', datetime(l.timestamp, 'unixepoch', 'localtime')) as timestamp,
-		l.time
+		strftime('%M:%f', l.time, 'unixepoch')
 from base.tracks t, base.cars c, laptimes l
 where t.id=l.track and c.id=l.car;
