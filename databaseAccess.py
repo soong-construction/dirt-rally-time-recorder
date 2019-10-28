@@ -63,7 +63,7 @@ class DatabaseAccess:
         for index, update in enumerate(updates):
             elementId = car[index]
             carName = self.database.getCarName(elementId)
-            trackName = self.database.getTrackName(track) if self.identify(track) != -1 else '???'
+            trackName = self.database.getTrackName(track) if self.identify(track) != -1 else 'UNKNOWN'
             
             script = self.ambiguousResultHandler.handleUpdateStatement(trackName, carName, timestamp, update)
             
@@ -75,7 +75,7 @@ class DatabaseAccess:
         for index, update in enumerate(updates):
             elementId = track[index]
             trackName = self.database.getTrackName(elementId)
-            carName = self.database.getCarName(car) if self.identify(car) != -1 else '???'
+            carName = self.database.getCarName(car) if self.identify(car) != -1 else 'UNKNOWN'
             
             script = self.ambiguousResultHandler.handleUpdateStatement(trackName, carName, timestamp, update)
             
