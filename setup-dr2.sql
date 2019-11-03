@@ -60,6 +60,8 @@ INSERT INTO Tracks (id, name, length, startz) VALUES (506, 'Ascenso bosque Montv
 INSERT INTO Tracks (id, name, length, startz) VALUES (507, 'Final de Bellriu', 13164.330078125, -2404.716552734375);
 INSERT INTO Tracks (id, name, length, startz) VALUES (508, 'Subida por carretera', 4380.740234375, -3003.61083984375);
 INSERT INTO Tracks (id, name, length, startz) VALUES (509, 'Salida desde Montverd', 6143.5703125, 2607.35400390625);
+INSERT INTO Tracks (id, name, length, startz) VALUES (510, 'Ascenso por valle el Gualet', 7005.68994140625, 190.19236755371094);
+INSERT INTO Tracks (id, name, length, startz) VALUES (511, 'Centenera', 10568.4296875, -2326.286865234375);
 
 -- Monaro, Australia:600
 INSERT INTO Tracks (id, name, length, startz) VALUES (600, 'Mountain Kaye Pass', 13301.109375, -2352.93017578125);
