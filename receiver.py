@@ -20,6 +20,7 @@ class Receiver(asyncore.dispatcher):
         self.car = 0
         self.topspeed = 0
         self.previousTime = 0
+        self.fieldCount = 66
         
         self.database = Database(approot).setup()
         self.ambiguousResultHandler = AmbiguousResultHandler(Database.laptimesDbName)
@@ -52,7 +53,7 @@ class Receiver(asyncore.dispatcher):
         return True
 
     def handle_read(self):
-        data = self.recv(512)
+        data = self.recv(self.fieldCount * 8)
         
         if not data:
             return
@@ -102,7 +103,7 @@ class Receiver(asyncore.dispatcher):
         self.appendInsert('car_inserts.sql', line)
 
     def parse(self, data):
-        stats = struct.unpack('64f', data[0:256])
+        stats = struct.unpack(str(self.fieldCount) + 'f', data[0:self.fieldCount * 4])
         
         time = stats[0]
         lap = stats[59]
@@ -130,22 +131,20 @@ class Receiver(asyncore.dispatcher):
         self.topspeed = 0
         
     def startStage(self, stats):
-        rpm = stats[37]  # *10 to get real value
+        actual_rpm = stats[37]  # *10 to get real value
         max_rpm = stats[63]  # *10 to get real value
         z = stats[6]
         tracklength = stats[61]
         
-        # TODO #8 I didn't see there seem to be fields for max. gear and idle rpm in DR2!
-        
-        # Adapt self.recv and struct.unpack calls accordingly
-#         idle_rpm = stats[64]
-#         top_gear = stats[65]
-#         print('rpm %s, idle_rpm ' % (rpm, idle_rpm))
-#         print('top_gear %s' % (top_gear, ))
+        # TODO #8 Debug
+        idle_rpm = stats[64]
+        top_gear = stats[65]
+        print('actual_rpm %s, idle_rpm %s' % (actual_rpm, idle_rpm))
+        print('top_gear %s' % (top_gear, ))
 
         dbAccess = self.databaseAccess
         self.track = dbAccess.identifyTrack(z, tracklength)
-        self.car = dbAccess.identifyCar(rpm, max_rpm)
+        self.car = dbAccess.identifyCar(idle_rpm, max_rpm)
         
         self.tracklength = tracklength
         
@@ -153,7 +152,7 @@ class Receiver(asyncore.dispatcher):
             self.sampleTrack(z, tracklength)
         # TODO Don't sample both simultaneously. Remove/shelve sampling before next release
         # if (dbAccess.identify(self.car) <= 0):
-        #    self.sampleCar(rpm, max_rpm)
+        #    self.sampleCar(actual_rpm, max_rpm)
 
         data = "dirtrally.%s.%s.%s.started:1|c" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car))
         print(data)
