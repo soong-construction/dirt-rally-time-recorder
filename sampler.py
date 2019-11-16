@@ -2,9 +2,12 @@ import shelve
 
 class Sampler():
 
+    def setup(self):
+        self.dict = shelve.open(self.filename)
+
     def __init__(self, filename):
         self.filename = filename
-        self.dict = shelve.open(self.filename)
+        self.setup()
 
     def close(self):
         self.dict.close()
