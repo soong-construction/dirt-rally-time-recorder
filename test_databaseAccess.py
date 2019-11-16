@@ -82,12 +82,14 @@ class TestDatabaseAccess(unittest.TestCase):
     def testHandleResultsWithAmbiguousCars(self):
         cars = [(1, 'car1'), (2, 'car2')]
         
+        self.thing.printCarUpdates = MagicMock();
+        
         self.database.getCarName = MagicMock(side_effect=list(name for (_,name) in cars))
         self.database.getTrackName = MagicMock(returnValue = 'track')
         
         self.thing.recordResults(100, cars, 234.44, )
         
-        # TODO assert missing
+        self.assertEquals(self.thing.printCarUpdates.call_count, 1);
         
     def testGetCarInterfacesStatementWithoutData(self):
         handbrakeData = [(None)]
