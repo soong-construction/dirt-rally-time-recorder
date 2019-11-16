@@ -64,16 +64,11 @@ class Database:
         return self.db.fetchall()
 
     def loadCars(self, rpm, max_rpm):
-        # Some more delta allowed for startrpm as 2nd Pikes Peak run seems to simulate worn/warmed up engine
-        # (1.0 - ?) = deviation rate. To account for varying rpm reported via UDP (DR2), allow some slack
+        # startrpm: Some delta allowed as 2nd Pikes Peak run seems to simulate worn/warmed up engine
+        # (1.0 - ?) = minimal gain of startrpm, i.e. reported value can be that much higher
         carSelectStatement = 'SELECT id, name FROM cars WHERE abs(maxrpm - ?) < 0.01 AND startrpm > (1.0 - ?) * ? AND startrpm <= ?'
         self.db.execute(carSelectStatement, (max_rpm, 0.01, rpm, rpm))
         result = self.db.fetchall()
-        if (len(result) == 0):
-            fuzzyFactor = 0.2
-            print("No car matched, trying to fuzzy match (%s deviation)..." % (fuzzyFactor, ))
-            self.db.execute(carSelectStatement, (max_rpm, fuzzyFactor, rpm, rpm))
-            result = self.db.fetchall()
         return result
 
     def recordResults(self, track, car, timestamp, laptime):
@@ -89,7 +84,7 @@ class Database:
     def getCarUpdateStatements(self, timestamp, cars):
         # TODO #8 Debug
         if len(cars) == 0:
-            print(UPDATE_STATEMENT % ('Track', 'NEW-ID', timestamp))
+            print(UPDATE_STATEMENT % ('Car', 'NEW-ID', timestamp))
         
         result = []
         for index in cars:
