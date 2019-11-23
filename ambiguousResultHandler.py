@@ -1,7 +1,6 @@
 class AmbiguousResultHandler(object):
     
     def __init__(self, dbName):
-        # TODO #9 This requires bundling sqlite3
         self.dbName = dbName
         self.scriptTemplate = 'sqlite3 %s "%s"'
         pass

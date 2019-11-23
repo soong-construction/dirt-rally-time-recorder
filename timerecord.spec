@@ -9,8 +9,11 @@ a = Analysis(['timerecord.py'],
              datas=[
              	('config.yml', '.'),
              	('dirtrally-lb.db', '.'),
+             	('bin/sqlite3.exe', '.'),
              	('LICENSE', '.'),
              	('VERSION', '.'),
+             	('list-*', '.'),
+             	('export-*', '.'),
              	('README.md', '.')
              ],
              hiddenimports=[],
