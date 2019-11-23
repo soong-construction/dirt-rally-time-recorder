@@ -48,6 +48,47 @@ INSERT INTO Tracks (id, name, length, startz) VALUES (509, 'Salida desde Montver
 INSERT INTO Tracks (id, name, length, startz) VALUES (510, 'Ascenso por valle el Gualet', 7005.68994140625, 190.19236755371094);
 INSERT INTO Tracks (id, name, length, startz) VALUES (511, 'Centenera', 10568.4296875, -2326.286865234375);
 
+-- Monaro, Australia:600
+INSERT INTO Tracks (id, name, length, startz) VALUES (600, 'Mountain Kaye Pass', 13301.109375, -2352.93017578125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (601, 'Yambulla Mountain Descent', 6221.490234375, -2353.200439453125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (602, 'Mountain Kaye Pass Reverse', 13301.109375, -2353.1884765625);
+INSERT INTO Tracks (id, name, length, startz) VALUES (603, 'Taylor Farm Sprint', 7007.02001953125, -1261.5372314453125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (604, 'Chandlers Creek', 12341.25, 2065.60888671875);
+INSERT INTO Tracks (id, name, length, startz) VALUES (605, 'Rockton Plains', 6951.15966796875, 2224.94921875);
+INSERT INTO Tracks (id, name, length, startz) VALUES (606, 'Yambulla Mountain Ascent', 6398.90966796875, 2519.379150390625);
+INSERT INTO Tracks (id, name, length, startz) VALUES (607, 'Rockton Plains Reverse', 7116.14990234375, 2456.95458984375);
+INSERT INTO Tracks (id, name, length, startz) VALUES (608, 'Chandlers Creek Reverse', 12305.0400390625, -1279.528564453125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (609, 'Noorinbee Ridge Ascent', 5277.02978515625, 2050.32373046875);
+INSERT INTO Tracks (id, name, length, startz) VALUES (610, 'Bondi Forest', 7052.2998046875, -604.4165649414062);
+INSERT INTO Tracks (id, name, length, startz) VALUES (611, 'Noorinbee Ridge Descent', 5236.91015625, -564.4724731445312);
+
+-- Catamarca, Argentina:800
+INSERT INTO Tracks (id, name, length, startz) VALUES (800, 'San Isidro', 4171.5, -3227.052001953125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (801, 'Valle de los puentes', 7667.31982421875, 131.24305725097656);
+INSERT INTO Tracks (id, name, length, startz) VALUES (802, 'Las Juntas', 8256.8603515625, 2581.4658203125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (803, 'Camino de acantilados y rocas', 5303.7900390625, 2581.419189453125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (804, 'Camino de acantilados y rocas inverso', 5294.81982421875, 1379.3668212890625);
+INSERT INTO Tracks (id, name, length, startz) VALUES (805, 'Camino a Coneta', 4082.2998046875, -1864.53857421875);
+INSERT INTO Tracks (id, name, length, startz) VALUES (806, 'El Rodeo', 2845.6298828125, 205.79042053222656);
+INSERT INTO Tracks (id, name, length, startz) VALUES (807, 'La Merced', 2779.489990234375, 1344.740478515625);
+INSERT INTO Tracks (id, name, length, startz) VALUES (808, 'Huillaprima', 3494.010009765625, -1876.92578125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (809, 'Camino a La Puerta', 8265.9501953125, 205.77462768554688);
+INSERT INTO Tracks (id, name, length, startz) VALUES (810, 'Valle de los puentes a la inversa', 7929.18994140625, -3223.035400390625);
+INSERT INTO Tracks (id, name, length, startz) VALUES (811, 'Miraflores', 3353.0400390625, 131.09925842285156);
+
+-- New England, USA:900
+INSERT INTO Tracks (id, name, length, startz) VALUES (900, 'Tolt Valley Sprint Forward', 6575.8701171875, -408.7677917480469);
+INSERT INTO Tracks (id, name, length, startz) VALUES (901, 'Beaver Creek Trail Forward', 12856.66015625, 519.74462890625);
+INSERT INTO Tracks (id, name, length, startz) VALUES (902, 'Fuller Mountain Ascent', 6468.2998046875, 2768.20947265625);
+INSERT INTO Tracks (id, name, length, startz) VALUES (903, 'Hancock Creek Burst', 6701.61962890625, 1521.3895263671875);
+INSERT INTO Tracks (id, name, length, startz) VALUES (904, 'Hancock Hill Sprint Reverse', 6109.5400390625, -353.2311096191406);
+INSERT INTO Tracks (id, name, length, startz) VALUES (905, 'North Fork Pass', 12228.830078125, 1521.4326171875);
+INSERT INTO Tracks (id, name, length, startz) VALUES (906, 'Beaver Creek Trail Reverse', 12765.919921875, -4618.1796875);
+INSERT INTO Tracks (id, name, length, startz) VALUES (907, 'Tolt Valley Sprint Reverse', 6604.0302734375, -4618.16796875);
+INSERT INTO Tracks (id, name, length, startz) VALUES (908, 'Hancock Hill Sprint Forward', 6229.10986328125, 519.571533203125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (909, 'North Fork Pass Reverse', 12276.1201171875, 27.196266174316406);
+INSERT INTO Tracks (id, name, length, startz) VALUES (910, 'Fuller Mountain Descent', 6488.330078125, 27.112668991088867);
+INSERT INTO Tracks (id, name, length, startz) VALUES (911, 'Fury Lake Depart', 6681.60986328125, 2951.18115234375);
 
 COMMIT TRANSACTION;
 PRAGMA foreign_keys = on;
