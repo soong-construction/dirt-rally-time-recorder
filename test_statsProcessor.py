@@ -4,12 +4,19 @@ from unittest.mock import MagicMock
 
 from receiver import Receiver
 from statsProcessor import StatsProcessor
+from database import Database
 
 
 class TestStatsProcessor(unittest.TestCase):
 
+    def __init__(self, methodName):
+        unittest.TestCase.__init__(self, methodName)
+        self.DatabaseSetupFunction = Database.setup
+    
     def setUp(self):
+        Database.setup = MagicMock()
         Receiver.reconnect = mock.Mock(return_value=None)
+        
         self.receiver = Receiver(('localhost', 12345), 'mph', 'test.statsProcessor')
         self.receiver.resetStage = MagicMock()
         self.receiver.prepareStage = MagicMock()
@@ -22,6 +29,7 @@ class TestStatsProcessor(unittest.TestCase):
         self.thing = StatsProcessor(self.receiver)
         
     def tearDown(self):
+        Database.setup = self.DatabaseSetupFunction
         pass
 
     def testPrepareAndStartStage(self):
