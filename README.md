@@ -69,7 +69,7 @@ UDP telemetry documentation (cf. DiRT 4 for DiRT Rally 2.0):
 
 
 ## Remainder
-Tested with DiRT Rally v1.22 and DiRT Rally 2.0 v1.9
+Tested with DiRT Rally v1.22 and DiRT Rally 2.0 v1.10.1
 
 UDP data recognition in collaboration with ErlerPhilipp: https://github.com/ErlerPhilipp/dr2_logger 
 
