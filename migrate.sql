@@ -12,7 +12,7 @@
 .open dirtrally-laptimes.db
 ALTER TABLE laptimes ADD COLUMN timestamp INTEGER DEFAULT NULL;
 
--- If you used this tool prior to version 1.2.0
+-- If you used this tool prior to version 2.0.0
 
 -- Commit 5846c3dae24554d017a17d7e48fb3cea18d9144e
 .open --new dirtrally-lb.db
