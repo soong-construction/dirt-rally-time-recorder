@@ -3,7 +3,6 @@ import socket
 import struct
 from databaseAccess import DatabaseAccess
 from database import Database
-from sampler import Sampler
 from statsProcessor import StatsProcessor
 from ambiguousResultHandler import AmbiguousResultHandler
 
@@ -28,8 +27,6 @@ class Receiver(asyncore.dispatcher):
         self.userArray = self.database.initializeLaptimesDb()
         self.statsProcessor = StatsProcessor(self)
         
-        self.carSampler = Sampler('sampling/dr2')
-        self.tracksSampler = Sampler('sampling/dr2_tracks')
         self.previousDistance = 0
         self.tracklength = -1
         
@@ -71,36 +68,12 @@ class Receiver(asyncore.dispatcher):
         data = "dirtrally.%s.%s.%s.topspeed:%s|%s" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car), self.topspeed, self.speed_units)
         print(data)
 
-
     def showCarControlInformation(self):
         if isinstance(self.car, (list,)):
             for car in self.car:
                 print(self.databaseAccess.describeCarInterfaces(car))
         else:
             print(self.databaseAccess.describeCarInterfaces(self.car))
-
-    def appendInsert(self, file_param, line):
-        insertFile = open(file=file_param, mode='a', encoding='utf-8', newline='\n')
-        insertFile.write(line)
-
-    def sampleTrack(self, z, tracklength):
-        ambiguousSample = self.carSampler.sample(z, tracklength)
-        if (ambiguousSample):
-            print("ambiguous sample for z:%s tracklength:%s" % (z, tracklength))
-        else:
-            print("stored sample for z:%s tracklength:%s" % (z, tracklength))
-        line = 'INSERT INTO Tracks (id, name, length, startz) VALUES (ID, \'TRACK_NAME\', %s, %s);\n' % (tracklength, z)
-        self.appendInsert('tracks_inserts.sql', line)
-        
-
-    def sampleCar(self, rpm, max_rpm):
-        ambiguousSample = self.carSampler.sample(rpm, max_rpm)
-        if (ambiguousSample):
-            print("ambiguous sample for rpm:%s max_rpm:%s" % (rpm, max_rpm))
-        else:
-            print("stored sample for rpm:%s max_rpm:%s" % (rpm, max_rpm))
-        line = 'INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (ID, \'CAR_NAME\', %s, %s);\n' % (max_rpm, rpm)
-        self.appendInsert('car_inserts.sql', line)
 
     def parse(self, data):
         stats = struct.unpack(str(self.fieldCount) + 'f', data[0:self.fieldCount * 4])
@@ -142,12 +115,6 @@ class Receiver(asyncore.dispatcher):
         
         self.tracklength = tracklength
         
-        if (dbAccess.identify(self.track) <= 0):
-            self.sampleTrack(z, tracklength)
-        # TODO #8 Don't sample both simultaneously. Remove/shelve sampling before next release
-        # if (dbAccess.identify(self.car) <= 0):
-        #    self.sampleCar(idle_rpm, max_rpm)
-
         data = "dirtrally.%s.%s.%s.started:1|c" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car))
         print(data)
         
@@ -159,5 +126,3 @@ class Receiver(asyncore.dispatcher):
         self.databaseAccess.recordResults(self.track, self.car, laptime)
         self.printResults(laptime)
         self.finished = True
-        # TODO #8 Remove when done with issue
-        print('final distance: %s at: %s' % (self.previousDistance, self.previousDistance / self.tracklength))
