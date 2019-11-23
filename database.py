@@ -64,7 +64,7 @@ class Database:
         return self.db.fetchall()
 
     def loadCars(self, rpm, max_rpm):
-        carSelectStatement = 'SELECT id, name FROM cars WHERE abs(maxrpm - ?) < 1.0 AND abs(startrpm - ?) < 1.0'
+        carSelectStatement = 'SELECT id, name FROM cars WHERE abs(maxrpm - ?) < 1.0 AND abs(idlerpm - ?) < 1.0'
         self.db.execute(carSelectStatement, (max_rpm, rpm))
         result = self.db.fetchall()
         return result

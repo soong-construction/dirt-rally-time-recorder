@@ -99,7 +99,7 @@ class Receiver(asyncore.dispatcher):
             print("ambiguous sample for rpm:%s max_rpm:%s" % (rpm, max_rpm))
         else:
             print("stored sample for rpm:%s max_rpm:%s" % (rpm, max_rpm))
-        line = 'INSERT INTO cars (id, name, maxrpm, startrpm) VALUES (ID, \'CAR_NAME\', %s, %s);\n' % (max_rpm, rpm)
+        line = 'INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (ID, \'CAR_NAME\', %s, %s);\n' % (max_rpm, rpm)
         self.appendInsert('car_inserts.sql', line)
 
     def parse(self, data):
