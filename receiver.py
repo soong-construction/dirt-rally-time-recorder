@@ -131,18 +131,11 @@ class Receiver(asyncore.dispatcher):
         self.topspeed = 0
         
     def startStage(self, stats):
-        actual_rpm = stats[37]  # *10 to get real value
+        idle_rpm = stats[64]  # *10 to get real value
         max_rpm = stats[63]  # *10 to get real value
         z = stats[6]
         tracklength = stats[61]
         
-        # TODO #8 Debug
-        idle_rpm = stats[64]
-        top_gear = stats[65]
-        print('actual_rpm %s, idle_rpm %s' % (actual_rpm, idle_rpm))
-        print('top_gear %s' % (top_gear, ))
-
-        # TODO #8 Looks like idle_rpm differs from actual_rpm, see idle_actual_rpm_mismatch.txt
         dbAccess = self.databaseAccess
         self.track = dbAccess.identifyTrack(z, tracklength)
         self.car = dbAccess.identifyCar(idle_rpm, max_rpm)
@@ -153,7 +146,7 @@ class Receiver(asyncore.dispatcher):
             self.sampleTrack(z, tracklength)
         # TODO #8 Don't sample both simultaneously. Remove/shelve sampling before next release
         # if (dbAccess.identify(self.car) <= 0):
-        #    self.sampleCar(actual_rpm, max_rpm)
+        #    self.sampleCar(idle_rpm, max_rpm)
 
         data = "dirtrally.%s.%s.%s.started:1|c" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car))
         print(data)

@@ -64,11 +64,8 @@ class Database:
         return self.db.fetchall()
 
     def loadCars(self, rpm, max_rpm):
-        # startrpm: Some delta allowed as 2nd Pikes Peak run seems to simulate worn/warmed up engine
-        # (1.0 - ?) = minimal gain of startrpm, i.e. reported value can be that much higher
-        carSelectStatement = 'SELECT id, name FROM cars WHERE abs(maxrpm - ?) < 0.01 AND startrpm > (1.0 - ?) * ? AND startrpm <= ?'
-        # TODO #8 Allow more delta as DR1 rpms are not sampled as accurately, e.g. VW Polo an MG Metro  
-        self.db.execute(carSelectStatement, (max_rpm, 0.01, rpm, rpm))
+        carSelectStatement = 'SELECT id, name FROM cars WHERE abs(maxrpm - ?) < 1.0 AND abs(startrpm - ?) < 1.0'
+        self.db.execute(carSelectStatement, (max_rpm, rpm))
         result = self.db.fetchall()
         return result
 
