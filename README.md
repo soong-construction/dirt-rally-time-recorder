@@ -38,16 +38,18 @@ You can choose to download and unzip a ready-to-use bundle (tested to work on Wi
 ## Record stage times
 - Start DiRT Rally [2.0] and finish a stage  
   - the tool runs in the background, reporting the car and the track it identifies from the telemetry  
-  - for cars, it will display control interface information such as the transmission type (based on [this discussion](http://forums.codemasters.com/discussion/7071/dirt-rally-handbrake-and-transmission-information)) (TODO Toggle off for DR2)  
+  - for cars, it will display control interface information such as the transmission type (based on [this discussion](http://forums.codemasters.com/discussion/7071/dirt-rally-handbrake-and-transmission-information))  
   - on stage completion, it reports your top speed and saves your time 
 - to quickly list your times with SQLite, run ``list-laptimes.bat``  
   - to create a CSV file consumable by your favorite spreadsheet editor, run ``export-laptimes.bat``  
 
 ## Troubleshooting
 Since DiRT Rally [2.0] telemetry data doesn't allow to clearly identify every available car and track, this tool will sometimes ask you to resolve this after completing a stage.  
-In order to do so, use SQLite to 
-- ``.open dirtrally-laptimes.db``
-- and run the ``UPDATE laptimes...`` statement that matches the actual car or track you drove
+In order to do so, the tool prepares scripts for you, e.g. `1573403766_ElRodeo_FordRS200.bat`
+- go the folder where you set up the timerecorder  
+- run the script file that matches the car you drove (e.g. double-click it)  
+- a window will open and close quickly, and that's it
+- you can delete the script files afterwards, e.g. you might find also find a `1573403766_ElRodeo_AudiSportQuattroS1E2.bat`  
 
 When you import the CSV snapshot file as a spreadsheet, make sure to select UTF-8 encoding.   
 

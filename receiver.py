@@ -142,6 +142,7 @@ class Receiver(asyncore.dispatcher):
         print('actual_rpm %s, idle_rpm %s' % (actual_rpm, idle_rpm))
         print('top_gear %s' % (top_gear, ))
 
+        # TODO #8 Looks like idle_rpm differs from actual_rpm, see idle_actual_rpm_mismatch.txt
         dbAccess = self.databaseAccess
         self.track = dbAccess.identifyTrack(z, tracklength)
         self.car = dbAccess.identifyCar(idle_rpm, max_rpm)
@@ -150,7 +151,7 @@ class Receiver(asyncore.dispatcher):
         
         if (dbAccess.identify(self.track) <= 0):
             self.sampleTrack(z, tracklength)
-        # TODO Don't sample both simultaneously. Remove/shelve sampling before next release
+        # TODO #8 Don't sample both simultaneously. Remove/shelve sampling before next release
         # if (dbAccess.identify(self.car) <= 0):
         #    self.sampleCar(actual_rpm, max_rpm)
 
