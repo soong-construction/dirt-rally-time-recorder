@@ -12,7 +12,7 @@ Time tracking works for stage rallies and the Pikes Peak events of the original 
 You can choose to download and unzip a ready-to-use bundle (tested to work on Windows 10 x64). If you don't trust pre-built .exe files, set up *dirt-rally-time-recorder* from scratch 
 
 ### Ready-to-use bundle
-- Download the latest release for either the original DiRT Rally or 2.0 and unzip it somewhere
+- Download the [latest release](https://github.com/soong-construction/dirt-rally-time-recorder/releases/latest) for either the original DiRT Rally or 2.0 and unzip it somewhere
 - Start ``timerecord.exe``
   - It should tell you to be *Waiting for data...*, otherwise take a look at the Troubleshooting section
 
