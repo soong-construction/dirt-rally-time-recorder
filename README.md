@@ -45,11 +45,11 @@ You can choose to download and unzip a ready-to-use bundle (tested to work on Wi
 
 ## Troubleshooting
 Since DiRT Rally [2.0] telemetry data doesn't allow to clearly identify every available car and track, this tool will sometimes ask you to resolve this after completing a stage.  
-In order to do so, the tool prepares scripts for you, e.g. `1573403766_ElRodeo_FordRS200.bat`
+In order to do so, the tool prepares scripts for you, e.g. `1573403766_ElRodeo_PoloGTIR5.bat`
 - go the folder where you set up the timerecorder  
 - run the script file that matches the car you drove (e.g. double-click it)  
 - a window will open and close quickly, and that's it
-- you can delete the script files afterwards, e.g. you might find also find a `1573403766_ElRodeo_AudiSportQuattroS1E2.bat`  
+- you can delete the script files afterwards, e.g. you might find also find a `1573403766_ElRodeo_SkodaFabiaR5.bat`  
 
 When you import the CSV snapshot file as a spreadsheet, make sure to select UTF-8 encoding.   
 
