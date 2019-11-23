@@ -4,14 +4,12 @@ from unittest.mock import MagicMock
 
 from receiver import Receiver
 from statsProcessor import StatsProcessor
-from sampler import Sampler
 
 
 class TestStatsProcessor(unittest.TestCase):
 
     def setUp(self):
         Receiver.reconnect = mock.Mock(return_value=None)
-        Sampler.__init__ = mock.Mock(return_value=None)
         self.receiver = Receiver(('localhost', 12345), 'mph', 'test.statsProcessor')
         self.receiver.resetStage = MagicMock()
         self.receiver.prepareStage = MagicMock()

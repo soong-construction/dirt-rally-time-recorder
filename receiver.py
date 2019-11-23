@@ -118,7 +118,6 @@ class Receiver(asyncore.dispatcher):
         data = "dirtrally.%s.%s.%s.started:1|c" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car))
         print(data)
         
-        # TODO #8 Include DR2 cars: https://docs.google.com/spreadsheets/d/1B0MNyHmtHrl0PN2R18tQ4mBkaqnouWR_dm6MPHu3qhE/edit#gid=296137675
         self.showCarControlInformation()
 
     def finishStage(self, stats):

@@ -3,25 +3,21 @@ import unittest
 from unittest.mock import MagicMock
 from receiver import Receiver
 from database import Database
-from sampler import Sampler
 
 class TestReceiver(unittest.TestCase):
 
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
         self.DatabaseSetupFunction = Database.setup
-        self.SamplerSetupFunction = Sampler.setup
     
     def setUp(self):
         Database.setup = MagicMock()
-        Sampler.setup = MagicMock()
         self.thing = Receiver(('localhost', 1024), 'kmh', 'testroot')
         self.thing.parse = MagicMock();
 
     def tearDown(self):
         # TODO This restoration should be used throughout the test base
         Database.setup = self.DatabaseSetupFunction
-        Sampler.setup = self.SamplerSetupFunction
 
     # TODO Build integration test from here
     def testHandleRead(self):
