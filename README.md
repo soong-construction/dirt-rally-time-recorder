@@ -4,12 +4,13 @@ This tool allows you to track your stage times in DiRT Rally and DiRT Rally 2.0 
 
 Time tracking works for stage rallies and the Pikes Peak events of the original DiRT Rally.   
 
-## Enable game telemetry
-- Configure UDP telemetry in *[home-or-documents-dir]\My Games\DiRT Rally [2.0]\hardwaresettings\hardware_settings_config.xml*
-  - Enable telemetry and request extradata by adapting the appropriate line as follows: ``<udp enabled="true" extradata="3" ...``
-  
 ## First time set up
-You can choose to download and unzip a ready-to-use bundle (tested to work on Windows 10 x64). If you don't trust pre-built .exe files, set up *dirt-rally-time-recorder* from scratch 
+
+You need to set up the game and enable UDP telemetry like so:
+- Open *[home-or-documents-dir]\My Games\DiRT Rally [2.0]\hardwaresettings\hardware_settings_config.xml* with a text editor
+- Enable telemetry and request extradata by adapting the appropriate line as follows: ``<udp enabled="true" extradata="3" ...``
+
+You can choose to download *dirt-rally-time-recorder* as a ready-to-use bundle (tested to work on Windows 10 x64). If you don't trust pre-built .exe files, you can set it up from scratch. 
 
 ### Ready-to-use bundle
 - Download the [latest release](https://github.com/soong-construction/dirt-rally-time-recorder/releases/latest) for either the original DiRT Rally or 2.0 and unzip it somewhere
@@ -37,25 +38,25 @@ You can choose to download and unzip a ready-to-use bundle (tested to work on Wi
   
 ## Record stage times
 - Start DiRT Rally [2.0] and finish a stage  
-  - the tool runs in the background, reporting the car and the track it identifies from the telemetry  
+  - *dirt-rally-time-recorder* runs in the background, reporting the car and the track it identifies from the telemetry  
   - for cars, it will display control interface information such as the transmission type (based on [this discussion](http://forums.codemasters.com/discussion/7071/dirt-rally-handbrake-and-transmission-information))  
   - on stage completion, it reports your top speed and saves your time 
 - to quickly list your times with SQLite, run ``list-laptimes.bat``  
-  - to create a CSV file consumable by your favorite spreadsheet editor, run ``export-laptimes.bat``  
+  - to create a CSV snapshot file consumable by your favorite spreadsheet editor, run ``export-laptimes.bat``  
 
 ## Troubleshooting
 Since DiRT Rally [2.0] telemetry data doesn't allow to clearly identify every available car and track, this tool will sometimes ask you to resolve this after completing a stage.  
 In order to do so, the tool prepares scripts for you, e.g. `1573403766_ElRodeo_PoloGTIR5.bat`
-- go the folder where you set up the timerecorder  
+- go the folder where you set up *dirt-rally-time-recorder*  
 - run the script file that matches the car you drove (e.g. double-click it)  
-- a window will open and close quickly, and that's it
+- you will barely notice a window opening and closing, and that's it
 - you can delete the script files afterwards, e.g. you might find also find a `1573403766_ElRodeo_SkodaFabiaR5.bat`  
 
 When you import the CSV snapshot file as a spreadsheet, make sure to select UTF-8 encoding.   
 
 If you encounter an error message talking about sockets, understand that this tool cannot run in parallel, but only in a single instance at the same time.  
 
-In case you modified the telemetry ip or port in *hardware_settings_config.xml*, adapt ``config.yml`` to these.
+In case you modified the telemetry ip or port in *hardware_settings_config.xml*, adapt ``config.yml`` accordingly.
 
 Note: Since this is still WIP, have a look at ``migrate.sql`` to find instructions how to migrate your data when updating this tool.    
 Consider deleting your ``*.db`` files if you encounter errors, thus starting over (time tracking data is lost).  
