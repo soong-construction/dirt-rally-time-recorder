@@ -5,6 +5,7 @@ from databaseAccess import DatabaseAccess
 from database import Database
 from statsProcessor import StatsProcessor
 from ambiguousResultHandler import AmbiguousResultHandler
+import time as python_time
 
 class Receiver(asyncore.dispatcher):
 
@@ -26,6 +27,8 @@ class Receiver(asyncore.dispatcher):
         self.databaseAccess = DatabaseAccess(self.database, self.ambiguousResultHandler)
         self.userArray = self.database.initializeLaptimesDb()
         self.statsProcessor = StatsProcessor(self)
+        
+        self.last_time = 0
         
         self.previousDistance = 0
         self.tracklength = -1
@@ -82,10 +85,19 @@ class Receiver(asyncore.dispatcher):
         lap = stats[59]
         distance = stats[2]
         
+        
         speed = int(stats[7] * 3.6)
         if self.topspeed < speed:
             self.topspeed = speed
 
+        # TODO #12 Debugging
+        position = stats[4:7]
+        suspension_pos = stats[17:21]
+        time_now = int(python_time.time())
+        if (time_now - self.last_time > 2):
+            print('position %s, suspension_pos %s' % (position, suspension_pos))
+            self.last_time = time_now
+            
         trackProgress = distance / self.tracklength
         self.statsProcessor.handleGameState(self.inStage(), self.finished, lap, time, self.previousTime, distance, trackProgress, stats)
 
