@@ -95,7 +95,7 @@ class Receiver(asyncore.dispatcher):
         suspension_pos = stats[17:21]
         time_now = int(python_time.time())
         if (time_now - self.last_time > 2):
-            print('position %s, suspension_pos %s' % (position, suspension_pos))
+            print('suspension_pos %s' % (suspension_pos, ))
             self.last_time = time_now
             
         trackProgress = distance / self.tracklength
