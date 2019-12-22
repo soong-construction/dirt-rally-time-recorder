@@ -41,9 +41,16 @@ You can choose to download *dirt-rally-time-recorder* as a ready-to-use bundle (
 ## Record stage times
 - Start DiRT Rally [2.0] and finish a stage  
   - *dirt-rally-time-recorder* runs in the background, reporting the car and the track it identifies from the telemetry  
-  - for cars, it will display control interface information such as the transmission type (based on [this discussion](http://forums.codemasters.com/discussion/7071/dirt-rally-handbrake-and-transmission-information))  
-  - on stage completion, it reports your top speed and saves your time 
-- to quickly list your times with SQLite, run ``list-laptimes.bat``  
+  - for cars, it will display control interface information such as the transmission type (based on [this discussion](http://forums.codemasters.com/discussion/7071/dirt-rally-handbrake-and-transmission-information)) 
+  - it will look something like this:
+```
+TRACK: Sweet Lamb
+CAR: Volkswagen Golf GTI 16V (94.2477798461914 - 785.398193359375)
+dirtrally.user1553422018.309.200.started:1|c
+Volkswagen Golf GTI 16V: H-PATTERN shifting, 5 speed, with manual CLUTCH, with HANDBRAKE
+```
+- On stage completion, it reports your top speed and saves your time 
+  - to quickly list your times with SQLite, run ``list-laptimes.bat``  
   - to create a CSV snapshot file consumable by your favorite spreadsheet editor, run ``export-laptimes.bat``  
 
 ## Troubleshooting
@@ -72,7 +79,7 @@ UDP telemetry documentation (cf. DiRT 4 for DiRT Rally 2.0):
 
 
 ## Remainder
-Tested with DiRT Rally v1.22 and DiRT Rally 2.0 v1.10.1
+Tested with DiRT Rally v1.22 and DiRT Rally 2.0 v1.11.1
 
 UDP data recognition in collaboration with ErlerPhilipp: https://github.com/ErlerPhilipp/dr2_logger 
 
