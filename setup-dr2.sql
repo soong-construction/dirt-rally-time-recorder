@@ -20,6 +20,34 @@ INSERT INTO Tracks (id, name, length, startz) VALUES (109, 'Ocean Beach Sprint R
 INSERT INTO Tracks (id, name, length, startz) VALUES (110, 'Te Awanga Sprint Reverse', 4688.52978515625, -2004.3233642578125);
 INSERT INTO Tracks (id, name, length, startz) VALUES (111, 'Elsthorpe Sprint Reverse', 6643.490234375, 5161.2197265625);
 
+-- Värmland, Sweden:200
+INSERT INTO Tracks (id, name, length, startz) VALUES (200, 'Älgsjön', 7055.9501953125, -1618.4476318359375);
+INSERT INTO Tracks (id, name, length, startz) VALUES (201, 'Östra Hinnsjön', 4911.68017578125, -1742.0498046875);
+INSERT INTO Tracks (id, name, length, startz) VALUES (202, 'Stor-jangen Sprint', 6666.89013671875, -2143.403076171875);
+INSERT INTO Tracks (id, name, length, startz) VALUES (203, 'Stor-jangen Sprint Reverse', 6693.43994140625, 563.3468017578125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (204, 'Björklangen', 4931.990234375, -5101.59619140625);
+INSERT INTO Tracks (id, name, length, startz) VALUES (205, 'Ransbysäter', 11922.6201171875, -4328.87158203125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (206, 'Hamra', 12123.740234375, 2697.36279296875);
+INSERT INTO Tracks (id, name, length, startz) VALUES (207, 'Lysvik', 12123.5908203125, -5101.78369140625);
+INSERT INTO Tracks (id, name, length, startz) VALUES (208, 'Norraskoga', 11503.490234375, 562.8009033203125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (209, 'Älgsjön Sprint', 5248.35986328125, -4328.87158203125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (210, 'Elgsjön', 7058.47998046875, 2696.98291015625);
+INSERT INTO Tracks (id, name, length, startz) VALUES (211, 'Skogsrallyt', 4804.0302734375, -2143.44384765625);
+
+-- Powys, Wales:300 
+INSERT INTO Tracks (id, name, length, startz) VALUES (300, 'Pant Mawr Reverse', 4821.64990234375, 2047.56201171875);
+INSERT INTO Tracks (id, name, length, startz) VALUES (301, 'Bidno Moorland', 4960.06005859375, 1924.06884765625);
+INSERT INTO Tracks (id, name, length, startz) VALUES (302, 'Bidno Moorland Reverse', 5165.96044921875, 2481.105224609375);
+INSERT INTO Tracks (id, name, length, startz) VALUES (303, 'River Severn Valley', 11435.5107421875, -557.0780029296875);
+INSERT INTO Tracks (id, name, length, startz) VALUES (304, 'Bronfelen', 11435.5400390625, 169.15403747558594);
+INSERT INTO Tracks (id, name, length, startz) VALUES (305, 'Fferm Wynt', 5717.39990234375, -557.11328125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (306, 'Fferm Wynt Reverse', 5717.3896484375, -22.597640991210938);
+INSERT INTO Tracks (id, name, length, startz) VALUES (307, 'Dyffryn Afon', 5718.099609375, -23.46375274658203);
+INSERT INTO Tracks (id, name, length, startz) VALUES (308, 'Dyffryn Afon Reverse', 5718.10009765625, 169.0966033935547);
+INSERT INTO Tracks (id, name, length, startz) VALUES (309, 'Sweet Lamb', 9911.66015625, 2220.982177734375);
+INSERT INTO Tracks (id, name, length, startz) VALUES (310, 'Geufron Forest', 10063.6005859375, 2481.169677734375);
+INSERT INTO Tracks (id, name, length, startz) VALUES (311, 'Pant Mawr', 4788.669921875, 2221.004150390625);
+
 -- Leczna County, Poland:400
 INSERT INTO Tracks (id, name, length, startz) VALUES (400, 'Borysik', 9194.3203125, 7393.10205078125);
 INSERT INTO Tracks (id, name, length, startz) VALUES (401, 'Zarobka', 16475.009765625, 4674.81787109375);
@@ -62,6 +90,20 @@ INSERT INTO Tracks (id, name, length, startz) VALUES (609, 'Noorinbee Ridge Asce
 INSERT INTO Tracks (id, name, length, startz) VALUES (610, 'Bondi Forest', 7052.2998046875, -604.4165649414062);
 INSERT INTO Tracks (id, name, length, startz) VALUES (611, 'Noorinbee Ridge Descent', 5236.91015625, -564.4724731445312);
 
+-- Baumholder, Germany:700
+INSERT INTO Tracks (id, name, length, startz) VALUES (700, 'Frauenberg', 11551.16015625, 539.3903198242188);
+INSERT INTO Tracks (id, name, length, startz) VALUES (701, 'Innerer Feld-Sprint (umgekehrt)', 4937.85009765625, 656.4170532226562);
+INSERT INTO Tracks (id, name, length, startz) VALUES (702, 'Kreuzungsring', 6121.8701171875, -718.7255249023438);
+INSERT INTO Tracks (id, name, length, startz) VALUES (703, 'Verbundsring Reverse', 5550.85009765625, 657.0391235351562);
+INSERT INTO Tracks (id, name, length, startz) VALUES (704, 'Verbundsring', 5855.6796875, 513.0369873046875);
+INSERT INTO Tracks (id, name, length, startz) VALUES (705, 'Hammerstein', 10805.23046875, 513.0381469726562);
+INSERT INTO Tracks (id, name, length, startz) VALUES (706, 'Innerer Feld-Sprint', 5129.0400390625, 814.1966552734375);
+INSERT INTO Tracks (id, name, length, startz) VALUES (707, 'Ruschberg', 10699.9599609375, 813.9644165039062);
+INSERT INTO Tracks (id, name, length, startz) VALUES (708, 'Waldabstieg', 5882.1796875, -948.1590576171875);
+INSERT INTO Tracks (id, name, length, startz) VALUES (709, 'Oberstein', 11487.189453125, -2661.260986328125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (710, 'Kreuzungsring Reverse', 5666.25, 539.3837890625);
+INSERT INTO Tracks (id, name, length, startz) VALUES (711, 'Waldaufstieg', 5361.90966796875, -2668.8408203125);
+
 -- Catamarca, Argentina:800
 INSERT INTO Tracks (id, name, length, startz) VALUES (800, 'San Isidro', 4171.5, -3227.052001953125);
 INSERT INTO Tracks (id, name, length, startz) VALUES (801, 'Valle de los puentes', 7667.31982421875, 131.24305725097656);
@@ -89,6 +131,20 @@ INSERT INTO Tracks (id, name, length, startz) VALUES (908, 'Hancock Hill Sprint 
 INSERT INTO Tracks (id, name, length, startz) VALUES (909, 'North Fork Pass Reverse', 12276.1201171875, 27.196266174316406);
 INSERT INTO Tracks (id, name, length, startz) VALUES (910, 'Fuller Mountain Descent', 6488.330078125, 27.112668991088867);
 INSERT INTO Tracks (id, name, length, startz) VALUES (911, 'Fury Lake Depart', 6681.60986328125, 2951.18115234375);
+
+-- Monte Carlo, Monaco:1000
+INSERT INTO Tracks (id, name, length, startz) VALUES (1000, 'Route de Turini', 10805.220703125, 1276.76611328125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1001, 'Vallee descendante', 10866.8603515625, -2344.705810546875);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1002, 'Col de Turini – Sprint en descente', 4730.02001953125, 283.7648620605469);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1003, 'Col de Turini sprint en Montee', 4729.5400390625, -197.3816375732422);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1004, 'Col de Turini – Descente', 5175.91015625, -131.84573364257812);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1005, 'Gordolon – Courte montee', 5175.91015625, -467.3677062988281);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1006, 'Route de Turini (Descente)', 4015.35986328125, -991.9784545898438);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1007, 'Approche du Col de Turini – Montee', 3952.150146484375, 1276.780517578125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1008, 'Pra d´Alart', 9831.4501953125, -467.483154296875);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1009, 'Col de Turini Depart', 9832.0205078125, 283.4727478027344);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1010, 'Route de Turini (Montee)', 6843.3203125, -991.945068359375);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1011, 'Col de Turini – Depart en descente', 6846.830078125, -2344.592529296875);
 
 COMMIT TRANSACTION;
 PRAGMA foreign_keys = on;
