@@ -1,7 +1,8 @@
 -- Follow these migration steps if you already recorded data before updating to the mentioned commits. 
 -- The ".<cmd>" instructions are for sqlite3, please adapt if you are using another SQL interface  
--- NOTE If you use the bundled version of dirt-rally-time-recorder, simply extract a newer release into your 
--- installation directory
+
+-- TODO #15 Remove migrate.sql from bundle as migration is automated
+-- NOTE If you use the bundled version of dirt-rally-time-recorder, you can skip migration of dirtrally-lb.db
 
 -- ONLY if you used this tool prior to version 1.0.0
  
@@ -18,5 +19,5 @@ ALTER TABLE laptimes ADD COLUMN timestamp INTEGER DEFAULT NULL;
 -- OR
 .read setup-dr2.sql
 
--- TODO Migration should only be necessary with a new minor version (e.g. 1.2.0), no need to refer to commit hashes.
+-- TODO #15 Migration should only be necessary with a new minor version (e.g. 1.2.0), no need to refer to commit hashes.
 -- If only dirtrally-lb.db changes, recommend migration for _every_ new version?
