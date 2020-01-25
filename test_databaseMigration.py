@@ -36,6 +36,10 @@ class TestDatabase(unittest.TestCase):
         expand_version = self.thing.expandVersion('12.1.21')
         self.assertEqual(expand_version, 12_001_021);
         
+    def testVersionExpansionWithWhitespace(self):
+        expand_version = self.thing.expandVersion(' 1.2.3\r\n')
+        self.assertEqual(expand_version, 1_002_003);
+
     def testVersionExpansionWithIllegalVersion(self):
         with self.assertRaises(RuntimeError):
             self.thing.expandVersion('1.1')
