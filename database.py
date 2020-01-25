@@ -1,6 +1,7 @@
 import sqlite3
 import getpass
 import time
+from databaseMigration import DatabaseMigration
 
 UPDATE_STATEMENT = 'UPDATE laptimes SET %s=%s WHERE Timestamp="%s";'
 
@@ -27,31 +28,50 @@ class Database:
             print("Error when reading from %s, please check set-up instructions in the README" % (self.baseDb))
             raise exc
 
+    def fetchUser(self, lapdb):
+        lapdb.execute('SELECT user FROM user;')
+        res = lapdb.fetchall()
+        userArray = res[0]
+        return userArray
+
+    def setDbVersion(self, lapdb):
+        versionFile = open(self.approot + '/VERSION', 'r')
+        versionString = versionFile.readline()
+        migration = DatabaseMigration(lapdb)
+        version = migration.expandVersion(versionString)
+        migration.setUserVersion(version)
+
+    def setupLaptimesDb(self, lapdb):
+        print("First run, setting up recording tables")
+        lapdb.execute('CREATE TABLE laptimes (Track INTEGER, Car INTEGER, Timestamp INTEGER, Time REAL);')
+        lapdb.execute('CREATE TABLE user (user TEXT);')
+        userId = self.createUserId()
+        lapdb.execute('INSERT INTO user VALUES (?)', (userId, ))
+        
+        self.setDbVersion(lapdb)
+
     def initializeLaptimesDb(self):
         try:
             lapconn = sqlite3.connect(self.approot + self.laptimesDb)
             lapdb = lapconn.cursor()
-            lapdb.execute('SELECT user FROM user;')
-            res = lapdb.fetchall()
-            userArray = res[0]
+            
+            print("Checking laptimes database")
+            DatabaseMigration(lapdb).migrateDb()
+            lapconn.commit()
+            
+            return self.fetchUser(lapdb)
+        
         except (Exception) as exc:
             try:
-                print("First run, setting up recording tables")
-                lapdb.execute('CREATE TABLE laptimes (Track INTEGER, Car INTEGER, Timestamp INTEGER, Time REAL);')
-                
-                lapdb.execute('CREATE TABLE user (user TEXT);')
-                userId = self.createUserId()
-                lapdb.execute('INSERT INTO user VALUES (?)', (userId,))
+                self.setupLaptimesDb(lapdb)
                 lapconn.commit()
-                lapdb.execute('SELECT user FROM user;')
-                res = lapdb.fetchall()
-                userArray = res[0]
+                return self.fetchUser(lapdb)
+            
             except (Exception) as exc:
-                print("Error initializing " + self.laptimesDb, exc)
+                print("Error initializing " + self.laptimesDbName, exc)
+        
         finally:
             lapconn.close()
-        
-        return userArray
     
     def createUserId(self):
         user = getpass.getuser()

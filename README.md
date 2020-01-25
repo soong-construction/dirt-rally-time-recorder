@@ -31,7 +31,7 @@ You can choose to download *dirt-rally-time-recorder* as a ready-to-use bundle (
 - Install SQLite: https://www.sqlite.org/cli.html  
   - choose the ``sqlite-tools-win32-x86-XXXXXX.zip`` package
   - extract ``sqlite3.exe`` to your work folder, i.e. next to ``timerecord.py``    
-- Setup database with car and track tables with SQLite  
+- Setup database with car and track tables by running `sqlite3.exe`  
   - ``.open --new dirtrally-lb.db`` 
   - ``.read setup-dr1.sql`` (or ``setup-dr2.sql``)
 - Start time tracking  
@@ -67,10 +67,10 @@ If you encounter an error message talking about sockets, understand that this to
 
 In case you modified the telemetry ip or port in *hardware_settings_config.xml*, adapt ``config.yml`` accordingly.
 
-Note: Since this is still WIP, have a look at ``migrate.sql`` to find instructions how to migrate your data when updating this tool.    
-Consider deleting your ``*.db`` files if you encounter errors, thus starting over (time tracking data is lost).  
+Unless you use the bundled version, have a look at ``migrate.sql`` to find instructions how to migrate your database for new releases.    
+If you encounter errors at start-up, see if renaming the file `dirtrally-laptimes.db` helps (which will create a new database).    
 
-Feel free to [open an issue](https://github.com/soong-construction/dirt-rally-time-recorder/issues/new).  
+In any case, feel free to [open an issue](https://github.com/soong-construction/dirt-rally-time-recorder/issues/new).  
 
 
 ## Resources
