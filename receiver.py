@@ -63,9 +63,12 @@ class Receiver(asyncore.dispatcher):
         topspeed_kmh = self.topspeed * 3.6
         return '%.1f' % (topspeed_kmh * self.speed_modifier,)
     
+    def formatLapTime(self, laptime):
+        return '%.2f' % (laptime,)
+
     def printResults(self, laptime):
         dbAccess = self.databaseAccess
-        data = "dirtrally.%s.%s.%s.time:%f|ms" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car), laptime * 1000)
+        data = "dirtrally.%s.%s.%s.time:%f|s" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car), self.formatLapTime(laptime))
         print(data)
         data = "dirtrally.%s.%s.%s.topspeed:%s|%s" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car), self.formatTopSpeed(), self.speed_unit)
         print(data)

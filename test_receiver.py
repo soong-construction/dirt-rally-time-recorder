@@ -32,6 +32,10 @@ class TestReceiver(unittest.TestCase):
         format_top_speed = self.thing.formatTopSpeed()
         self.assertEqual(format_top_speed, '74.4')
     
+    def testLapTimeConversion(self):
+        format_lap_time = self.thing.formatLapTime(180.249)
+        self.assertEqual(format_lap_time, '180.25')
+        
     # TODO Build integration test from here
     def testHandleRead(self):
         self.thing.reconnect()
