@@ -21,11 +21,14 @@ class DatabaseMigration:
         # Initial migration
         self.migrate_2_2_0();
         
-        # So far no further migrations
+        self.migrate('2.3.0', lambda lapDb: self.migrate_2_3_0(lapDb))
     
     def migrate_2_2_0(self):
         self.migrate('2.2.0', lambda _: None)
 
+    def migrate_2_3_0(self, lapDb):
+        lapDb.execute('ALTER TABLE laptimes ADD COLUMN topspeed REAL DEFAULT NULL;')
+    
     def migrate(self, targetVersionString, applicator):
         targetVersion = self.expandVersion(targetVersionString)
         user_version = self.getUserVersion()

@@ -81,9 +81,9 @@ class DatabaseAccess:
             
             print(" ==> %s" % (script, ))
 
-    def recordResults(self, track, car, laptime):
+    def recordResults(self, track, car, laptime, topspeed):
         timestamp = time.time()
-        self.database.recordResults(self.identify(track), self.identify(car), timestamp, laptime)
+        self.database.recordResults(self.identify(track), self.identify(car), timestamp, laptime, topspeed)
         
         if isinstance(car, (list,)):
             self.printCarUpdates(car, timestamp, track)

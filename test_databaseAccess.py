@@ -87,7 +87,7 @@ class TestDatabaseAccess(unittest.TestCase):
         self.database.getCarName = MagicMock(side_effect=list(name for (_,name) in cars))
         self.database.getTrackName = MagicMock(returnValue = 'track')
         
-        self.thing.recordResults(100, cars, 234.44, )
+        self.thing.recordResults(100, cars, 234.44, 160.6)
         
         self.assertEqual(self.thing.printCarUpdates.call_count, 1);
         

@@ -43,7 +43,7 @@ class Database:
 
     def setupLaptimesDb(self, lapdb):
         print("First run, setting up recording tables")
-        lapdb.execute('CREATE TABLE laptimes (Track INTEGER, Car INTEGER, Timestamp INTEGER, Time REAL);')
+        lapdb.execute('CREATE TABLE laptimes (Track INTEGER, Car INTEGER, Timestamp INTEGER, Time REAL, Topspeed REAL);')
         lapdb.execute('CREATE TABLE user (user TEXT);')
         userId = self.createUserId()
         lapdb.execute('INSERT INTO user VALUES (?)', (userId, ))
@@ -89,15 +89,15 @@ class Database:
         result = self.db.fetchall()
         return result
 
-    def recordResults(self, track, car, timestamp, laptime):
+    def recordResults(self, track, car, timestamp, laptime, topspeed):
         try:
             lapconn = sqlite3.connect(self.approot + self.laptimesDb)
             lapdb = lapconn.cursor()
-            lapdb.execute('INSERT INTO laptimes (Track, Car, Timestamp, Time) VALUES (?, ?, ?, ?)', (track, car, timestamp, laptime))
+            lapdb.execute('INSERT INTO laptimes (Track, Car, Timestamp, Time, Topspeed) VALUES (?, ?, ?, ?, ?)', (track, car, timestamp, laptime, topspeed))
             lapconn.commit()
             lapconn.close()
         except (Exception) as exc:
-            print("Error connecting to database:", exc)
+            print("Error connecting to "+ self.laptimesDbName, exc)
             
     def getCarUpdateStatements(self, timestamp, cars):
         result = []

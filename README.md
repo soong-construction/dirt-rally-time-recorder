@@ -49,9 +49,9 @@ CAR: Volkswagen Golf GTI 16V (94.2477798461914 - 785.398193359375)
 dirtrally.user1553422018.309.200.started:1|c
 Volkswagen Golf GTI 16V: H-PATTERN shifting, 5 speed, with manual CLUTCH, with HANDBRAKE
 ```
-- On stage completion, it reports your top speed and saves your time 
-  - to quickly list your times with SQLite, run ``list-laptimes.bat``  
-  - to create a CSV snapshot file consumable by your favorite spreadsheet editor, run ``export-laptimes.bat``  
+- On stage completion, it reports your top speed and time and saves it to the database 
+  - to quickly list your recorded times with SQLite, run ``list-laptimes.bat``  
+  - to dump the database into a CSV file consumable by your favorite spreadsheet editor, run ``export-laptimes.bat``  
 
 ## Troubleshooting
 Since DiRT Rally [2.0] telemetry data doesn't allow to clearly identify every available car and track, this tool will sometimes ask you to resolve this after completing a stage.  
@@ -61,7 +61,7 @@ In order to do so, the tool prepares scripts for you, e.g. `1573403766_ElRodeo_P
 - you will barely notice a window opening and closing, and that's it
 - you can delete the script files afterwards, e.g. you might find also find a `1573403766_ElRodeo_SkodaFabiaR5.bat`  
 
-When you import the CSV snapshot file as a spreadsheet, make sure to select UTF-8 encoding.   
+When you import the CSV file as a spreadsheet, make sure to select UTF-8 encoding.   
 
 If you encounter an error message talking about sockets, understand that this tool cannot run in parallel, but only in a single instance at the same time.  
 

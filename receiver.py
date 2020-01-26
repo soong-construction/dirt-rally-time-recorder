@@ -141,7 +141,9 @@ class Receiver(asyncore.dispatcher):
 
     def finishStage(self, stats):
         laptime = stats[62]
-        self.databaseAccess.recordResults(self.track, self.car, laptime)
+        # TODO #5 Explain to configure speed_unit ONCE
+        # TODO #5 Adapt list & export
+        self.databaseAccess.recordResults(self.track, self.car, laptime, self.formatTopSpeed())
         self.printResults(laptime)
         self.finished = True
 
