@@ -18,8 +18,9 @@ if __name__ == '__main__':
         print("Error in configuration file:", exc)
 
     server = (config['telemetry_server']['host'], config['telemetry_server']['port'])
-    speed_units = config['speed_units']
+    speed_unit = config['speed_unit']
 
-    game = Receiver(server, speed_units, approot)
+    receiver = Receiver(server, speed_unit, approot)
+    receiver.reconnect()
 
     asyncore.loop()

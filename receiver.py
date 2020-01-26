@@ -8,16 +8,16 @@ from ambiguousResultHandler import AmbiguousResultHandler
 
 class Receiver(asyncore.dispatcher):
 
-    def __init__(self, address, speed_units, approot):
+    def __init__(self, address, speed_unit, approot):
         asyncore.dispatcher.__init__(self)
-        self.speed_units = speed_units
-        self.speed_modifier = speed_units == 'mph' and 0.6214 or 1
+        self.speed_unit = speed_unit
+        self.speed_modifier = speed_unit == 'mph' and 0.6214 or 1
         self.address = address
         self.approot = approot
         self.finished = False
         self.track = 0
         self.car = 0
-        self.topspeed = 0
+        self.topspeed = 0 # unit: m/s
         self.previousTime = 0
         self.fieldCount = 66
         
@@ -29,8 +29,6 @@ class Receiver(asyncore.dispatcher):
         
         self.previousDistance = 0
         self.tracklength = -1
-        
-        self.reconnect()
 
     def reconnect(self):
         self.received_data = False
@@ -61,11 +59,15 @@ class Receiver(asyncore.dispatcher):
 
         self.parse(data)
         
+    def formatTopSpeed(self):
+        topspeed_kmh = self.topspeed * 3.6
+        return '%.1f' % (topspeed_kmh * self.speed_modifier,)
+    
     def printResults(self, laptime):
         dbAccess = self.databaseAccess
         data = "dirtrally.%s.%s.%s.time:%f|ms" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car), laptime * 1000)
         print(data)
-        data = "dirtrally.%s.%s.%s.topspeed:%s|%s" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car), self.topspeed, self.speed_units)
+        data = "dirtrally.%s.%s.%s.topspeed:%s|%s" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car), self.formatTopSpeed(), self.speed_unit)
         print(data)
 
     def showCarControlInformation(self):
@@ -82,7 +84,7 @@ class Receiver(asyncore.dispatcher):
         lap = stats[59]
         distance = stats[2]
         
-        speed = int(stats[7] * 3.6)
+        speed = int(stats[7])
         if self.topspeed < speed:
             self.topspeed = speed
 
