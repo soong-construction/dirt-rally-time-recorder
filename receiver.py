@@ -68,7 +68,10 @@ class Receiver(asyncore.dispatcher):
 
     def printResults(self, laptime):
         dbAccess = self.databaseAccess
-        data = "dirtrally.%s.%s.%s.time:%f|s" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car), self.formatLapTime(laptime))
+        # FIXME Uncaught error, handle better/log. Also, test this method
+        #data = "dirtrally.%s.%s.%s.time:%f|s" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car), self.formatLapTime(laptime))
+        ##error: uncaptured python exception, closing channel <receiver.Receiver 127.0.0.1:20778 at 0x16c613a6748> (<class 'TypeError'>:must be real number, not str [D:\Python\lib\asyncore.py|read|83] [D:\Python\lib\asyncore.py|handle_read_event|420] [G:\git-repos\dirt-rally-time-recorder\receiver.py|handle_read|60] [G:\git-repos\dirt-rally-time-recorder\receiver.py|parse|95] [G:\git-repos\dirt-rally-time-recorder\statsProcessor.py|handleGameState|19] [G:\git-repos\dirt-rally-time-recorder\receiver.py|finishStage|131] [G:\git-repos\dirt-rally-time-recorder\receiver.py|printResults|71])
+        data = "dirtrally.%s.%s.%s.time:%s|s" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car), self.formatLapTime(laptime))
         print(data)
         data = "dirtrally.%s.%s.%s.topspeed:%s|%s" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car), self.formatTopSpeed(), self.speed_unit)
         print(data)
