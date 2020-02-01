@@ -89,7 +89,7 @@ class TestDatabaseAccess(unittest.TestCase):
         
         self.thing.recordResults(100, cars, 234.44, )
         
-        self.assertEquals(self.thing.printCarUpdates.call_count, 1);
+        self.assertEqual(self.thing.printCarUpdates.call_count, 1);
         
     def testGetCarInterfacesStatementWithoutData(self):
         handbrakeData = [(None)]
