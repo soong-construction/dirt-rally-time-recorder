@@ -1,5 +1,3 @@
--- PRELIMINARY, USE WITH CARE. Please check migrate.sql each time you update this tool
-
 -- Table: Tracks
 PRAGMA foreign_keys = off;
 BEGIN TRANSACTION;
@@ -146,6 +144,34 @@ INSERT INTO Tracks (id, name, length, startz) VALUES (1009, 'Col de Turini Depar
 INSERT INTO Tracks (id, name, length, startz) VALUES (1010, 'Route de Turini (Montee)', 6843.3203125, -991.945068359375);
 INSERT INTO Tracks (id, name, length, startz) VALUES (1011, 'Col de Turini – Depart en descente', 6846.830078125, -2344.592529296875);
 
+-- Argolis, Greece:1100
+INSERT INTO Tracks (id, name, length, startz) VALUES (1100, 'Ampelonas Ormi', 4860.1904296875, 91.54808044433594);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1101, 'Anodou Farmakas', 9666.5, -2033.0767822265625);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1102, 'Kathodo Leontiou', 9665.990234375, 457.1891784667969);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1103, 'Pomono Ékrixi', 5086.830078125, -2033.0767822265625);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1104, 'Koryfi Dafni', 4582.009765625, 164.40521240234375);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1105, 'Fourketa Kourva', 4515.39990234375, 457.18927001953125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1106, 'Perasma Platani', 10487.060546875, 504.3974609375);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1107, 'Tsiristra Théa', 10357.8798828125, -3672.5810546875);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1108, 'Ourea Spevsi', 5739.099609375, 504.3973693847656);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1109, 'Ypsona tou Dasos', 5383.009765625, -2277.10986328125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1110, 'Abies Koiláda', 6888.39990234375, -1584.236083984375);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1111, 'Pedines Epidaxi', 6595.31005859375, -3672.58154296875);
+
+-- Jämsä, Finland:1200
+INSERT INTO Tracks (id, name, length, startz) VALUES (1200, 'Kailajärvi', 7515.40966796875, 39.52613830566406);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1201, 'Paskuri', 7461.65966796875, 881.0377197265625);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1202, 'Naarajärvi', 7310.5400390625, 846.68701171875);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1203, 'Jyrkysjärvi', 7340.3798828125, -192.40794372558594);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1204, 'Kakaristo', 16205.1904296875, 3751.42236328125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1205, 'Pitkäjärvi', 16205.259765625, 833.2575073242188);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1206, 'Iso Oksjärvi', 8042.5205078125, 3751.42236328125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1207, 'Oksala', 8057.52978515625, -3270.775390625);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1208, 'Kotajärvi', 8147.560546875, -3263.315185546875);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1209, 'Järvenkylä', 8147.419921875, 833.2575073242188);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1210, 'Kontinjärvi', 14929.7998046875, 39.52613067626953);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1211, 'Hämelahti', 14866.08984375, -192.407958984375);
+
 COMMIT TRANSACTION;
 PRAGMA foreign_keys = on;
 
@@ -211,6 +237,9 @@ INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1000, 'Citroen C4 Rally', 7
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1001, 'Škoda Fabia Rally', 774.92620849609375, 178.02359008789062);
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1002, 'Ford Focus RS Rally', 769.69024658203125, 186.92477416992188);
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1003, 'Subaru Impreza 2008', 785.398193359375, 219.91148376464844);
+INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1004, 'Ford Focus RS Rally 2001', 785.398193359375, 178.02359008789062);
+INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1005, 'Subaru Impreza (2001)', 837.758056640625, 204.2035369873047);
+INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1006, 'Peugeot 206 Rally', 680.678466796875, 157.0796356201172);
 
 -- R5
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1100, 'Ford Fiesta R5', 774.92620849609375, 188.49555969238281);
@@ -226,6 +255,11 @@ INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1201, 'BMW M2 Competition',
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1202, 'Chevrolet Camaro GT4.R', 759.21820068359375, 178.02359008789062);
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1203, 'Aston Martin V8 Vantage GT4', 733.03826904296875, 104.71975708007812);
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1204, 'Ford Mustang GT4 Ford RS200', 863.9380493164062, 146.607666015625);
+
+-- F2 Kit Car
+INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1300, 'Peugeot 306 Maxi', 1151.9173583984375, 198.96754455566406);
+INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1301, 'Seat Ibiza Kit Car', 942.477783203125, 136.13568115234375);
+INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1302, 'Volkswagen Golf Kitcar', 942.477783203125, 125.66371154785156);
 
 COMMIT TRANSACTION;
 PRAGMA foreign_keys = on;
@@ -292,6 +326,9 @@ INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES
 INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1001, 1, 'PADDLE', 0, 6);
 INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1002, 1, 'PADDLE', 0, 5);
 INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1003, 1, 'PADDLE', 0, 6);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1004, 1, 'SEQUENTIAL', 0, 6);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1005, 1, 'PADDLE', 0, 6);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1006, 1, 'PADDLE', 0, 5);
 
 -- R5
 INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1100, 1, 'SEQUENTIAL', 0, 5);
@@ -307,6 +344,11 @@ INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES
 INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1202, 1, 'SEQUENTIAL', 0, 6);
 INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1203, 1, 'SEQUENTIAL', 0, 6);
 INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1204, 1, 'SEQUENTIAL', 0, 6);
+
+-- F2 Kit Car
+INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1300, 1, 'SEQUENTIAL', 0, 6);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1301, 1, 'SEQUENTIAL', 0, 6);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1302, 1, 'SEQUENTIAL', 0, 6);
 
 COMMIT TRANSACTION;
 PRAGMA foreign_keys = on;
