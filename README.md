@@ -4,23 +4,18 @@ This tool allows you to track your stage times in DiRT Rally and DiRT Rally 2.0 
 
 Time tracking works for stage rallies and the Pikes Peak events of the original DiRT Rally.  
 
-> To check if the latest DiRT Rally 2.0 Season is supported, look for or create an [issue.](https://github.com/soong-construction/dirt-rally-time-recorder/issues?q=label%3ADLC) 
+> To check if the latest DiRT Rally 2.0 DLC is supported, look for or create an [issue.](https://github.com/soong-construction/dirt-rally-time-recorder/issues?q=label%3ADLC) 
 
 ## First time set up
-
-You need to set up the game and enable UDP telemetry like so:
-- Open *[home-or-documents-dir]\My Games\DiRT Rally [2.0]\hardwaresettings\hardware_settings_config.xml* with a text editor
-- Enable telemetry and request extradata by adapting the appropriate line as follows: ``<udp enabled="true" extradata="3" ...``  
 
 You can choose to download *dirt-rally-time-recorder* as a ready-to-use bundle (tested to work on Windows 10 x64). If you don't trust pre-built .exe files, you can set it up from scratch. 
 
 ### Ready-to-use bundle
 - Download the [latest release](https://github.com/soong-construction/dirt-rally-time-recorder/releases/latest) for either the original DiRT Rally or 2.0 and unzip it somewhere
-- If you prefer imperial units (mph), you can configure this in `config.yml`. If you change this later on, you will falsify top speeds of recorded stages (unless you migrate your database)  
 - Start ``timerecord.exe``
   - It should tell you to be *Waiting for data...*, otherwise take a look at [Troubleshooting](#troubleshooting)  
 
-### Set up from scratch  
+### ... or set up from scratch  
 *These steps refer to Windows, Linux users will know how to use their package manager appropriately*
 
 - Clone this repo or download and unpack its zip file to your disk
@@ -35,10 +30,16 @@ You can choose to download *dirt-rally-time-recorder* as a ready-to-use bundle (
 - Setup database with car and track tables by running `sqlite3.exe`  
   - ``.open --new dirtrally-lb.db`` 
   - ``.read setup-dr1.sql`` (or ``setup-dr2.sql``)
-- If you prefer imperial units (mph), you can configure this in `config.yml`. If you change this later on, you will falsify top speeds of recorded stages (unless you migrate your database)  
 - Start time tracking  
   - open a command prompt (e.g. via the work folder context menu, this saves you from moving to this directory manually) and run ``python timerecord.py``
-  - It should tell you to be *Waiting for data...*, otherwise check the set up or take a look at [Troubleshooting](#troubleshooting)  
+  - It should tell you to be *Waiting for data...*, otherwise check the set up or take a look at [Troubleshooting](#troubleshooting)
+
+### Configuration
+If you prefer imperial units (mph), you can change the `speed_unit` in `config.yml` (default: kmh). If you change this later on, you will falsify top speeds of recorded stages (unless you migrate your database)  
+
+Before starting DiRT Rally [2.0] you need to enable UDP telemetry like so:
+- Open *[home-or-documents-dir]\My Games\DiRT Rally [2.0]\hardwaresettings\hardware_settings_config.xml* with a text editor
+- Enable telemetry and request extradata by adapting the appropriate line as follows: ``<udp enabled="true" extradata="3" ...``  
   
 ## Record stage times
 - Start DiRT Rally [2.0] and finish a stage  
