@@ -41,8 +41,8 @@ class DatabaseAccess:
     def logCar(self, rpm, max_rpm, name):
         print("CAR: %s (%s - %s)" % (name, str(rpm), str(max_rpm)))
 
-    def identifyCar(self, rpm, max_rpm):
-        cars = self.database.loadCars(rpm, max_rpm)
+    def identifyCar(self, rpm, max_rpm, top_gear):
+        cars = self.database.loadCars(rpm, max_rpm, top_gear)
         if (len(cars) == 0):
             print("Failed to identify car: %s - %s" % (str(rpm), str(max_rpm)))
             return []

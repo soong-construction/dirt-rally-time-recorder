@@ -68,7 +68,7 @@ class Database:
                 return self.fetchUser(lapdb)
             
             except (Exception) as exc:
-                print("Error initializing " + self.laptimesDbName, exc)
+                print("Error initializing %s:" % (self.laptimesDbName,), exc)
         
         finally:
             lapconn.close()
@@ -83,9 +83,11 @@ class Database:
         self.db.execute('SELECT id, name, startz FROM Tracks WHERE abs(length - ?) < 0.001', (tracklength,))
         return self.db.fetchall()
 
-    def loadCars(self, rpm, max_rpm):
-        carSelectStatement = 'SELECT id, name FROM cars WHERE abs(maxrpm - ?) < 1.0 AND abs(idlerpm - ?) < 1.0'
-        self.db.execute(carSelectStatement, (max_rpm, rpm))
+    def loadCars(self, rpm, max_rpm, top_gear):
+        carSelectStatement = ('SELECT cars.id, cars.name ' 
+                              'FROM cars INNER JOIN controls USING(id) ' 
+                              'WHERE abs(cars.maxrpm - ?) < 1.0 AND abs(cars.idlerpm - ?) < 1.0 AND controls.forwardgears = ? ')
+        self.db.execute(carSelectStatement, (max_rpm, rpm, top_gear))
         result = self.db.fetchall()
         return result
 

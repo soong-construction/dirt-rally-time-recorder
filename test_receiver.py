@@ -78,6 +78,28 @@ class TestReceiver(unittest.TestCase):
         self.thing.databaseAccess.recordResults.assert_called()
         self.assertTrue(self.thing.finished, 'Did not toggle finished')
 
+    def testHandleStartStageAndDatabaseCalled(self):
+        self.thing.reconnect()
+
+        self.thing.inStage = MagicMock(return_value=False)
+        self.thing.print = MagicMock()
+        self.thing.databaseAccess.recordResults = MagicMock()
+        self.thing.databaseAccess.identifyCar = MagicMock(return_value=10)
+        self.thing.databaseAccess.identifyTrack = MagicMock(return_value=11)
+
+        stats = struct.unpack(str(self.thing.fieldCount) + 'f', sixtySixFields[0:self.thing.fieldCount * 4])
+        # stats[59] == 1 means lap/stage complete
+        stats = stats[:59] + (0.0,) + stats[60:]
+        stats = struct.pack(str(self.thing.fieldCount) + 'f', *stats)
+
+        self.thing.recv = MagicMock(return_value=stats)
+
+        self.thing.handle_read()
+
+        self.thing.print.assert_called()
+        self.thing.databaseAccess.identifyCar.assert_called()
+        self.thing.databaseAccess.identifyTrack.assert_called()
+
     def testCloseGracefullyOnError(self):
         self.thing.reconnect()
 

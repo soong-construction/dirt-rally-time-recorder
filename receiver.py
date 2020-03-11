@@ -125,12 +125,13 @@ class Receiver(asyncore.dispatcher):
     def startStage(self, stats):
         idle_rpm = stats[64]  # *10 to get real value
         max_rpm = stats[63]  # *10 to get real value
+        top_gear = stats[65]
         z = stats[6]
         tracklength = stats[61]
 
         dbAccess = self.databaseAccess
         self.track = dbAccess.identifyTrack(z, tracklength)
-        self.car = dbAccess.identifyCar(idle_rpm, max_rpm)
+        self.car = dbAccess.identifyCar(idle_rpm, max_rpm, top_gear)
 
         self.tracklength = tracklength
 
