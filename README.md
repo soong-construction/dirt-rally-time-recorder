@@ -56,14 +56,16 @@ Volkswagen Golf GTI 16V: H-PATTERN shifting, 5 speed, with manual CLUTCH, with H
   - to quickly list your recorded times with SQLite, run ``list-laptimes.bat``  
   - to dump the database into a CSV file consumable by your favorite spreadsheet editor, run ``export-laptimes.bat``  
 
-## Troubleshooting
+## Limitations
 Since DiRT Rally [2.0] telemetry data doesn't allow to clearly identify every available car and track, this tool will sometimes ask you to resolve this after completing a stage.  
-In order to do so, the tool prepares scripts for you, e.g. `1573403766_ElRodeo_PoloGTIR5.bat`
+
+In order to consolidate the database, the tool prepares scripts for you, e.g. `1573403766_ElRodeo_PoloGTIR5.bat`
 - go the folder where you set up *dirt-rally-time-recorder*  
 - run the script file that matches the car you drove (e.g. double-click it)  
 - you will barely notice a window opening and closing, and that's it
 - you can delete the script files afterwards, e.g. you might find also find a `1573403766_ElRodeo_SkodaFabiaR5.bat`  
 
+## Troubleshooting
 When you import the CSV file as a spreadsheet, make sure to select UTF-8 encoding.   
 
 If you encounter an error message talking about sockets, understand that this tool cannot run in parallel, but only in a single instance at the same time.  
