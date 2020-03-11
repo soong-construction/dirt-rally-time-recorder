@@ -86,7 +86,7 @@ class Database:
     def loadCars(self, rpm, max_rpm, top_gear):
         carSelectStatement = ('SELECT cars.id, cars.name ' 
                               'FROM cars INNER JOIN controls USING(id) ' 
-                              'WHERE abs(cars.maxrpm - ?) < 1.0 AND abs(cars.idlerpm - ?) < 1.0 AND controls.forwardgears = ? ')
+                              'WHERE abs(cars.maxrpm - ?) < 1.0 AND abs(cars.idlerpm - ?) < 1.0 AND controls.topgear = ? ')
         self.db.execute(carSelectStatement, (max_rpm, rpm, top_gear))
         result = self.db.fetchall()
         return result
@@ -139,6 +139,6 @@ class Database:
         return bool(fetch[0]) if fetch else None
 
     def loadGearsData(self, car):
-        self.db.execute('SELECT forwardgears FROM controls WHERE id = ?', (car,))
+        self.db.execute('SELECT topgear FROM controls WHERE id = ?', (car,))
         fetch = self.db.fetchone()
         return fetch[0] if fetch else None
