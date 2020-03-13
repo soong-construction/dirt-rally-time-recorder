@@ -20,10 +20,10 @@ You can choose to download *dirt-rally-time-recorder* as a ready-to-use bundle (
 
 - Clone this repo or download and unpack its zip file to your disk
   - this creates your work folder, e.g. ``C:\dirtrally-time-recorder-master``
-- Install Python3: https://wiki.python.org/moin/BeginnersGuide/Download
+- Install Python 3.7: https://wiki.python.org/moin/BeginnersGuide/Download
   - If Python was installed already, ensure [pip is set up properly](https://packaging.python.org/tutorials/installing-packages/#ensure-you-can-run-pip-from-the-command-line) 
 - Install dependencies
-  - in a command prompt, run ``pip install PyYAML==3.12``
+  - in a command prompt, run ``pip install PyYAML==5.3``
 - Install SQLite: https://www.sqlite.org/cli.html  
   - choose the ``sqlite-tools-win32-x86-XXXXXX.zip`` package
   - extract ``sqlite3.exe`` to your work folder, i.e. next to ``timerecord.py``    
