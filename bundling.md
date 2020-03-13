@@ -1,4 +1,4 @@
-Note that bundling with pyinstaller is OS dependent. Releases for dirt-rally-time-recorder target x64 Windows platforms. 
+Note that bundling with pyinstaller is OS dependent. Bundle releases for dirt-rally-time-recorder target x64 Windows platforms. 
 
 ## Prepare a release
 Not all steps are necessary for each release
@@ -15,7 +15,7 @@ Finally
 
 *Note:* Since v2.5.0, release are bundled automatically as part of the CI (GitHub Actions).
 
-Once, run `pip install pyinstaller==3.5`.  
+Once, run `pip install pyinstaller==3.6`.  
 
 To create bundle (e.g. for DR1)
 - perform the bundle steps as per `.github/workflows`
