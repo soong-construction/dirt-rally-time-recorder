@@ -17,7 +17,7 @@ You can choose to download *dirt-rally-time-recorder* as a ready-to-use bundle (
   - It should tell you to be *Waiting for data...*, otherwise take a look at [Troubleshooting](#troubleshooting)  
 
 ### ... or set up from scratch  
-*These steps refer to Windows, Linux users will know how to use their package manager appropriately*
+*These steps refer to Windows, Linux users will know how to use their package manager appropriately.*
 
 - Clone this repo or download and unpack its zip file to your disk
   - this creates your work folder, e.g. ``C:\dirtrally-time-recorder-master``
@@ -36,7 +36,7 @@ You can choose to download *dirt-rally-time-recorder* as a ready-to-use bundle (
   - It should tell you to be *Waiting for data...*, otherwise check the set up or take a look at [Troubleshooting](#troubleshooting)
 
 ### Configuration
-If you prefer imperial units (mph), you can change the `speed_unit` in `config.yml` (default: kmh). Afterwards, restart *dirt-rally-time-recorder*. If you change this later on, you will falsify top speeds of recorded stages (unless you migrate your database)  
+If you prefer imperial units (mph), you can change the `speed_unit` in `config.yml` (default: kmh). Afterwards, restart *dirt-rally-time-recorder*. If you change this later on, you will falsify top speeds of recorded stages (unless you migrate your database).  
 
 Before starting DiRT Rally [2.0] you need to enable UDP telemetry like so:
 - Navigate to the settings directory of [DiRT Rally](https://www.pcgamingwiki.com/wiki/DiRT_Rally#Configuration_file.28s.29_location) or [DiRT Rally 2.0](https://www.pcgamingwiki.com/wiki/DiRT_Rally_2.0#Configuration_file.28s.29_location) (e.g. `%USERPROFILE%\Documents\My Games\DiRT Rally 2.0\hardwaresettings\`)
@@ -73,9 +73,12 @@ When you import the CSV file as a spreadsheet, make sure to select UTF-8 encodin
 
 If you encounter an error message talking about sockets, understand that this tool cannot run in parallel, but only in a single instance at the same time.  
 
+Steam updates of the game sometimes reset *hardware_settings_config.xml*. Then, repeat the steps to enable UDP telemetry again.  
+
 In case you modified the telemetry ip or port in *hardware_settings_config.xml*, adapt ``config.yml`` accordingly.
 
-Unless you use the bundled version, have a look at ``migrate.sql`` to find instructions how to migrate your database for new releases.    
+Unless you use the bundled version, have a look at ``migrate.sql`` to find instructions how to migrate your database for new releases.  
+
 If you encounter errors at start-up, see if renaming the file `dirtrally-laptimes.db` helps (which will create a new database).    
 
 In any case, feel free to [open an issue](https://github.com/soong-construction/dirt-rally-time-recorder/issues/new).  
