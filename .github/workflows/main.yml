@@ -17,10 +17,10 @@ jobs:
     # The type of runner that the job will run on
     runs-on: windows-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
     - name: Setup Python
       uses: actions/setup-python@v1.2.0
@@ -38,8 +38,9 @@ jobs:
     - name: Run tests / pytest
       run: pytest
     
-    - name: Bundle to executable / PyInstaller
+    - name: Bundle DR1 executable / PyInstaller
       run: |
+        rm -f dirtrally-lb.db
         ./bin/sqlite3 -batch -init setup-dr1.sql dirtrally-lb.db .exit 
         pyinstaller timerecord.spec --noconfirm
 
@@ -47,10 +48,22 @@ jobs:
       uses: DuckSoft/create-7z-action@v1.0
       with:
         pathSource: ./dist/timerecorder
-        pathTarget: timerecorder-dirt-rally.zip
-    
+        pathTarget: artifacts/timerecorder-dirt-rally.zip
+
+    - name: Bundle DR2 executable / PyInstaller
+      run: |
+        rm -f dirtrally-lb.db
+        ./bin/sqlite3 -batch -init setup-dr2.sql dirtrally-lb.db .exit 
+        pyinstaller timerecord.spec --noconfirm
+
+    - name: Zip distribution / create-7z-action
+      uses: DuckSoft/create-7z-action@v1.0
+      with:
+        pathSource: ./dist/timerecorder
+        pathTarget: artifacts/timerecorder-dirt-rally-2.0.zip
+
     - name: Archive artifacts
       uses: actions/upload-artifact@v1
       with:
-        name: timerecorder-dirt-rally.zip
-        path: timerecorder-dirt-rally.zip
+        name: artifacts.zip
+        path: artifacts
