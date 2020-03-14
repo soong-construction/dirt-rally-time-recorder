@@ -40,7 +40,7 @@ jobs:
     
     - name: Bundle DR1 executable / PyInstaller
       run: |
-        rm -f dirtrally-lb.db
+        Remove-Item -ErrorAction SilentlyContinue dirtrally-lb.db
         ./bin/sqlite3 -batch -init setup-dr1.sql dirtrally-lb.db .exit 
         pyinstaller timerecord.spec --noconfirm
 
@@ -52,7 +52,7 @@ jobs:
 
     - name: Bundle DR2 executable / PyInstaller
       run: |
-        rm -f dirtrally-lb.db
+        Remove-Item -ErrorAction SilentlyContinue dirtrally-lb.db
         ./bin/sqlite3 -batch -init setup-dr2.sql dirtrally-lb.db .exit 
         pyinstaller timerecord.spec --noconfirm
 
