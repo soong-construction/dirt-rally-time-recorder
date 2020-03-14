@@ -25,24 +25,21 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v1.2.0
       with:
-        # Version range or exact version of a Python version to use, using SemVer's version range syntax.
         python-version: 3.7
 
-    # Runs a single command using the runners shell
-    - name: Run a one-line script
-      run: echo Hello, world!
-
-    # Runs a set of commands using the runners shell
-    - name: Run a multi-line script
-      run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
-    
-    - name: Pip Installer
+    - name: Install job dependencies / Pip Installer
       uses: BSFishy/pip-action@v1
       with:
-        # The packages to install from Pip
-        packages: pytest
+        packages: |
+          pytest
+          PyYAML==5.3
+          pyinstaller==3.6
     
     - name: Run tests
       run: pytest
+    
+    - name: Bundle to executable / PyInstaller
+      run: |
+        ./bin/sqlite3 -batch -init setup-dr1.sql dirtrally-lb.db .exit 
+        pyinstaller timerecord.spec --noconfirm
+
