@@ -37,7 +37,7 @@ jobs:
   assemble:
     runs-on: windows-latest
     needs: build
-    #if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master'
     
     steps:
     - name: Checkout repository
