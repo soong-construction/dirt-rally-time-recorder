@@ -34,7 +34,7 @@ jobs:
   assemble:
     runs-on: windows-latest
     needs: build
-    if: github.ref == 'refs/heads/master'
+    if: startsWith(github.ref, 'refs/tags/')
     
     steps:
     - name: Checkout repository
