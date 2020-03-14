@@ -268,87 +268,87 @@ PRAGMA foreign_keys = on;
 PRAGMA foreign_keys = off;
 BEGIN TRANSACTION;
 
-CREATE TABLE controls(id INTEGER PRIMARY KEY UNIQUE, handbrake integer, shifting text, manualclutch integer, forwardgears integer);
+CREATE TABLE controls(id INTEGER PRIMARY KEY UNIQUE, handbrake integer, shifting text, manualclutch integer, topgear integer);
 
 -- H1 FWD
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (100, 1, 'H-PATTERN', 1, 4);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (101, 1, 'H-PATTERN', 1, 4);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (102, 1, 'H-PATTERN', 1, 4);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (100, 1, 'H-PATTERN', 1, 4);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (101, 1, 'H-PATTERN', 1, 4);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (102, 1, 'H-PATTERN', 1, 4);
 
 -- H2 FWD
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (200, 1, 'H-PATTERN', 1, 5);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (201, 1, 'H-PATTERN', 1, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (200, 1, 'H-PATTERN', 1, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (201, 1, 'H-PATTERN', 1, 5);
 
 -- H2 RWD
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (300, 1, 'H-PATTERN', 1, 5);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (301, 1, 'H-PATTERN', 1, 5);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (302, 1, 'H-PATTERN', 1, 5);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (303, 1, 'H-PATTERN', 1, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (300, 1, 'H-PATTERN', 1, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (301, 1, 'H-PATTERN', 1, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (302, 1, 'H-PATTERN', 1, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (303, 1, 'H-PATTERN', 1, 5);
 
 -- H3 RWD
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (400, 1, 'H-PATTERN', 1, 6);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (401, 1, 'H-PATTERN', 1, 5);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (402, 1, 'H-PATTERN', 1, 5);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (403, 1, 'H-PATTERN', 1, 5);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (404, 1, 'H-PATTERN', 1, 5);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (405, 1, 'H-PATTERN', 1, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (400, 1, 'H-PATTERN', 1, 6);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (401, 1, 'H-PATTERN', 1, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (402, 1, 'H-PATTERN', 1, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (403, 1, 'H-PATTERN', 1, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (404, 1, 'H-PATTERN', 1, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (405, 1, 'H-PATTERN', 1, 5);
 
 -- Group B RWD
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (500, 1, 'H-PATTERN', 1, 5);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (501, 1, 'H-PATTERN', 1, 5);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (502, 1, 'H-PATTERN', 1, 5);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (503, 1, 'H-PATTERN', 1, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (500, 1, 'H-PATTERN', 1, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (501, 1, 'H-PATTERN', 1, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (502, 1, 'H-PATTERN', 1, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (503, 1, 'H-PATTERN', 1, 5);
 
 -- Group B 4WD
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (600, 0, 'H-PATTERN', 1, 5);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (601, 0, 'H-PATTERN', 1, 5);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (602, 0, 'H-PATTERN', 1, 5);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (603, 0, 'H-PATTERN', 1, 5);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (604, 0, 'H-PATTERN', 1, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (600, 0, 'H-PATTERN', 1, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (601, 0, 'H-PATTERN', 1, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (602, 0, 'H-PATTERN', 1, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (603, 0, 'H-PATTERN', 1, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (604, 0, 'H-PATTERN', 1, 5);
 
 -- R2
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (700, 1, 'SEQUENTIAL', 0, 5);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (701, 1, 'SEQUENTIAL', 0, 5);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (702, 1, 'SEQUENTIAL', 0, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (700, 1, 'SEQUENTIAL', 0, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (701, 1, 'SEQUENTIAL', 0, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (702, 1, 'SEQUENTIAL', 0, 5);
 
 -- Group A
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (800, 1, 'H-PATTERN', 0, 6);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (801, 1, 'SEQUENTIAL', 0, 6);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (802, 1, 'H-PATTERN', 1, 6);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (803, 1, 'H-PATTERN', 0, 7);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (800, 1, 'H-PATTERN', 0, 6);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (801, 1, 'SEQUENTIAL', 0, 6);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (802, 1, 'H-PATTERN', 1, 6);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (803, 1, 'H-PATTERN', 0, 7);
 
 -- NR4/R4
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (900, 1, 'H-PATTERN', 0, 5);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (901, 1, 'H-PATTERN', 0, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (900, 1, 'H-PATTERN', 0, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (901, 1, 'H-PATTERN', 0, 5);
 
 -- 4WD/2000c
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1000, 1, 'PADDLE', 0, 6);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1001, 1, 'PADDLE', 0, 6);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1002, 1, 'PADDLE', 0, 5);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1003, 1, 'PADDLE', 0, 6);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1004, 1, 'SEQUENTIAL', 0, 6);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1005, 1, 'PADDLE', 0, 6);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1006, 1, 'PADDLE', 0, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1000, 1, 'PADDLE', 0, 6);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1001, 1, 'PADDLE', 0, 6);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1002, 1, 'PADDLE', 0, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1003, 1, 'PADDLE', 0, 6);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1004, 1, 'SEQUENTIAL', 0, 6);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1005, 1, 'PADDLE', 0, 6);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1006, 1, 'PADDLE', 0, 5);
 
 -- R5
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1100, 1, 'SEQUENTIAL', 0, 5);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1101, 1, 'SEQUENTIAL', 0, 5);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1102, 1, 'SEQUENTIAL', 0, 5);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1103, 1, 'SEQUENTIAL', 0, 5);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1104, 1, 'SEQUENTIAL', 0, 5);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1105, 1, 'SEQUENTIAL', 0, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1100, 1, 'SEQUENTIAL', 0, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1101, 1, 'SEQUENTIAL', 0, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1102, 1, 'SEQUENTIAL', 0, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1103, 1, 'SEQUENTIAL', 0, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1104, 1, 'SEQUENTIAL', 0, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1105, 1, 'SEQUENTIAL', 0, 5);
 
 -- Rally GT
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1200, 1, 'SEQUENTIAL', 0, 6);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1201, 1, 'SEQUENTIAL', 0, 6);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1202, 1, 'SEQUENTIAL', 0, 6);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1203, 1, 'SEQUENTIAL', 0, 6);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1204, 1, 'SEQUENTIAL', 0, 6);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1200, 1, 'SEQUENTIAL', 0, 6);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1201, 1, 'SEQUENTIAL', 0, 6);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1202, 1, 'SEQUENTIAL', 0, 6);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1203, 1, 'SEQUENTIAL', 0, 6);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1204, 1, 'SEQUENTIAL', 0, 6);
 
 -- F2 Kit Car
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1300, 1, 'SEQUENTIAL', 0, 6);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1301, 1, 'SEQUENTIAL', 0, 6);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, forwardgears) VALUES (1302, 1, 'SEQUENTIAL', 0, 6);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1300, 1, 'SEQUENTIAL', 0, 6);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1301, 1, 'SEQUENTIAL', 0, 6);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1302, 1, 'SEQUENTIAL', 0, 6);
 
 COMMIT TRANSACTION;
 PRAGMA foreign_keys = on;
