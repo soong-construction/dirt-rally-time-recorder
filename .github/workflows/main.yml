@@ -46,13 +46,11 @@ jobs:
     - name: Zip distribution / create-7z-action
       uses: DuckSoft/create-7z-action@v1.0
       with:
-        # file/folder path to compress
         pathSource: ./dist/timerecorder
-        # 7z archive path to write
         pathTarget: timerecorder-dirt-rally.zip
     
     - name: Archive artifacts
       uses: actions/upload-artifact@v1
       with:
         name: timerecorder-dirt-rally.zip
-        path: ./
+        path: timerecorder-dirt-rally.zip
