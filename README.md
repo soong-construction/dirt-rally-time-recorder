@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.com/soong-construction/dirt-rally-time-recorder.svg?branch=master)](https://travis-ci.com/soong-construction/dirt-rally-time-recorder)
+![CI](https://github.com/soong-construction/dirt-rally-time-recorder/workflows/CI/badge.svg)
+
 ## Goal
 This tool allows you to track your stage times in DiRT Rally and DiRT Rally 2.0 and browse them, which the game itself does not allow.  
 
