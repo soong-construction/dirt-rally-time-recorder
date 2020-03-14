@@ -13,7 +13,7 @@ if __name__ == '__main__':
         approot = os.path.dirname(os.path.realpath(__file__))
 
     try:
-        config = yaml.load(open(approot + '/config.yml', 'r'))
+        config = yaml.load(open(approot + '/config.yml', 'r'), yaml.SafeLoader)
     except (yaml.YAMLError) as exc:
         print("Error in configuration file:", exc)
 

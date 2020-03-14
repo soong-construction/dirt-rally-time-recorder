@@ -1,0 +1,82 @@
+name: CI
+
+# Controls when the action will run. 
+on:
+  push:
+    branches: '**'
+  pull_request:
+    branches: '**'
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup Python
+      uses: actions/setup-python@v1.2.0
+      with:
+        python-version: 3.7
+
+    - name: Install job dependencies / Pip Installer
+      uses: BSFishy/pip-action@v1
+      with:
+        packages: |
+          pytest
+          PyYAML==5.3
+    
+    - name: Run tests / pytest
+      run: pytest
+  
+  assemble:
+    runs-on: windows-latest
+    needs: build
+    if: github.ref == 'refs/heads/master'
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup Python
+      uses: actions/setup-python@v1.2.0
+      with:
+        python-version: 3.7
+
+    - name: Install job dependencies / Pip Installer
+      uses: BSFishy/pip-action@v1
+      with:
+        packages: |
+          pyinstaller==3.6
+    
+    - name: Bundle DR1 executable / PyInstaller
+      run: |
+        Remove-Item -ErrorAction SilentlyContinue dirtrally-lb.db
+        ./bin/sqlite3 -batch -init setup-dr1.sql dirtrally-lb.db .exit 
+        pyinstaller timerecord.spec --noconfirm
+
+    - name: Zip distribution / create-7z-action
+      uses: DuckSoft/create-7z-action@v1.0
+      with:
+        pathSource: ./dist/timerecorder
+        pathTarget: artifacts/timerecorder-dirt-rally.zip
+
+    - name: Bundle DR2 executable / PyInstaller
+      run: |
+        Remove-Item -ErrorAction SilentlyContinue dirtrally-lb.db
+        ./bin/sqlite3 -batch -init setup-dr2.sql dirtrally-lb.db .exit 
+        pyinstaller timerecord.spec --noconfirm
+
+    - name: Zip distribution / create-7z-action
+      uses: DuckSoft/create-7z-action@v1.0
+      with:
+        pathSource: ./dist/timerecorder
+        pathTarget: artifacts/timerecorder-dirt-rally-2.0.zip
+
+    - name: Archive artifacts
+      uses: actions/upload-artifact@v1
+      with:
+        name: artifacts.zip
+        path: artifacts
