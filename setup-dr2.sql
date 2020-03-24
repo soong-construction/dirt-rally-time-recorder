@@ -227,6 +227,7 @@ INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (800, 'Mitsubishi Lancer Evo
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (801, 'Subaru Impreza 1995', 733.03826904296875, 115.19173431396484);
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (802, 'Lancia Delta HF Integrale', 785.398193359375, 104.71975708007812);
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (803, 'Ford Escort RS Cosworth', 733.03826904296875, 146.607666015625);
+INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (804, 'Subaru Legacy RS', 791.1577758789062, 202.4232940673828);
 
 -- NR4/R4
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (900, 'Subaru Impreza WRX STI NR4', 837.758056640625, 178.02359008789062);
@@ -240,6 +241,7 @@ INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1003, 'Subaru Impreza 2008'
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1004, 'Ford Focus RS Rally 2001', 785.398193359375, 178.02359008789062);
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1005, 'Subaru Impreza (2001)', 837.758056640625, 204.2035369873047);
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1006, 'Peugeot 206 Rally', 680.678466796875, 157.0796356201172);
+INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1007, 'Subaru Impreza S4 Rally', 816.8141479492188, 207.34512329101562);
 
 -- R5
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1100, 'Ford Fiesta R5', 774.92620849609375, 188.49555969238281);
@@ -316,6 +318,7 @@ INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (800
 INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (801, 1, 'SEQUENTIAL', 0, 6);
 INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (802, 1, 'H-PATTERN', 1, 6);
 INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (803, 1, 'H-PATTERN', 0, 7);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (804, 1, 'H-PATTERN', 0, 6);
 
 -- NR4/R4
 INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (900, 1, 'H-PATTERN', 0, 5);
@@ -329,6 +332,7 @@ INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (100
 INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1004, 1, 'SEQUENTIAL', 0, 6);
 INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1005, 1, 'PADDLE', 0, 6);
 INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1006, 1, 'PADDLE', 0, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1007, 1, 'H-PATTERN', 0, 6);
 
 -- R5
 INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1100, 1, 'SEQUENTIAL', 0, 5);
