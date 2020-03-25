@@ -172,6 +172,21 @@ INSERT INTO Tracks (id, name, length, startz) VALUES (1209, 'Järvenkylä', 8147
 INSERT INTO Tracks (id, name, length, startz) VALUES (1210, 'Kontinjärvi', 14929.7998046875, 39.52613067626953);
 INSERT INTO Tracks (id, name, length, startz) VALUES (1211, 'Hämelahti', 14866.08984375, -192.407958984375);
 
+-- Perth and Kinross, Scotland:1300
+INSERT INTO Tracks (id, name, length, startz) VALUES (1300, 'South Morningside', 12583.41015625, -1157.8094482421875);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1301, 'South Morningside Reverse', 12670.58984375, -1657.54736328125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1302, 'Old Butterstone Muir', 5822.77001953125, -1157.8094482421875);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1303, 'Rosebank Farm', 7144.69970703125, -1657.54736328125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1304, 'Rosebank Farm Reverse', 6967.89990234375, 3383.734130859375);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1305, 'Old Butterstone Muir Reverse', 5659.8203125, 3338.64306640625);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1306, 'Newhouse Bridge', 12857.0703125, 1386.6217041015625);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1307, 'Newhouse Bridge Reverse', 12969.2109375, -403.2851867675781);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1308, 'Glencastle Farm', 5245.4501953125, 1386.62158203125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1309, 'Annbank Station', 7703.72021484375, -403.28497314453125);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1310, 'Annbank Station Reverse', 7587.64013671875, -1838.8472900390625);
+INSERT INTO Tracks (id, name, length, startz) VALUES (1311, 'Glencastle Farm Reverse', 5238.43994140625, -1860.947021484375);
+
+
 COMMIT TRANSACTION;
 PRAGMA foreign_keys = on;
 
