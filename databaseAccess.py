@@ -32,14 +32,14 @@ class DatabaseAccess:
                 
             if matchingTrack and tracksDiffer:
                 index, name = matchingTrack
-                print("TRACK: %s" % (str(name)))
+                print("TRACK: %s" % str(name))
                 return index
         
         print("Ambiguous track data, %s matches: %s (Z: %s)" % (len(tracks), str(tracklength), str(z)))
         return list(index for (index, name, startZ) in tracks)
     
-    def logCar(self, rpm, max_rpm, name):
-        print("CAR: %s (%s - %s)" % (name, str(rpm), str(max_rpm)))
+    def logCar(self, name):
+        print("CAR: %s" % (name,))
 
     def identifyCar(self, rpm, max_rpm, top_gear):
         cars = self.database.loadCars(rpm, max_rpm, top_gear)
@@ -49,7 +49,7 @@ class DatabaseAccess:
         
         elif (len(cars) == 1):
             index, name = cars[0]
-            self.logCar(rpm, max_rpm, name)
+            self.logCar(name)
             return index
         
         else:
