@@ -8,6 +8,7 @@ from ambiguousResultHandler import AmbiguousResultHandler
 from gearTracker import GearTracker
 from timeTracker import TimeTracker
 from progressTracker import ProgressTracker
+from speedTracker import SpeedTracker
 
 
 class Receiver(asyncore.dispatcher):
@@ -21,7 +22,6 @@ class Receiver(asyncore.dispatcher):
         self.finished = False
         self.track = 0
         self.car = 0
-        self.topspeed = 0  # unit: m/s
         self.fieldCount = 66
 
         self.database = Database(approot).setup()
@@ -74,8 +74,8 @@ class Receiver(asyncore.dispatcher):
         self.parse(data)
 
     def formatTopSpeed(self):
-        topspeed_kmh = self.topspeed * 3.6
-        return '%.1f' % (topspeed_kmh * self.speed_modifier,)
+        topSpeed_kmh = self.speedTracker.getTopSpeed() * 3.6
+        return '%.1f' % (topSpeed_kmh * self.speed_modifier,)
 
     def formatLapTime(self, laptime):
         return '%.2f' % (laptime,)
@@ -101,12 +101,8 @@ class Receiver(asyncore.dispatcher):
         self.timeTracker.track(stats)
         self.gearTracker.track(stats)
         self.progressTracker.track(stats)
+        self.speedTracker.track(stats)
         
-        # TODO Extract to tracker
-        speed = int(stats[7])
-        if self.topspeed < speed:
-            self.topspeed = speed
-
         time = self.timeTracker.getTime()
         previousTime = self.timeTracker.getPreviousTime() or -1
         stageProgress = self.progressTracker.getProgress()
@@ -117,20 +113,21 @@ class Receiver(asyncore.dispatcher):
     def resetStage(self):
         self.track = 0
         self.car = 0
+        
+        self.initTrackers()
 
     def inStage(self):
         return self.track != 0 and self.car != 0
 
+    # TODO Can this be merged into resetStage? Is always called right after, now?
     def prepareStage(self):
         self.finished = False
-        self.topspeed = 0
-        
-        self.initTrackers()
 
     def initTrackers(self):
         self.timeTracker = TimeTracker()
         self.gearTracker = GearTracker()
         self.progressTracker = ProgressTracker()
+        self.speedTracker = SpeedTracker()
 
     def startStage(self, stats):
         idle_rpm = stats[64]  # *10 to get real value

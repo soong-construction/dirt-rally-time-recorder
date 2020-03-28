@@ -29,13 +29,13 @@ class TestReceiver(unittest.TestCase):
 
     def testTopSpeedConversion(self):
         self.thing = Receiver(('localhost', 1024), 'kmh', 'testroot')
-        self.thing.topspeed = 33.28
+        self.thing.speedTracker.topSpeed = 33.28
 
         format_top_speed = self.thing.formatTopSpeed()
         self.assertEqual(format_top_speed, '119.8')
 
         self.thing = Receiver(('localhost', 1024), 'mph', 'testroot')
-        self.thing.topspeed = 33.28
+        self.thing.speedTracker.topSpeed = 33.28
 
         format_top_speed = self.thing.formatTopSpeed()
         self.assertEqual(format_top_speed, '74.4')
