@@ -16,7 +16,7 @@ class GearTracker():
             print('[GEAR SKIPPED] %s -> %s' % (self.lastGear, current_gear))
 
     def track(self, stats):
-        current_gear = stats[32]
+        current_gear = stats[33]
         if self.lastGear is not None:
             self.checkGearChanged(current_gear)
             self.checkGearSkipped(current_gear)

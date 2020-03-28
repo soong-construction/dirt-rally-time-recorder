@@ -19,7 +19,7 @@ class TestGearTracker(unittest.TestCase):
         self.thing.track(stats)
         self.assertEqual(self.thing.getGearChangeCount(), 0)
         
-        stats[32] = 1
+        stats[33] = 1
         self.thing.track(stats)
         self.assertEqual(self.thing.getGearChangeCount(), 1)
         
@@ -32,12 +32,12 @@ class TestGearTracker(unittest.TestCase):
         self.thing.track(stats)
         self.assertEqual(self.thing.getGearSkipCount(), 0)
 
-        stats[32] = 2
+        stats[33] = 2
         self.thing.track(stats)
         self.assertEqual(self.thing.getGearChangeCount(), 1) 
         self.assertEqual(self.thing.getGearSkipCount(), 0) 
         
-        stats[32] = 4
+        stats[33] = 4
         self.thing.track(stats)
         self.assertEqual(self.thing.getGearChangeCount(), 2) 
         self.assertEqual(self.thing.getGearSkipCount(), 1) 
