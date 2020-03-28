@@ -110,18 +110,17 @@ class Receiver(asyncore.dispatcher):
         
         self.statsProcessor.handleGameState(self.inStage(), self.finished, lap, time, previousTime, stageProgress, stats)
 
+    # TODO resetCarAndTrack - is not called when restarting stage!
     def resetStage(self):
         self.track = 0
         self.car = 0
-        
-        self.initTrackers()
 
     def inStage(self):
         return self.track != 0 and self.car != 0
 
-    # TODO Can this be merged into resetStage? Is always called right after, now?
+    # TODO Remove. 
     def prepareStage(self):
-        self.finished = False
+        pass
 
     def initTrackers(self):
         self.timeTracker = TimeTracker()
@@ -130,6 +129,9 @@ class Receiver(asyncore.dispatcher):
         self.speedTracker = SpeedTracker()
 
     def startStage(self, stats):
+        self.finished = False
+        self.initTrackers()
+
         idle_rpm = stats[64]  # *10 to get real value
         max_rpm = stats[63]  # *10 to get real value
         top_gear = stats[65]
@@ -146,6 +148,7 @@ class Receiver(asyncore.dispatcher):
         self.showCarControlInformation()
 
     def finishStage(self, stats):
+        # TODO Move to time tracker?
         laptime = stats[62]
         self.databaseAccess.recordResults(self.track, self.car, laptime, self.formatTopSpeed())
         self.printResults(laptime)

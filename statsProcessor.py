@@ -18,10 +18,11 @@ class StatsProcessor():
             self.receiver.finishStage(stats)
         
         elif time < previousTime:
-            # Looks like time is not reset when restarting events (but for: fresh/proceeding events, second runs on PP).
+            # Field Time is not reset when restarting events (but for: new/proceeding events, second runs on PP).
             # New event for which track/car must be reset
             self.receiver.resetStage()
-            
+         
+        # TODO Check that DR1 (Sweden?) time recording will start properly w.r.t. stageProgress    
         elif stageProgress <= self.goLineProgress and self.statsWithTelemetry(stats):
             # Reset stage data when starting a new stage
             self.receiver.prepareStage()
