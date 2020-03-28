@@ -1,5 +1,4 @@
 
-
 class StatsProcessor():
     
     goLineDistance = 0.0

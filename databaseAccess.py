@@ -19,8 +19,8 @@ class DatabaseAccess:
             print("TRACK: %s" % str(name))
             return index
         
+        # TODO Can't Z-based recognition be part of the SQL query? Looks much too complicated...
         elif (len(tracks) == 2):
-            
             matchingTrack = None
             lastZ = None
             for index, name, startZ in tracks:

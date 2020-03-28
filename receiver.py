@@ -5,6 +5,8 @@ from databaseAccess import DatabaseAccess
 from database import Database
 from statsProcessor import StatsProcessor
 from ambiguousResultHandler import AmbiguousResultHandler
+from gearTracker import GearTracker
+from timeTracker import TimeTracker
 
 
 class Receiver(asyncore.dispatcher):
@@ -19,7 +21,6 @@ class Receiver(asyncore.dispatcher):
         self.track = 0
         self.car = 0
         self.topspeed = 0  # unit: m/s
-        self.previousTime = 0
         self.fieldCount = 66
 
         self.database = Database(approot).setup()
@@ -27,9 +28,11 @@ class Receiver(asyncore.dispatcher):
         self.databaseAccess = DatabaseAccess(self.database, self.ambiguousResultHandler)
         self.userArray = self.database.initializeLaptimesDb()
         self.statsProcessor = StatsProcessor(self)
-
+        
         self.previousDistance = 0
-        self.tracklength = -1
+        self.track_length = -1
+        
+        self.initTrackers()
 
     def reconnect(self):
         self.received_data = False
@@ -97,19 +100,24 @@ class Receiver(asyncore.dispatcher):
     def parse(self, data):
         stats = struct.unpack(str(self.fieldCount) + 'f', data[0:self.fieldCount * 4])
 
-        time = stats[0]
         lap = stats[59]
         distance = stats[2]
-
+        
+        self.timeTracker.track(stats)
+        self.gearTracker.track(stats)
+        
+        # TODO Extract to tracker
         speed = int(stats[7])
         if self.topspeed < speed:
             self.topspeed = speed
 
-        trackProgress = distance / self.tracklength
-        self.statsProcessor.handleGameState(self.inStage(), self.finished, lap, time, self.previousTime, distance, trackProgress, stats)
-
-        self.previousTime = time
-        self.previousDistance = distance
+        # TODO Extract to tracker
+        trackProgress = distance / self.track_length
+        
+        time = self.timeTracker.getTime()
+        previousTime = self.timeTracker.getPreviousTime() or -1
+        
+        self.statsProcessor.handleGameState(self.inStage(), self.finished, lap, time, previousTime, distance, trackProgress, stats)
 
     def resetStage(self):
         self.track = 0
@@ -121,19 +129,23 @@ class Receiver(asyncore.dispatcher):
     def prepareStage(self):
         self.finished = False
         self.topspeed = 0
+        
+        self.initTrackers()
+
+    def initTrackers(self):
+        self.timeTracker = TimeTracker()
+        self.gearTracker = GearTracker()
 
     def startStage(self, stats):
         idle_rpm = stats[64]  # *10 to get real value
         max_rpm = stats[63]  # *10 to get real value
         top_gear = stats[65]
-        z = stats[6]
-        tracklength = stats[61]
+        track_z = stats[6]
+        self.track_length = stats[61]
 
         dbAccess = self.databaseAccess
-        self.track = dbAccess.identifyTrack(z, tracklength)
+        self.track = dbAccess.identifyTrack(track_z, self.track_length)
         self.car = dbAccess.identifyCar(idle_rpm, max_rpm, top_gear)
-
-        self.tracklength = tracklength
 
         data = "dirtrally.%s.%s.%s.started:1|c" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car))
         self.print(data)
