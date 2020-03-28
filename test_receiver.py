@@ -112,5 +112,4 @@ class TestReceiver(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    # import sys;sys.argv = ['', 'TestReceiver.testTopSpeedConversion']
     unittest.main()

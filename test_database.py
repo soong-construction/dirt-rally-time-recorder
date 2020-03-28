@@ -58,5 +58,4 @@ class TestDatabase(unittest.TestCase):
         conn.close.assert_called_once()
         
 if __name__ == "__main__":
-    #import sys;sys.argv = ['', 'TestDatabaseAccess.testResetStage']
     unittest.main()

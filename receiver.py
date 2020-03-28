@@ -7,6 +7,7 @@ from statsProcessor import StatsProcessor
 from ambiguousResultHandler import AmbiguousResultHandler
 from gearTracker import GearTracker
 from timeTracker import TimeTracker
+from progressTracker import ProgressTracker
 
 
 class Receiver(asyncore.dispatcher):
@@ -28,9 +29,6 @@ class Receiver(asyncore.dispatcher):
         self.databaseAccess = DatabaseAccess(self.database, self.ambiguousResultHandler)
         self.userArray = self.database.initializeLaptimesDb()
         self.statsProcessor = StatsProcessor(self)
-        
-        self.previousDistance = 0
-        self.track_length = -1
         
         self.initTrackers()
 
@@ -100,24 +98,21 @@ class Receiver(asyncore.dispatcher):
     def parse(self, data):
         stats = struct.unpack(str(self.fieldCount) + 'f', data[0:self.fieldCount * 4])
 
-        lap = stats[59]
-        distance = stats[2]
-        
         self.timeTracker.track(stats)
         self.gearTracker.track(stats)
+        self.progressTracker.track(stats)
         
         # TODO Extract to tracker
         speed = int(stats[7])
         if self.topspeed < speed:
             self.topspeed = speed
 
-        # TODO Extract to tracker
-        trackProgress = distance / self.track_length
-        
         time = self.timeTracker.getTime()
         previousTime = self.timeTracker.getPreviousTime() or -1
+        stageProgress = self.progressTracker.getProgress()
+        lap = self.progressTracker.getLap()
         
-        self.statsProcessor.handleGameState(self.inStage(), self.finished, lap, time, previousTime, distance, trackProgress, stats)
+        self.statsProcessor.handleGameState(self.inStage(), self.finished, lap, time, previousTime, stageProgress, stats)
 
     def resetStage(self):
         self.track = 0
@@ -135,16 +130,17 @@ class Receiver(asyncore.dispatcher):
     def initTrackers(self):
         self.timeTracker = TimeTracker()
         self.gearTracker = GearTracker()
+        self.progressTracker = ProgressTracker()
 
     def startStage(self, stats):
         idle_rpm = stats[64]  # *10 to get real value
         max_rpm = stats[63]  # *10 to get real value
         top_gear = stats[65]
         track_z = stats[6]
-        self.track_length = stats[61]
-
+        
         dbAccess = self.databaseAccess
-        self.track = dbAccess.identifyTrack(track_z, self.track_length)
+        track_length = self.progressTracker.getTrackLength()
+        self.track = dbAccess.identifyTrack(track_z, track_length)
         self.car = dbAccess.identifyCar(idle_rpm, max_rpm, top_gear)
 
         data = "dirtrally.%s.%s.%s.started:1|c" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car))

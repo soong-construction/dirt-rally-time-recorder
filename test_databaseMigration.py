@@ -70,5 +70,4 @@ class TestDatabase(unittest.TestCase):
         self.assertGreater(self.lapDb.execute.call_count, 0)
         
 if __name__ == "__main__":
-    #import sys;sys.argv = ['', 'TestDatabaseAccess.testUserVersion']
     unittest.main()

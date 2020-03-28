@@ -123,5 +123,4 @@ class TestDatabaseAccess(unittest.TestCase):
         self.assertEqual(secondCarInterface, "Modern Car: 2 PADDLES shifting, 6 speed, with HANDBRAKE")
         
 if __name__ == "__main__":
-    #import sys;sys.argv = ['', 'TestDatabaseAccess.testIdentifyTrackUnambiguous']
     unittest.main()
