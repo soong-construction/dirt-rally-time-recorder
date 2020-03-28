@@ -40,7 +40,7 @@ class TestStatsProcessor(unittest.TestCase):
         self.assertTrue(self.receiver.startStage.called, 'Never called expected receiver method')
         self.assertFalse(self.receiver.finishStage.called, 'Actually called unexpected receiver method')
 
-    # TODO #8 Can this actually happen in DR1?
+    # TODO Can this actually happen in DR1?
     def testPrepareStageWithoutStart(self):
         self.thing.handleGameState(True, False, 0, 905, 900, -40, -0.2, self.stats)
     

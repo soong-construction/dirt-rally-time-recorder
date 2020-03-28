@@ -5,7 +5,6 @@ class AmbiguousResultHandler(object):
         self.scriptTemplate = 'sqlite3 %s "%s"'
         pass
 
-    # TODO #8 It would be nice to append the localtime, e.g. 11-32.bat
     def buildFileName(self, track, car, timestamp):
         return str(int(timestamp)) + '_' + track.replace(' ', '') + '_' + car.replace(' ', '') + '.bat'
 
@@ -16,7 +15,7 @@ class AmbiguousResultHandler(object):
         
         fileName = self.buildFileName(track, car, timestamp)
         
-        # TODO #8 Clean up: Remove <epoch-prefix>* files older than 7 days on start up 
+        # TODO #22 Clean up: Remove <epoch-prefix>* files older than 7 days on start up 
         insertFile = open(file=fileName, mode='w', encoding='utf-8', newline='\n')
         insertFile.write(self.buildScript(updateStatement))
         

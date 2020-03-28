@@ -55,7 +55,6 @@ class TestReceiver(unittest.TestCase):
 
         self.assertTrue(self.thing.parse.called, 'Never called parse')
 
-    # TODO Build integration test from here
     def testHandleFinishStageAndPrintResults(self):
         self.thing.reconnect()
 
