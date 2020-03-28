@@ -6,7 +6,6 @@ from timerecorder.database import Database
 
 class TestDatabase(unittest.TestCase):
 
-
     def setUp(self):
         self.thing = Database('test')
         
@@ -48,9 +47,9 @@ class TestDatabase(unittest.TestCase):
         self.assertIsNotNone(userId, "userId must exist")
 
     def testUserIdDiffersOverTime(self):
-        userId1 = self.thing.createUserId();
+        userId1 = self.thing.createUserId()
         time.sleep(1)
-        userId2 = self.thing.createUserId();
+        userId2 = self.thing.createUserId()
         self.assertNotEqual(userId1, userId2, "userId must differ over time")
     
     def testRecordResults(self):

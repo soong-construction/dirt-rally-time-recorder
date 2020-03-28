@@ -1,6 +1,7 @@
 from .ambiguousResultHandler import AmbiguousResultHandler
 from .database import Database
 from .databaseAccess import DatabaseAccess
+from .databaseAccess import identify
 from .gearTracker import GearTracker
 from .log import getLogger
 from .progressTracker import ProgressTracker
@@ -8,12 +9,17 @@ from .respawnTracker import RespawnTracker
 from .speedTracker import SpeedTracker
 from .timeTracker import TimeTracker
 from . import config
+from .gearShiftHeuristics import GearShiftHeuristics
+from .luckyGuessHeuristics import LuckyGuessHeuristics
+import random
+import time
 
 goLineProgress = 0.0
 completionProgress = 0.999
 
 logger = getLogger(__name__)
 
+# TODO Split off printing stuff
 class StatsProcessor():
 
     def __init__(self, approot):
@@ -43,10 +49,9 @@ class StatsProcessor():
     def formatLapTime(self, laptime):
         return '%.2f' % (laptime,)
 
-    def printResults(self, laptime):
-        dbAccess = self.databaseAccess
-        logger.debug("%s.%s.%s.time:%s|s", self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car), self.formatLapTime(laptime))
-        logger.debug("%s.%s.%s.topspeed:%s|%s", self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car), self.formatTopSpeed(), self.speed_unit)
+    def printResults(self, laptime, track, car):
+        logger.debug("%s.%s.%s.time:%s|s", self.userArray[0], track, car, self.formatLapTime(laptime))
+        logger.debug("%s.%s.%s.topspeed:%s|%s", self.userArray[0], track, car, self.formatTopSpeed(), self.speed_unit)
         logger.info("Completed stage in %ss.", self.formatLapTime(laptime))
 
     def showCarControlInformation(self):
@@ -105,14 +110,58 @@ class StatsProcessor():
         car_data = stats[63:66] # max_rpm, idle_rpm, top_gear
         self.car = dbAccess.identifyCar(*tuple(car_data))
 
-        logger.debug("%s.%s.%s.started", self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car))
+        logger.debug("%s.%s.%s.started", self.userArray[0], identify(self.track), identify(self.car))
 
+        # TODO #25 Still show in case of ambiguities?
         self.showCarControlInformation()
+
+    def applyHeuristics(self, car_candidates):
+        car_shift_map = self.databaseAccess.mapCarsToShifting(car_candidates)
+
+        heuristics = GearShiftHeuristics(list(car_shift_map), self.gearTracker)
+        # TODO The seed should only be fixed per program run, not always 0
+        heuristics.withFallback(LuckyGuessHeuristics(car_candidates, random.seed(0)))
+        
+        return heuristics.guessCar()
+
+    def instructUser(self, track, car, car_instruction, timestamp):
+        if isinstance(car, (list, )):
+            logger.info(car_instruction)
+            self.databaseAccess.printCarUpdates(car, timestamp, track)
+        if isinstance(track, (list, )):
+            logger.info("Please run one of the scripts below to link the recorded laptime to the correct track:")
+            self.databaseAccess.handleTrackUpdates(track, timestamp, car)
+
+    def handleAmbiguities(self, timestamp):
+        car_instruction = "Please run one of the scripts below to link the recorded laptime to the correct car:"
+        track = self.track
+        car = self.car
+        
+        # TODO #25 Needs to be opt-in per config.yaml
+        if isinstance(car, list):
+            logger.info("Guessing car...")
+            guessed_car = self.applyHeuristics(car)
+            if guessed_car is not None:
+                self.databaseAccess.logCar(self.database.getCarName(guessed_car))
+                car = guessed_car
+                car_instruction = "If heuristics-based guess IS WRONG, RUN THE SCRIPT provided to fix the recorded car:"
+        
+        # TODO #25 Only create script for non-matching cars
+        self.instructUser(track, self.car, car_instruction, timestamp)
+        return identify(track), identify(car)
 
     def finishStage(self, stats):
         laptime = stats[62]
-        self.databaseAccess.recordResults(self.track, self.car, laptime, self.formatTopSpeed())
-        self.printResults(laptime)
+
+        timestamp = time.time()
+        
+        # TODO Debug
+        logger.debug("TOTAL GEAR SHIFT/SKIP: %s/%s", self.gearTracker.getGearChangeCount(), self.gearTracker.getGearSkipCount())
+        
+        track, car = self.handleAmbiguities(timestamp)
+        
+        self.databaseAccess.recordResults(track, car, timestamp, laptime, self.formatTopSpeed())
+        self.printResults(laptime, track, car)
 
     def finishedDR2TimeTrial(self, stats, trackProgess):
         return trackProgess >= completionProgress and self.allZeroStats(stats)

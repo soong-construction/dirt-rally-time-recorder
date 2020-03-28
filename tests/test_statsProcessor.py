@@ -1,9 +1,11 @@
+import time
 import unittest
 from unittest.mock import MagicMock
 
 from timerecorder.statsProcessor import StatsProcessor
 from tests.test_base import TestBase
 from timerecorder import config
+from timerecorder.database import Database
 
 fieldCount = 66
 
@@ -30,16 +32,16 @@ class TestStatsProcessor(TestBase):
 
     # Scenario for timeDelta<0 and !restart: 1) cancel DR1 event near the start  2) enter the same event again (similar x/y pos)
     def testStageRestartOrTimeResetLeadToStageAborted(self):
-        self.thing.timeTracker.getTimeDelta = MagicMock(return_value = -1)
-        self.thing.respawnTracker.isRestart = MagicMock(return_value = False)
+        self.thing.timeTracker.getTimeDelta = MagicMock(return_value=-1)
+        self.thing.respawnTracker.isRestart = MagicMock(return_value=False)
         self.assertTrue(self.thing.stageAborted())
     
-        self.thing.timeTracker.getTimeDelta = MagicMock(return_value = 1)
-        self.thing.respawnTracker.isRestart = MagicMock(return_value = True)
+        self.thing.timeTracker.getTimeDelta = MagicMock(return_value=1)
+        self.thing.respawnTracker.isRestart = MagicMock(return_value=True)
         self.assertTrue(self.thing.stageAborted())
 
-        self.thing.timeTracker.getTimeDelta = MagicMock(return_value = 1)
-        self.thing.respawnTracker.isRestart = MagicMock(return_value = False)
+        self.thing.timeTracker.getTimeDelta = MagicMock(return_value=1)
+        self.thing.respawnTracker.isRestart = MagicMock(return_value=False)
         self.assertFalse(self.thing.stageAborted())
 
     def testStartStage(self):
@@ -159,7 +161,7 @@ class TestStatsProcessor(TestBase):
 
     def testTrackersAreCalledWithStats(self):
         self.thing.timeTracker = MagicMock()
-        self.thing.stageAborted = MagicMock(return_value = False)
+        self.thing.stageAborted = MagicMock(return_value=False)
 
         stats = [1] * fieldCount
         self.thing.handleStats(stats)
@@ -168,12 +170,40 @@ class TestStatsProcessor(TestBase):
 
     def testTrackersAreNotCalledWithEmptyStats(self):
         self.thing.timeTracker = MagicMock()
-        self.thing.stageAborted = MagicMock(return_value = False)
+        self.thing.stageAborted = MagicMock(return_value=False)
 
         stats = [0] * fieldCount
         self.thing.handleStats(stats)
 
         self.thing.timeTracker.track.assert_not_called()
+        
+    def testHandleResultsWithAmbiguousCarsAndNoHeuristics(self):
+        self.thing.car = [100, 200]
+        self.thing.track = 1000
+        
+        self.thing.applyHeuristics = MagicMock(return_value = None)
+        self.thing.instructUser = MagicMock()
+        self.thing.databaseAccess.recordResults = MagicMock()
+        
+        result = self.thing.handleAmbiguities(time.time())
+        
+        self.thing.applyHeuristics.assert_called_once_with(self.thing.car)
+        self.assertEqual(self.thing.instructUser.call_count, 1)
+        self.assertEqual(result, (1000, -1))
+
+    def testHandleResultsWithAmbiguousCarsAndLuckyGuess(self):
+        self.thing.car = [100, 200]
+        self.thing.track = 1000
+        
+        self.thing.applyHeuristics = MagicMock(return_value = 200)
+        self.thing.instructUser = MagicMock()
+        self.thing.databaseAccess.recordResults = MagicMock()
+        
+        result = self.thing.handleAmbiguities(time.time())
+        
+        self.thing.applyHeuristics.assert_called_once_with(self.thing.car)
+        self.assertEqual(self.thing.instructUser.call_count, 1)
+        self.assertEqual(result, (1000, 200))
 
 if __name__ == "__main__":
     unittest.main()

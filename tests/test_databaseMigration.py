@@ -31,14 +31,14 @@ class TestDatabase(unittest.TestCase):
         
     def testVersionExpansion(self):
         expand_version = self.thing.expandVersion('1.0.0')
-        self.assertEqual(expand_version, 1_000_000);
+        self.assertEqual(expand_version, 1_000_000)
 
         expand_version = self.thing.expandVersion('12.1.21')
-        self.assertEqual(expand_version, 12_001_021);
+        self.assertEqual(expand_version, 12_001_021)
         
     def testVersionExpansionWithWhitespace(self):
         expand_version = self.thing.expandVersion(' 1.2.3\r\n')
-        self.assertEqual(expand_version, 1_002_003);
+        self.assertEqual(expand_version, 1_002_003)
 
     def testVersionExpansionWithIllegalVersion(self):
         with self.assertRaises(RuntimeError):
@@ -48,7 +48,7 @@ class TestDatabase(unittest.TestCase):
         initialVersion = 1_000_000
         self.cursor.fetchall = MagicMock(return_value=[[initialVersion]])
         
-        self.thing.migrate_2_2_0();
+        self.thing.migrate_2_2_0()
 
         self.assertEqual(self.lapDb.execute.call_count, 2)
         self.lapDb.execute.assert_called_with('PRAGMA user_version = 2002000')
@@ -57,7 +57,7 @@ class TestDatabase(unittest.TestCase):
         initialVersion = 2_002_000
         self.cursor.fetchall = MagicMock(return_value=[[initialVersion]])
         
-        self.thing.migrate_2_2_0();
+        self.thing.migrate_2_2_0()
 
         self.lapDb.execute.assert_called_once_with('PRAGMA user_version;')
         

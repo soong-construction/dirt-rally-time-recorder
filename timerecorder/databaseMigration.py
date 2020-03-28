@@ -19,7 +19,7 @@ class DatabaseMigration:
     
     def migrateDb(self):
         # Initial migration
-        self.migrate_2_2_0();
+        self.migrate_2_2_0()
         
         self.migrate('2.4.0', lambda lapDb: self.migrate_2_4_0(lapDb))
     

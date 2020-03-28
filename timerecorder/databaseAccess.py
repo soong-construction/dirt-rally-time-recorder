@@ -1,8 +1,10 @@
-import time
 from .log import getLogger
 from timerecorder.log import VERBOSE
 
 logger = getLogger(__name__)
+
+def identify(element):
+    return element if isinstance(element, int) else -1
 
 class DatabaseAccess:
     
@@ -67,44 +69,35 @@ class DatabaseAccess:
             logger.debug("Idle/Max RPM: %s - %s", str(idle_rpm), str(max_rpm))
             return list(index for (index, name) in cars)
 
-
     def printCarUpdates(self, car, timestamp, track):
         updates = self.database.getCarUpdateStatements(timestamp, car)
-        logger.info("Please run one of the scripts below to link the recorded laptime to the correct car:")
         for index, update in enumerate(updates):
             elementId = car[index]
             carName = self.database.getCarName(elementId)
-            trackName = self.database.getTrackName(track) if self.identify(track) != -1 else 'UNKNOWN'
+            trackName = self.database.getTrackName(track) if identify(track) != -1 else 'UNKNOWN'
             
-            script = self.ambiguousResultHandler.handleUpdateStatement(trackName, carName, timestamp, update)
+            scriptName = self.ambiguousResultHandler.handleUpdateStatement(trackName, carName, timestamp, update)
             
-            logger.info(" ==> %s", script)
+            logger.info(" ==> %s", scriptName)
 
     def handleTrackUpdates(self, track, timestamp, car):
         updates = self.database.getTrackUpdateStatements(timestamp, track)
-        logger.info("Please run one of the scripts below to link the recorded laptime to the correct track:")
         for index, update in enumerate(updates):
             elementId = track[index]
             trackName = self.database.getTrackName(elementId)
-            carName = self.database.getCarName(car) if self.identify(car) != -1 else 'UNKNOWN'
+            carName = self.database.getCarName(car) if identify(car) != -1 else 'UNKNOWN'
             
-            script = self.ambiguousResultHandler.handleUpdateStatement(trackName, carName, timestamp, update)
+            scriptName = self.ambiguousResultHandler.handleUpdateStatement(trackName, carName, timestamp, update)
             
-            logger.info(" ==> %s", script)
+            logger.info(" ==> %s", scriptName)
 
-    def recordResults(self, track, car, laptime, topspeed):
-        timestamp = time.time()
-        self.database.recordResults(self.identify(track), self.identify(car), timestamp, laptime, topspeed)
+    def mapCarsToShifting(self, car_candidates):
+        shifting_data = map(self.database.loadShiftingData, car_candidates)
+        return zip(car_candidates, shifting_data)
+    
+    def recordResults(self, track, car, timestamp, laptime, topspeed):
+        self.database.recordResults(track, car, timestamp, laptime, topspeed)
         
-        if isinstance(car, (list,)):
-            self.printCarUpdates(car, timestamp, track)
-                
-        if isinstance(track, (list,)):
-            self.handleTrackUpdates(track, timestamp, car)
-
-    def identify(self, element):
-        return element if isinstance(element, int) else -1
-
     def describeHandbrake(self, car):
         hasHandbrake = self.database.loadHandbrakeData(car)
         if (hasHandbrake):

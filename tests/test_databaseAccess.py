@@ -79,18 +79,6 @@ class TestDatabaseAccess(unittest.TestCase):
         loadedCar = self.thing.identifyCar(1000, 100, 5)
         self.assertEqual(loadedCar, [1, 2], "Should return all cars")
 
-    def testHandleResultsWithAmbiguousCars(self):
-        cars = [(1, 'car1'), (2, 'car2')]
-        
-        self.thing.printCarUpdates = MagicMock();
-        
-        self.database.getCarName = MagicMock(side_effect=list(name for (_,name) in cars))
-        self.database.getTrackName = MagicMock(returnValue = 'track')
-        
-        self.thing.recordResults(100, cars, 234.44, 160.6)
-        
-        self.assertEqual(self.thing.printCarUpdates.call_count, 1);
-        
     def testGetCarInterfacesStatementWithoutData(self):
         handbrakeData = [(None)]
         self.database.loadHandbrakeData = MagicMock(side_effect=handbrakeData)
@@ -121,6 +109,15 @@ class TestDatabaseAccess(unittest.TestCase):
 
         secondCarInterface = self.thing.describeCarInterfaces(2)
         self.assertEqual(secondCarInterface, "Modern Car: 2 PADDLES shifting, 6 speed, with HANDBRAKE")
+    
+    def testMapToShiftingData(self):
+        shiftingData = [('H-PATTERN'), ('SEQUENTIAL')]
+        self.database.loadShiftingData = MagicMock(side_effect=shiftingData)
+        
+        car_candidates = [100, 200]
+        result = self.thing.mapCarsToShifting(car_candidates)
+        
+        self.assertEqual(list(result), [(100, 'H-PATTERN'), (200,'SEQUENTIAL')])
         
 if __name__ == "__main__":
     unittest.main()
