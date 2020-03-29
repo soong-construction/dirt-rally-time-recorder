@@ -3,8 +3,15 @@ class ProgressTracker():
     def __init__(self):
         self.distance = None
         self.track_length = None
+        self.lap = None
+
+    def allZeroStats(self, stats):
+        return stats.count(0) == len(stats)
 
     def track(self, stats):
+        if self.allZeroStats(stats):
+            return
+        
         self.distance = stats[2]
         self.lap = stats[59]
         

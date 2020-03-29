@@ -9,7 +9,7 @@ from gearTracker import GearTracker
 from timeTracker import TimeTracker
 from progressTracker import ProgressTracker
 from speedTracker import SpeedTracker
-
+from respawnTracker import RespawnTracker
 
 class Receiver(asyncore.dispatcher):
 
@@ -98,6 +98,10 @@ class Receiver(asyncore.dispatcher):
     def parse(self, data):
         stats = struct.unpack(str(self.fieldCount) + 'f', data[0:self.fieldCount * 4])
 
+        # TODO Trackers must handle or ignore all zero stats
+        self.respawnTracker.track(stats)
+        
+        # TODO Should remaining trackers depend on respawnTracker?
         self.timeTracker.track(stats)
         self.gearTracker.track(stats)
         self.progressTracker.track(stats)
@@ -106,14 +110,16 @@ class Receiver(asyncore.dispatcher):
         time = self.timeTracker.getTime()
         previousTime = self.timeTracker.getPreviousTime() or -1
         stageProgress = self.progressTracker.getProgress()
+        isRestart = self.respawnTracker.isRestart()
         lap = self.progressTracker.getLap()
-        
-        self.statsProcessor.handleGameState(self.inStage(), self.finished, lap, time, previousTime, stageProgress, stats)
 
-    # TODO resetCarAndTrack - is not called when restarting stage!
-    def resetStage(self):
+        # TODO If onFinish:resetRecognition, we wouldn't need self.finished, no?
+        self.statsProcessor.handleGameState(isRestart, self.inStage(), self.finished, lap, time, previousTime, stageProgress, stats)
+
+    def resetRecognition(self):
         self.track = 0
         self.car = 0
+        self.initTrackers()
 
     def inStage(self):
         return self.track != 0 and self.car != 0
@@ -127,10 +133,10 @@ class Receiver(asyncore.dispatcher):
         self.gearTracker = GearTracker()
         self.progressTracker = ProgressTracker()
         self.speedTracker = SpeedTracker()
+        self.respawnTracker = RespawnTracker()
 
     def startStage(self, stats):
         self.finished = False
-        self.initTrackers()
 
         idle_rpm = stats[64]  # *10 to get real value
         max_rpm = stats[63]  # *10 to get real value

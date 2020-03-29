@@ -9,6 +9,8 @@ class GearTracker():
         if current_gear != self.lastGear:
             self.changeCount += 1
 
+    # TODO Must handle Reverse = 10.0 correctly
+    # TODO Must hande Recover Vehicle correctly
     def checkGearSkipped(self, current_gear):
         distance = self.lastGear - current_gear
         if abs(distance) > 1:

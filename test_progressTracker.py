@@ -58,7 +58,7 @@ class TestProgressTracker(unittest.TestCase):
     def testLapTracked(self):
         stats = [0] * fieldCount
         self.thing.track(stats)
-        self.assertEqual(self.thing.getLap(), 0)
+        self.assertIsNone(self.thing.getLap())
         
         stats[59] = 1
         self.thing.track(stats)
