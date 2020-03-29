@@ -21,6 +21,18 @@ class TestProgressTracker(unittest.TestCase):
         self.assertEqual(self.thing.getTrackLength(), None)
         self.assertEqual(self.thing.getProgress(), None)
         
+    def testTrackLengthTrackedOnce(self):
+        self.assertEqual(self.thing.getTrackLength(), None)
+        stats = [0] * fieldCount
+        stats[61] = 10000
+
+        self.thing.track(stats)
+        self.assertEqual(self.thing.getTrackLength(), 10000)
+        
+        stats[61] = 0
+        self.thing.track(stats)
+        self.assertEqual(self.thing.getTrackLength(), 10000)
+       
     def testProgressTracked(self):
         stats = [0] * fieldCount
         stats[2] = 1000

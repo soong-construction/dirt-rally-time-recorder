@@ -6,8 +6,10 @@ class ProgressTracker():
 
     def track(self, stats):
         self.distance = stats[2]
-        self.track_length = stats[61]
         self.lap = stats[59]
+        
+        if self.track_length is None:
+            self.track_length = stats[61]
             
     def getTrackLength(self):
         return self.track_length
