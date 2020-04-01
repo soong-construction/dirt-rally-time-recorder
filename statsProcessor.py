@@ -21,7 +21,7 @@ class StatsProcessor():
             # Field Time is not reset when restarting events (but for: new/proceeding events, second runs on PP).
             self.receiver.resetRecognition()
          
-        elif stageProgress <= self.goLineProgress and self.statsWithTelemetry(stats):
+        elif self.statsWithTelemetry(stats) and stageProgress <= self.goLineProgress:
             # Reset stage data when starting a new stage
             self.receiver.prepareStage()
             
