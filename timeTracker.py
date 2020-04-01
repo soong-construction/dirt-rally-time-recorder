@@ -1,15 +1,14 @@
 class TimeTracker():
     
     def __init__(self):
-        self.time = None
+        self.time = 0
         self.previousTime = None
 
     def track(self, stats):
         self.previousTime = self.time
         self.time = stats[0]
             
-    def getTime(self):
-        return self.time
-
-    def getPreviousTime(self):
-        return self.previousTime
+    def getTimeDelta(self):
+        if self.previousTime is None:
+            return 0
+        return self.time - self.previousTime

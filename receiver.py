@@ -109,15 +109,13 @@ class Receiver(asyncore.dispatcher):
             self.gearTracker.track(stats)
             self.speedTracker.track(stats)
         
-        # TODO Must not "or" values that have semantics in statsProcessor
-        time = self.timeTracker.getTime() or -1
-        previousTime = self.timeTracker.getPreviousTime() or -1
+        timeDelta = self.timeTracker.getTimeDelta()
         stageProgress = self.progressTracker.getProgress()
         isRestart = self.respawnTracker.isRestart()
         lap = self.progressTracker.getLap()
 
         # TODO If onFinish:resetRecognition, we wouldn't need self.finished, no?
-        self.statsProcessor.handleGameState(isRestart, self.inStage(), self.finished, lap, time, previousTime, stageProgress, stats)
+        self.statsProcessor.handleGameState(isRestart, self.inStage(), self.finished, lap, timeDelta, stageProgress, stats)
 
     def resetRecognition(self):
         self.track = 0
