@@ -7,7 +7,6 @@ fieldCount = 66
 
 class TestProgressTracker(unittest.TestCase):
 
-
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
 
@@ -56,10 +55,9 @@ class TestProgressTracker(unittest.TestCase):
         self.assertEqual(self.thing.getProgress(), -0.0005)
         
     def testLapTracked(self):
-        stats = [0] * fieldCount
-        self.thing.track(stats)
         self.assertIsNone(self.thing.getLap())
         
+        stats = [0] * fieldCount
         stats[59] = 1
         self.thing.track(stats)
         self.assertEqual(self.thing.getLap(), 1)

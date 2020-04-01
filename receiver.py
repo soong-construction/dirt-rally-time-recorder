@@ -95,19 +95,22 @@ class Receiver(asyncore.dispatcher):
         else:
             self.print(self.databaseAccess.describeCarInterfaces(self.car))
 
+    def allZeroStats(self, stats):
+        return stats.count(0) == len(stats)
+
     def parse(self, data):
         stats = struct.unpack(str(self.fieldCount) + 'f', data[0:self.fieldCount * 4])
 
-        # TODO Trackers must handle or ignore all zero stats
-        self.respawnTracker.track(stats)
+        if not self.allZeroStats(stats):
+            # TODO Some trackers must consider if a frame is a respawn
+            self.respawnTracker.track(stats)
+            self.timeTracker.track(stats)
+            self.progressTracker.track(stats)
+            self.gearTracker.track(stats)
+            self.speedTracker.track(stats)
         
-        # TODO Should remaining trackers depend on respawnTracker?
-        self.timeTracker.track(stats)
-        self.gearTracker.track(stats)
-        self.progressTracker.track(stats)
-        self.speedTracker.track(stats)
-        
-        time = self.timeTracker.getTime()
+        # TODO Must not "or" values that have semantics in statsProcessor
+        time = self.timeTracker.getTime() or -1
         previousTime = self.timeTracker.getPreviousTime() or -1
         stageProgress = self.progressTracker.getProgress()
         isRestart = self.respawnTracker.isRestart()

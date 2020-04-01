@@ -18,6 +18,7 @@ class TestReceiver(unittest.TestCase):
     def setUp(self):
         Database.setup = MagicMock()
         self.thing = Receiver(('localhost', 1024), 'kmh', 'testroot')
+        self.thing.print = MagicMock()
 
     def tearDown(self):
         # TODO This restoration should be used throughout the test base
@@ -59,7 +60,6 @@ class TestReceiver(unittest.TestCase):
         self.thing.reconnect()
 
         self.thing.inStage = MagicMock(return_value=True)
-        self.thing.print = MagicMock()
         self.thing.databaseAccess.recordResults = MagicMock()
         self.thing.databaseAccess.identifyCar = MagicMock(return_value=10)
         self.thing.databaseAccess.identifyTrack = MagicMock(return_value=11)
@@ -81,7 +81,6 @@ class TestReceiver(unittest.TestCase):
         self.thing.reconnect()
 
         self.thing.inStage = MagicMock(return_value=False)
-        self.thing.print = MagicMock()
         self.thing.databaseAccess.recordResults = MagicMock()
         self.thing.databaseAccess.identifyCar = MagicMock(return_value=10)
         self.thing.databaseAccess.identifyTrack = MagicMock(return_value=11)
@@ -110,6 +109,33 @@ class TestReceiver(unittest.TestCase):
 
         self.thing.informCloseAndWaitForInput.assert_called()
 
+    def testTrackersAreCalledWithStats(self):
+        self.thing.reconnect()
+
+        self.thing.statsProcessor = MagicMock()
+        self.thing.timeTracker = MagicMock()
+
+        stats = struct.unpack(str(self.thing.fieldCount) + 'f', sixtySixFields[0:self.thing.fieldCount * 4])
+        stats = struct.pack(str(self.thing.fieldCount) + 'f', *stats)
+        self.thing.recv = MagicMock(return_value=stats)
+
+        self.thing.handle_read()
+
+        self.thing.timeTracker.track.assert_called()
+
+    def testTrackersAreNotCalledWithEmptyStats(self):
+        self.thing.reconnect()
+
+        self.thing.statsProcessor = MagicMock()
+        self.thing.timeTracker = MagicMock()
+
+        stats = [0] * self.thing.fieldCount
+        stats = struct.pack(str(self.thing.fieldCount) + 'f', *stats)
+        self.thing.recv = MagicMock(return_value=stats)
+
+        self.thing.handle_read()
+
+        self.thing.timeTracker.track.assert_not_called()
 
 if __name__ == "__main__":
     unittest.main()

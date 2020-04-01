@@ -8,6 +8,8 @@ class RespawnTracker():
     def __init__(self):
         self.last_x = None
         self.last_y = None
+        self.recover = False
+        self.restart = False
 
     def updatePos(self, pos_x, pos_y):
         self.last_x = pos_x
