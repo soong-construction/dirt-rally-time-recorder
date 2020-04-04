@@ -1,9 +1,10 @@
 
+recoverDelta = 2
+restartDelta = 30
+restartDistance = 10
+
 # Should handle most respawns, except successive recovers in one place (only DR1)
-# TODO test
 class RespawnTracker():
-    recoverDelta = 2
-    restartDelta = 30
     
     def __init__(self):
         self.last_x = None
@@ -15,18 +16,27 @@ class RespawnTracker():
         self.last_x = pos_x
         self.last_y = pos_y
 
+    def positionDeltaExceeds(self, pos_x, pos_y, delta):
+        exceeds_x = abs(pos_x - self.last_x) >= delta
+        exceeds_y = abs(pos_y - self.last_y) >= delta
+        
+        return exceeds_x or exceeds_y
+
     def track(self, stats):
         self.recover = False
         self.restart = False
         pos_x = stats[4]
         pos_y = stats[5]
+        distance = stats[2]
         
         if self.last_x is None:
             pass
-        elif abs(pos_x - self.last_x) > self.restartDelta or abs(pos_y - self.last_y) > self.restartDelta:  
+        
+        elif self.positionDeltaExceeds(pos_x, pos_y, restartDelta) and distance <= restartDistance:
             self.restart = True
             print('[RESTART]')
-        elif abs(pos_x - self.last_x) > self.recoverDelta or abs(pos_y - self.last_y) > self.recoverDelta:  
+                
+        elif self.positionDeltaExceeds(pos_x, pos_y, recoverDelta):  
             self.recover = True
             print('[RECOVER]')
 
