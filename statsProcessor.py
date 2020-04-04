@@ -1,14 +1,14 @@
+goLineProgress = 0.0
+completionProgress = 0.999
 
 class StatsProcessor():
     
-    goLineProgress = 0.0
-    completionProgress = 0.999
     
     def __init__(self, receiver):
         self.receiver = receiver
         
     def finishedDR2TimeTrial(self, stats, trackProgess):
-        return trackProgess >= self.completionProgress and not self.statsWithTelemetry(stats)
+        return trackProgess >= completionProgress and not self.statsWithTelemetry(stats)
 
     def statsWithTelemetry(self, stats):
         return stats.count(0) != len(stats)
@@ -22,5 +22,5 @@ class StatsProcessor():
             # Field Time is not reset when restarting events (but for: new/proceeding events, second runs on PP).
             self.receiver.resetRecognition()
          
-        elif self.statsWithTelemetry(stats) and stageProgress <= self.goLineProgress and not inStage:
+        elif self.statsWithTelemetry(stats) and stageProgress <= goLineProgress and not inStage:
             self.receiver.startStage(stats)

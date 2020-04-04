@@ -52,8 +52,9 @@ class TestStatsProcessor(unittest.TestCase):
         self.assertFalse(self.receiver.startStage.called, 'Actually called unexpected receiver method')
         self.assertFalse(self.receiver.finishStage.called, 'Actually called unexpected receiver method')
         
+    # Scenario: After cancelling a DR1 event near the start, enter the same event again (similar x/y pos) 
     def testResetRecognitionWhenTimeIsReset(self):
-        self.thing.handleGameState(False, False, 0, -900, 0.2, self.stats)
+        self.thing.handleGameState(False, True, 0, -900, 0.2, self.stats)
 
         self.assertTrue(self.receiver.resetRecognition.called, 'Never called expected receiver method')
         self.assertFalse(self.receiver.startStage.called, 'Actually called unexpected receiver method')
