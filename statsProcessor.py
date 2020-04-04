@@ -13,9 +13,10 @@ class StatsProcessor():
     def statsWithTelemetry(self, stats):
         return stats.count(0) != len(stats)
 
-    def handleGameState(self, isRestart, inStage, finished, lap, timeDelta, stageProgress, stats):
-        if not finished and (lap == 1 or self.finishedDR2TimeTrial(stats, stageProgress)):
+    def handleGameState(self, isRestart, inStage, lap, timeDelta, stageProgress, stats):
+        if inStage and (lap == 1 or self.finishedDR2TimeTrial(stats, stageProgress)):
             self.receiver.finishStage(stats)
+            self.receiver.resetRecognition()
         
         elif isRestart or timeDelta < 0:
             # Field Time is not reset when restarting events (but for: new/proceeding events, second runs on PP).

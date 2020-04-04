@@ -19,7 +19,6 @@ class Receiver(asyncore.dispatcher):
         self.speed_modifier = speed_unit == 'mph' and 0.6214 or 1
         self.address = address
         self.approot = approot
-        self.finished = False
         self.track = 0
         self.car = 0
         self.fieldCount = 66
@@ -114,8 +113,7 @@ class Receiver(asyncore.dispatcher):
         isRestart = self.respawnTracker.isRestart()
         lap = self.progressTracker.getLap()
 
-        # TODO If onFinish:resetRecognition, we wouldn't need self.finished, no?
-        self.statsProcessor.handleGameState(isRestart, self.inStage(), self.finished, lap, timeDelta, stageProgress, stats)
+        self.statsProcessor.handleGameState(isRestart, self.inStage(), lap, timeDelta, stageProgress, stats)
 
     def resetRecognition(self):
         self.track = 0
@@ -133,8 +131,6 @@ class Receiver(asyncore.dispatcher):
         self.respawnTracker = RespawnTracker()
 
     def startStage(self, stats):
-        self.finished = False
-
         idle_rpm = stats[64]  # *10 to get real value
         max_rpm = stats[63]  # *10 to get real value
         top_gear = stats[65]
@@ -155,7 +151,6 @@ class Receiver(asyncore.dispatcher):
         laptime = stats[62]
         self.databaseAccess.recordResults(self.track, self.car, laptime, self.formatTopSpeed())
         self.printResults(laptime)
-        self.finished = True
 
     def print(self, message):
         print(message)

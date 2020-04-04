@@ -75,7 +75,6 @@ class TestReceiver(unittest.TestCase):
 
         self.thing.print.assert_called()
         self.thing.databaseAccess.recordResults.assert_called()
-        self.assertTrue(self.thing.finished, 'Did not toggle finished')
 
     def testHandleStartStageAndDatabaseCalled(self):
         self.thing.reconnect()
