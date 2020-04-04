@@ -125,10 +125,6 @@ class Receiver(asyncore.dispatcher):
     def inStage(self):
         return self.track != 0 and self.car != 0
 
-    # TODO Remove. 
-    def prepareStage(self):
-        pass
-
     def initTrackers(self):
         self.timeTracker = TimeTracker()
         self.gearTracker = GearTracker()
