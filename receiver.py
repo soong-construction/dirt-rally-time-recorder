@@ -131,9 +131,11 @@ class Receiver(asyncore.dispatcher):
         self.respawnTracker = RespawnTracker()
 
     def startStage(self, stats):
+        # TODO Move to car tracker?
         idle_rpm = stats[64]  # *10 to get real value
         max_rpm = stats[63]  # *10 to get real value
         top_gear = stats[65]
+        # TODO Move to progressTracker?
         track_z = stats[6]
         
         dbAccess = self.databaseAccess
