@@ -1,6 +1,7 @@
 class GearTracker():
 
-    def __init__(self):
+    def __init__(self, respawnTracker):
+        self.respawnTracker = respawnTracker
         self.lastGear = None
         self.changeCount = 0
         self.skipCount = 0
@@ -9,7 +10,6 @@ class GearTracker():
         if current_gear != self.lastGear:
             self.changeCount += 1
 
-    # TODO Must hande Recover Vehicle correctly
     def checkGearSkipped(self, current_gear):
         distance = self.lastGear - current_gear
         if abs(distance) > 1:
@@ -26,7 +26,9 @@ class GearTracker():
         if current_gear == -1 or current_gear == 10:
             current_gear = 0
 
-        if self.lastGear is not None:
+        respawn = self.respawnTracker.isRecover() or self.respawnTracker.isRestart()
+        
+        if not (respawn or self.lastGear is None):
             self.checkGearChanged(current_gear)
             self.checkGearSkipped(current_gear)
 
