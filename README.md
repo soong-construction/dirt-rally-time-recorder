@@ -69,7 +69,7 @@ In order to consolidate the database, the tool prepares scripts for you, e.g. `1
 - you can delete the script files afterwards, e.g. you might find also find a `1573403766_ElRodeo_SkodaFabiaR5.bat`  
 
 ## Troubleshooting
-When you import the CSV file as a spreadsheet, make sure to select UTF-8 encoding.   
+When you open the CSV file with your spreadsheet editor, make sure to select UTF-8 encoding to avoid corrupt characters. In MS Excel, use the [query tool.](https://support.office.com/en-us/article/import-data-from-external-data-sources-power-query-be4330b3-5356-486c-a168-b68e9e616f5a)   
 
 If you encounter an error message talking about sockets, understand that this tool cannot run in parallel, but only in a single instance at the same time.  
 

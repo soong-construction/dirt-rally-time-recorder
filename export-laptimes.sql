@@ -1,6 +1,7 @@
 -- Export your times with SQLite  
 .open dirtrally-laptimes.db
 attach 'dirtrally-lb.db' as base;
+.separator ";"
 .once snapshot.csv
 select t.name, 
 		c.name, 
