@@ -2,6 +2,7 @@ import unittest
 
 from database import Database
 import time
+from unittest.mock import MagicMock
 
 class TestDatabase(unittest.TestCase):
 
@@ -42,6 +43,19 @@ class TestDatabase(unittest.TestCase):
         time.sleep(1)
         userId2 = self.thing.createUserId();
         self.assertNotEqual(userId1, userId2, "userId must differ over time")
+    
+    def testRecordResults(self):
+        conn = MagicMock()
+        cursor = MagicMock()
+        conn.cursor = MagicMock(return_value = cursor)
+        cursor.execute = MagicMock()
+        self.thing.getLapDbConnection = MagicMock(return_value = conn)
+        
+        self.thing.recordResults(100, 200, 1586278198.59, 220.4, 144)
+        
+        cursor.execute.assert_called_once_with('INSERT INTO laptimes (Track, Car, Timestamp, Time, Topspeed) VALUES (?, ?, ?, ?, ?)', (100, 200, 1586278198.59, 220.4, 144));
+        conn.commit.assert_called_once()
+        conn.close.assert_called_once()
         
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'TestDatabaseAccess.testResetStage']

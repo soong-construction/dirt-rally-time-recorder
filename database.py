@@ -52,7 +52,7 @@ class Database:
 
     def initializeLaptimesDb(self):
         try:
-            lapconn = sqlite3.connect(self.approot + self.laptimesDb)
+            lapconn = self.getLapDbConnection()
             lapdb = lapconn.cursor()
             
             print("Checking laptimes database")
@@ -91,9 +91,12 @@ class Database:
         result = self.db.fetchall()
         return result
 
+    def getLapDbConnection(self):
+        return sqlite3.connect(self.approot + self.laptimesDb)
+
     def recordResults(self, track, car, timestamp, laptime, topspeed):
         try:
-            lapconn = sqlite3.connect(self.approot + self.laptimesDb)
+            lapconn = self.getLapDbConnection()
             lapdb = lapconn.cursor()
             lapdb.execute('INSERT INTO laptimes (Track, Car, Timestamp, Time, Topspeed) VALUES (?, ?, ?, ?, ?)', (track, car, timestamp, laptime, topspeed))
             lapconn.commit()
