@@ -41,10 +41,10 @@ class DatabaseAccess:
     def logCar(self, name):
         print("CAR: %s" % (name,))
 
-    def identifyCar(self, rpm, max_rpm, top_gear):
-        cars = self.database.loadCars(rpm, max_rpm, top_gear)
+    def identifyCar(self, max_rpm, idle_rpm, top_gear):
+        cars = self.database.loadCars(idle_rpm, max_rpm, top_gear)
         if (len(cars) == 0):
-            print("Failed to identify car: %s - %s" % (str(rpm), str(max_rpm)))
+            print("Failed to identify car: %s - %s" % (str(idle_rpm), str(max_rpm)))
             return []
         
         elif (len(cars) == 1):
@@ -53,7 +53,7 @@ class DatabaseAccess:
             return index
         
         else:
-            print("Ambiguous car data, %s matches: %s - %s" % (len(cars), str(rpm), str(max_rpm)))
+            print("Ambiguous car data, %s matches: %s - %s" % (len(cars), str(idle_rpm), str(max_rpm)))
             return list(index for (index, name) in cars)
 
 

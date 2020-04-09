@@ -83,11 +83,11 @@ class Database:
         self.db.execute('SELECT id, name, startz FROM Tracks WHERE abs(length - ?) < 0.001', (tracklength,))
         return self.db.fetchall()
 
-    def loadCars(self, rpm, max_rpm, top_gear):
+    def loadCars(self, idle_rpm, max_rpm, top_gear):
         carSelectStatement = ('SELECT cars.id, cars.name ' 
                               'FROM cars INNER JOIN controls USING(id) ' 
                               'WHERE abs(cars.maxrpm - ?) < 1.0 AND abs(cars.idlerpm - ?) < 1.0 AND controls.topgear = ? ')
-        self.db.execute(carSelectStatement, (max_rpm, rpm, top_gear))
+        self.db.execute(carSelectStatement, (max_rpm, idle_rpm, top_gear))
         result = self.db.fetchall()
         return result
 

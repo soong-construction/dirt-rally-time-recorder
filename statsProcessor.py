@@ -87,17 +87,14 @@ class StatsProcessor():
         self.speedTracker = SpeedTracker()
 
     def startStage(self, stats):
-        # TODO Move to car tracker?
-        idle_rpm = stats[64]  # *10 to get real value
-        max_rpm = stats[63]  # *10 to get real value
-        top_gear = stats[65]
-        # TODO Move to progressTracker?
-        track_z = stats[6]
-        
         dbAccess = self.databaseAccess
+        
+        track_z = stats[6]
         track_length = self.progressTracker.getTrackLength()
         self.track = dbAccess.identifyTrack(track_z, track_length)
-        self.car = dbAccess.identifyCar(idle_rpm, max_rpm, top_gear)
+        
+        car_data = stats[63:66] # max_rpm, idle_rpm, top_gear
+        self.car = dbAccess.identifyCar(*tuple(car_data))
 
         data = "dirtrally.%s.%s.%s.started:1|c" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car))
         self.print(data)
@@ -105,7 +102,6 @@ class StatsProcessor():
         self.showCarControlInformation()
 
     def finishStage(self, stats):
-        # TODO Move to time tracker?
         laptime = stats[62]
         self.databaseAccess.recordResults(self.track, self.car, laptime, self.formatTopSpeed())
         self.printResults(laptime)
