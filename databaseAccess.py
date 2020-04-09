@@ -13,7 +13,7 @@ class DatabaseAccess:
         tracks = self.database.loadTracks(tracklength)
 
         if (len(tracks) == 0):
-            logger.warn("Failed to identify track")
+            logger.warning("Failed to identify track")
             logger.debug("Length: %s", str(tracklength))
             return []
         
@@ -38,7 +38,7 @@ class DatabaseAccess:
                 logger.info("TRACK: %s", str(name))
                 return index
         
-        logger.warn("Ambiguous track data, %s matches", len(tracks))
+        logger.warning("Ambiguous track data, %s matches", len(tracks))
         logger.debug("Length: %s (Z: %s)", str(tracklength), str(z))
         return list(index for (index, name, startZ) in tracks)
     
@@ -48,7 +48,7 @@ class DatabaseAccess:
     def identifyCar(self, max_rpm, idle_rpm, top_gear):
         cars = self.database.loadCars(idle_rpm, max_rpm, top_gear)
         if (len(cars) == 0):
-            logger.warn("Failed to identify car")
+            logger.warning("Failed to identify car")
             logger.debug("Idle/Max RPM: %s - %s", str(idle_rpm), str(max_rpm))
             return []
         
@@ -58,7 +58,7 @@ class DatabaseAccess:
             return index
         
         else:
-            logger.warn("Ambiguous car data, %s matches", len(cars))
+            logger.warning("Ambiguous car data, %s matches", len(cars))
             logger.debug("Idle/Max RPM: %s - %s", str(idle_rpm), str(max_rpm))
             return list(index for (index, name) in cars)
 
