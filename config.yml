@@ -1,4 +1,4 @@
 speed_unit: kph # or mph
 telemetry_server:
     host: 127.0.0.1
-    port: 20778
+    port: 20777
