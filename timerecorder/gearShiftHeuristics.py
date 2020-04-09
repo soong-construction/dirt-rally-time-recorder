@@ -1,10 +1,10 @@
 from .log import getLogger
 
 is_h_pattern = lambda shift: shift == 'H-PATTERN'
+REQUIRED_SHIFT_COUNT = 10
 
 logger = getLogger(__name__)
 
-# TODO #25 Test
 class GearShiftHeuristics:
     
     def __init__(self, car_shift_list, gearTracker):
@@ -21,9 +21,10 @@ class GearShiftHeuristics:
         cars_with_h_pattern_shifting = list(filter(select_match, self.car_shift_list))
         cars_without_h_pattern_shifting = list(filter(select_mismatch, self.car_shift_list))
 
-        # TODO Check for shiftCount > N to ensure enough data
-        # TODO Check for skipCount > M to account for missed Recovers
-        applicable = len(self.car_shift_list) == 2 and len(cars_with_h_pattern_shifting) == 1
+        # TODO #25 Check for skipCount > M to account for missed Recovers?
+        sufficientData = self.gearTracker.getGearChangeCount() >= REQUIRED_SHIFT_COUNT
+        canDiscriminate = len(self.car_shift_list) == 2 and len(cars_with_h_pattern_shifting) == 1
+        applicable = sufficientData and canDiscriminate
 
         if not applicable:
             logger.debug('GEAR HEURISTICS not applicable')
@@ -33,6 +34,6 @@ class GearShiftHeuristics:
 
         singleton_list = cars_with_h_pattern_shifting if gearsWereSkipped else cars_without_h_pattern_shifting
 
-        car, _ = singleton_list[0]
+        (car, _) = singleton_list[0]
         
         return car
