@@ -35,7 +35,6 @@ class TestDatabase(unittest.TestCase):
 
     def testGetUserId(self):
         userId = self.thing.createUserId();
-        print(userId)
         self.assertIsNotNone(userId, "userId must exist")
 
     def testUserIdDiffersOverTime(self):

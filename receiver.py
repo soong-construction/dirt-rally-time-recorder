@@ -3,9 +3,12 @@ import socket
 import struct
 
 from statsProcessor import StatsProcessor
+from log import getLogger
 
+logger = getLogger(__name__)
+    
 class Receiver(asyncore.dispatcher):
-
+    
     def __init__(self, address, speed_unit, approot):
         asyncore.dispatcher.__init__(self)
         self.address = address
@@ -17,13 +20,13 @@ class Receiver(asyncore.dispatcher):
 
         self.create_socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.bind(self.address)
-        self.print("Waiting for data on %s:%s" % self.address)
+        logger.info("Waiting for data on %s:%s", *self.address)
 
     def writable(self):
         return False
 
     def handle_expt(self):
-        self.print('exception occurred!')
+        logger.exception('An exception occured while reading from socket')
         self.handle_close()
 
     def handle_error(self):
@@ -31,7 +34,7 @@ class Receiver(asyncore.dispatcher):
         asyncore.dispatcher.handle_error(self)
 
     def informCloseAndWaitForInput(self):
-        self.print('The connection was closed.')
+        logger.info('The connection was closed.')
         input('Press ENTER to end program.')
 
     def handle_close(self):
@@ -49,7 +52,7 @@ class Receiver(asyncore.dispatcher):
 
         if not self.received_data:
             self.received_data = True
-            self.print("Receiving data on %s:%s" % self.address)
+            logger.debug("Receiving data on %s:%s", *self.address)
 
         self.parse(data)
 
@@ -57,7 +60,3 @@ class Receiver(asyncore.dispatcher):
         stats = struct.unpack(str(self.fieldCount) + 'f', data[0:self.fieldCount * 4])
 
         self.statsProcessor.handleStats(stats)
-
-    def print(self, message):
-        print(message)
-        

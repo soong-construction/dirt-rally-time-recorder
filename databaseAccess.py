@@ -1,5 +1,7 @@
 import time
+from log import getLogger
 
+logger = getLogger(__name__)
 
 class DatabaseAccess:
     
@@ -11,12 +13,13 @@ class DatabaseAccess:
         tracks = self.database.loadTracks(tracklength)
 
         if (len(tracks) == 0):
-            print("Failed to identify track: %s" % (str(tracklength)))
+            logger.warn("Failed to identify track")
+            logger.debug("Length: %s", str(tracklength))
             return []
         
         elif (len(tracks) == 1):
             index, name, startZ = tracks[0]
-            print("TRACK: %s" % str(name))
+            logger.info("TRACK: %s", str(name))
             return index
         
         # TODO Can't Z-based recognition be part of the SQL query? Looks much too complicated...
@@ -32,19 +35,21 @@ class DatabaseAccess:
                 
             if matchingTrack and tracksDiffer:
                 index, name = matchingTrack
-                print("TRACK: %s" % str(name))
+                logger.info("TRACK: %s", str(name))
                 return index
         
-        print("Ambiguous track data, %s matches: %s (Z: %s)" % (len(tracks), str(tracklength), str(z)))
+        logger.warn("Ambiguous track data, %s matches", len(tracks))
+        logger.debug("Length: %s (Z: %s)", str(tracklength), str(z))
         return list(index for (index, name, startZ) in tracks)
     
     def logCar(self, name):
-        print("CAR: %s" % (name,))
+        logger.info("CAR: %s", name)
 
     def identifyCar(self, max_rpm, idle_rpm, top_gear):
         cars = self.database.loadCars(idle_rpm, max_rpm, top_gear)
         if (len(cars) == 0):
-            print("Failed to identify car: %s - %s" % (str(idle_rpm), str(max_rpm)))
+            logger.warn("Failed to identify car")
+            logger.debug("Idle/Max RPM: %s - %s", str(idle_rpm), str(max_rpm))
             return []
         
         elif (len(cars) == 1):
@@ -53,13 +58,14 @@ class DatabaseAccess:
             return index
         
         else:
-            print("Ambiguous car data, %s matches: %s - %s" % (len(cars), str(idle_rpm), str(max_rpm)))
+            logger.warn("Ambiguous car data, %s matches", len(cars))
+            logger.debug("Idle/Max RPM: %s - %s", str(idle_rpm), str(max_rpm))
             return list(index for (index, name) in cars)
 
 
     def printCarUpdates(self, car, timestamp, track):
         updates = self.database.getCarUpdateStatements(timestamp, car)
-        print("Please run one of the scripts below to link the recorded laptime to the correct car:")
+        logger.info("Please run one of the scripts below to link the recorded laptime to the correct car:")
         for index, update in enumerate(updates):
             elementId = car[index]
             carName = self.database.getCarName(elementId)
@@ -67,11 +73,11 @@ class DatabaseAccess:
             
             script = self.ambiguousResultHandler.handleUpdateStatement(trackName, carName, timestamp, update)
             
-            print(" ==> %s" % (script, ))
+            logger.info(" ==> %s", script)
 
     def handleTrackUpdates(self, track, timestamp, car):
         updates = self.database.getTrackUpdateStatements(timestamp, track)
-        print("Please run one of the scripts below to link the recorded laptime to the correct track:")
+        logger.info("Please run one of the scripts below to link the recorded laptime to the correct track:")
         for index, update in enumerate(updates):
             elementId = track[index]
             trackName = self.database.getTrackName(elementId)
@@ -79,7 +85,7 @@ class DatabaseAccess:
             
             script = self.ambiguousResultHandler.handleUpdateStatement(trackName, carName, timestamp, update)
             
-            print(" ==> %s" % (script, ))
+            logger.info(" ==> %s", script)
 
     def recordResults(self, track, car, laptime, topspeed):
         timestamp = time.time()

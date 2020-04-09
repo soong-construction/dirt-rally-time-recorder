@@ -60,7 +60,7 @@ class TestDatabaseAccess(unittest.TestCase):
         cars = [(1, 'car1')]
         self.database.loadCars = MagicMock(return_value=cars)
         
-        loadedCar = self.thing.identifyCar(100, 1000, 5)
+        loadedCar = self.thing.identifyCar(1000, 100, 5)
 
         self.assertEqual(loadedCar, 1, "Wrong ID")
 
@@ -68,7 +68,7 @@ class TestDatabaseAccess(unittest.TestCase):
         cars = []
         self.database.loadCars = MagicMock(return_value=cars)
         
-        loadedCar = self.thing.identifyCar(100, 1000, 5)
+        loadedCar = self.thing.identifyCar(1000, 100, 5)
 
         self.assertEqual(loadedCar, [], "Shouldn't identify car")
 
@@ -76,7 +76,7 @@ class TestDatabaseAccess(unittest.TestCase):
         cars = [(1, 'car1'), (2, 'car2')]
         self.database.loadCars = MagicMock(return_value=cars)
         
-        loadedCar = self.thing.identifyCar(100, 1000, 5)
+        loadedCar = self.thing.identifyCar(1000, 100, 5)
         self.assertEqual(loadedCar, [1, 2], "Should return all cars")
 
     def testHandleResultsWithAmbiguousCars(self):

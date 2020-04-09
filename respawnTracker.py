@@ -1,7 +1,10 @@
+from log import getLogger
 
 recoverDelta = 2
 restartDelta = 30
 restartDistance = 10
+
+logger = getLogger(__name__)
 
 # Should handle most respawns, except successive recovers in one place (only DR1)
 class RespawnTracker():
@@ -34,11 +37,11 @@ class RespawnTracker():
         
         elif self.positionDeltaExceeds(pos_x, pos_y, restartDelta) and distance <= restartDistance:
             self.restart = True
-            print('[RESTART]')
+            logger.debug('RESTART')
                 
         elif self.positionDeltaExceeds(pos_x, pos_y, recoverDelta):  
             self.recover = True
-            print('[RECOVER]')
+            logger.debug('RECOVER')
 
         self.updatePos(pos_x, pos_y)
         

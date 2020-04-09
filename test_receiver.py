@@ -16,7 +16,6 @@ class TestReceiver(unittest.TestCase):
     def setUp(self):
         Database.setup = MagicMock()
         self.thing = Receiver(('localhost', 1024), 'kmh', 'testroot')
-        self.thing.print = MagicMock()
 
     def tearDown(self):
         # TODO This restoration should be used throughout the test base

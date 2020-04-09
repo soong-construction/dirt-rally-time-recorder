@@ -1,3 +1,7 @@
+from log import getLogger, VERBOSE
+
+logger = getLogger(__name__)
+
 class GearTracker():
 
     def __init__(self, respawnTracker):
@@ -14,7 +18,7 @@ class GearTracker():
         distance = self.lastGear - current_gear
         if abs(distance) > 1:
             self.skipCount += 1
-            print('[GEAR SKIPPED] %s -> %s' % (self.lastGear, current_gear))
+            logger.log(VERBOSE, 'GEAR SKIPPED: %s -> %s', self.lastGear, current_gear)
 
     def track(self, stats):
         current_gear = stats[33]

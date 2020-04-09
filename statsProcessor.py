@@ -6,9 +6,12 @@ from gearTracker import GearTracker
 from progressTracker import ProgressTracker
 from speedTracker import SpeedTracker
 from respawnTracker import RespawnTracker
+from log import getLogger
 
 goLineProgress = 0.0
 completionProgress = 0.999
+
+logger = getLogger(__name__)
 
 class StatsProcessor():
     
@@ -32,20 +35,18 @@ class StatsProcessor():
     def formatLapTime(self, laptime):
         return '%.2f' % (laptime,)
 
-    # TODO #17 Log in a "python" way
     def printResults(self, laptime):
         dbAccess = self.databaseAccess
-        data = "dirtrally.%s.%s.%s.time:%s|s" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car), self.formatLapTime(laptime))
-        self.print(data)
-        data = "dirtrally.%s.%s.%s.topspeed:%s|%s" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car), self.formatTopSpeed(), self.speed_unit)
-        self.print(data)
+        logger.debug("%s.%s.%s.time:%s|s", self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car), self.formatLapTime(laptime))
+        logger.debug("%s.%s.%s.topspeed:%s|%s", self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car), self.formatTopSpeed(), self.speed_unit)
+        logger.info("Completed stage in %ss.", self.formatLapTime(laptime))
 
     def showCarControlInformation(self):
         if isinstance(self.car, (list,)):
             for car in self.car:
-                self.print(self.databaseAccess.describeCarInterfaces(car))
+                logger.info(self.databaseAccess.describeCarInterfaces(car))
         else:
-            self.print(self.databaseAccess.describeCarInterfaces(self.car))
+            logger.info(self.databaseAccess.describeCarInterfaces(self.car))
 
     def allZeroStats(self, stats):
         return stats.count(0) == len(stats)
@@ -96,8 +97,7 @@ class StatsProcessor():
         car_data = stats[63:66] # max_rpm, idle_rpm, top_gear
         self.car = dbAccess.identifyCar(*tuple(car_data))
 
-        data = "dirtrally.%s.%s.%s.started:1|c" % (self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car))
-        self.print(data)
+        logger.debug("%s.%s.%s.started", self.userArray[0], dbAccess.identify(self.track), dbAccess.identify(self.car))
 
         self.showCarControlInformation()
 
@@ -106,9 +106,6 @@ class StatsProcessor():
         self.databaseAccess.recordResults(self.track, self.car, laptime, self.formatTopSpeed())
         self.printResults(laptime)
 
-    def print(self, message):
-        print(message)
-        
     def finishedDR2TimeTrial(self, stats, trackProgess):
         return trackProgess >= completionProgress and self.allZeroStats(stats)
 

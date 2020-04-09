@@ -2,9 +2,11 @@ import sqlite3
 import getpass
 import time
 from databaseMigration import DatabaseMigration
+from log import getLogger
 
 UPDATE_STATEMENT = 'UPDATE laptimes SET %s=%s WHERE Timestamp="%s";'
 
+logger = getLogger(__name__)
 
 class Database:
     
@@ -21,11 +23,11 @@ class Database:
             db = conn.cursor()
             trackCount = db.execute('SELECT count(*) FROM Tracks').fetchall()[0]
             carCount = db.execute('SELECT count(*) FROM cars').fetchall()[0]
-            print('Found %s tracks and %s cars' % (trackCount[0], carCount[0]))
+            logger.info('Found %s tracks and %s cars', trackCount[0], carCount[0])
             self.db = db
             return self
-        except (Exception) as exc:
-            print("Error when reading from %s, please check set-up instructions in the README" % (self.baseDb))
+        except Exception as exc:
+            logger.exception("Error when reading from %s, please check set-up instructions in the README", self.baseDb)
             raise exc
 
     def fetchUser(self, lapdb):
@@ -42,7 +44,7 @@ class Database:
         migration.setUserVersion(version)
 
     def setupLaptimesDb(self, lapdb):
-        print("First run, setting up recording tables")
+        logger.info("First run, setting up recording tables")
         lapdb.execute('CREATE TABLE laptimes (Track INTEGER, Car INTEGER, Timestamp INTEGER, Time REAL, Topspeed REAL);')
         lapdb.execute('CREATE TABLE user (user TEXT);')
         userId = self.createUserId()
@@ -55,27 +57,27 @@ class Database:
             lapconn = self.getLapDbConnection()
             lapdb = lapconn.cursor()
             
-            print("Checking laptimes database")
+            logger.info("Checking laptimes database")
             DatabaseMigration(lapdb).migrateDb()
             lapconn.commit()
             
             return self.fetchUser(lapdb)
         
-        except (Exception) as exc:
+        except Exception:
             try:
                 self.setupLaptimesDb(lapdb)
                 lapconn.commit()
                 return self.fetchUser(lapdb)
             
-            except (Exception) as exc:
-                print("Error initializing %s:" % (self.laptimesDbName,), exc)
+            except Exception:
+                logger.exception("Error initializing %s", self.laptimesDbName)
         
         finally:
             lapconn.close()
     
     def createUserId(self):
         user = getpass.getuser()
-        user = 'defaultuser' if (user == None) else user
+        user = 'defaultuser' if user is None else user
         epoch = int(time.time())
         return str(user) + str(epoch)
 
@@ -101,8 +103,8 @@ class Database:
             lapdb.execute('INSERT INTO laptimes (Track, Car, Timestamp, Time, Topspeed) VALUES (?, ?, ?, ?, ?)', (track, car, timestamp, laptime, topspeed))
             lapconn.commit()
             lapconn.close()
-        except (Exception) as exc:
-            print("Error connecting to "+ self.laptimesDbName, exc)
+        except Exception:
+            logger.exception("Error connecting to %s", self.laptimesDbName)
             
     def getCarUpdateStatements(self, timestamp, cars):
         result = []

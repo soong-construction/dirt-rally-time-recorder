@@ -15,17 +15,17 @@ class TestStatsProcessor(unittest.TestCase):
     def setUp(self):
         Database.setup = MagicMock()
         self.thing = StatsProcessor('mph', 'test.statsProcessor')
-        self.thing.resetRecognition = MagicMock()
-        self.thing.startStage = MagicMock()
-        self.thing.finishStage = MagicMock()
         
-        self.thing.print = MagicMock()
-
         self.stats = range(0, 256)
         self.allZeroStats = [0.0] * 256
 
     def tearDown(self):
         Database.setup = self.DatabaseSetupFunction
+
+    def mockVisitorMethods(self):
+        self.thing.resetRecognition = MagicMock()
+        self.thing.startStage = MagicMock()
+        self.thing.finishStage = MagicMock()
 
     # Scenario for timeDelta<0 and !restart: 1) cancel DR1 event near the start  2) enter the same event again (similar x/y pos)
     def testStageRestartOrTimeResetLeadToStageAborted(self):
@@ -42,6 +42,7 @@ class TestStatsProcessor(unittest.TestCase):
         self.assertFalse(self.thing.stageAborted())
 
     def testStartStage(self):
+        self.mockVisitorMethods()
         self.thing.handleGameState(False, False, 0, -0.2, self.stats)
     
         self.assertFalse(self.thing.resetRecognition.called, 'Actually called unexpected receiver method')
@@ -50,6 +51,7 @@ class TestStatsProcessor(unittest.TestCase):
 
     # This will ultimately lead to a recover to the start line which is treated as Restart (DR2: Disqualify?)
     def testMoveCarBehindStartLineDoesNotBreakRecognition(self):
+        self.mockVisitorMethods()
         self.thing.handleGameState(False, True, 0, -0.2, self.stats)
     
         self.assertFalse(self.thing.resetRecognition.called, 'Actually called unexpected receiver method')
@@ -57,6 +59,7 @@ class TestStatsProcessor(unittest.TestCase):
         self.assertFalse(self.thing.finishStage.called, 'Actually called unexpected receiver method')
         
     def testStatsAfterAStageLeadToResetButNotStartStage(self):
+        self.mockVisitorMethods()
         self.thing.handleGameState(True, True, 0, 0.9, self.allZeroStats)
     
         self.assertTrue(self.thing.resetRecognition.called, 'Never called expected receiver method')
@@ -64,6 +67,7 @@ class TestStatsProcessor(unittest.TestCase):
         self.assertFalse(self.thing.finishStage.called, 'Actually called unexpected receiver method')
         
     def testResetRecognitionWhenStageIsAborted(self):
+        self.mockVisitorMethods()
         self.thing.handleGameState(True, False, 0, 0.2, self.stats)
 
         self.assertTrue(self.thing.resetRecognition.called, 'Never called expected receiver method')
@@ -71,6 +75,7 @@ class TestStatsProcessor(unittest.TestCase):
         self.assertFalse(self.thing.finishStage.called, 'Actually called unexpected receiver method')
         
     def testFinishStage(self):
+        self.mockVisitorMethods()
         self.thing.handleGameState(False, True, 1, 0.9, self.stats)
 
         self.assertTrue(self.thing.resetRecognition.called, 'Actually called unexpected receiver method')
@@ -78,6 +83,7 @@ class TestStatsProcessor(unittest.TestCase):
         self.assertTrue(self.thing.finishStage.called, 'Never called expected receiver method')
 
     def testFinishStageOnlyOnce(self):
+        self.mockVisitorMethods()
         self.thing.handleGameState(False, False, 1, 0.9, self.stats)
 
         self.assertFalse(self.thing.resetRecognition.called, 'Actually called unexpected receiver method')
@@ -85,6 +91,7 @@ class TestStatsProcessor(unittest.TestCase):
         self.assertFalse(self.thing.finishStage.called, 'Never called expected receiver method')
 
     def testFinishStageInDR2TimeTrial(self):
+        self.mockVisitorMethods()
         self.thing.handleGameState(False, True, 0, 0.999, self.allZeroStats)
 
         self.assertTrue(self.thing.resetRecognition.called, 'Actually called unexpected receiver method')
@@ -92,6 +99,7 @@ class TestStatsProcessor(unittest.TestCase):
         self.assertTrue(self.thing.finishStage.called, 'Never called expected receiver method')
 
     def testDontFinishStageInDR2TimeTrialIfNotAtEndOfStage(self):
+        self.mockVisitorMethods()
         self.thing.handleGameState(False, True, 0, 0.822, self.allZeroStats)
 
         self.assertFalse(self.thing.resetRecognition.called, 'Actually called unexpected receiver method')
@@ -119,7 +127,7 @@ class TestStatsProcessor(unittest.TestCase):
         stats = [1] * fieldCount
 
         self.thing.inStage = MagicMock(return_value=True)
-        self.thing.databaseAccess.recordResults = MagicMock()
+        self.thing.databaseAccess = MagicMock()
         self.thing.databaseAccess.identifyCar = MagicMock(return_value=10)
         self.thing.databaseAccess.identifyTrack = MagicMock(return_value=11)
 
@@ -127,21 +135,24 @@ class TestStatsProcessor(unittest.TestCase):
         stats[59] = 1
         self.thing.handleStats(stats)
 
-        self.assertTrue(self.thing.print.recordResults, 'Did not call mock')
+        self.thing.databaseAccess.identifyCar.assert_not_called()
+        self.thing.databaseAccess.identifyTrack.assert_not_called()
+        self.thing.databaseAccess.recordResults.assert_called_once()
 
     def testHandleStartStageAndDatabaseCalled(self):
         stats = [1] * fieldCount
+        stats[2] = 0
 
         self.thing.inStage = MagicMock(return_value=False)
-        self.thing.databaseAccess.recordResults = MagicMock()
+        self.thing.databaseAccess = MagicMock()
         self.thing.databaseAccess.identifyCar = MagicMock(return_value=10)
         self.thing.databaseAccess.identifyTrack = MagicMock(return_value=11)
 
-        stats[59] = 0
         self.thing.handleStats(stats)
 
-        self.assertTrue(self.thing.print.identifyCar, 'Did not call mock')
-        self.assertTrue(self.thing.print.identifyTrack, 'Did not call mock')
+        self.thing.databaseAccess.identifyCar.assert_called_once()
+        self.thing.databaseAccess.identifyTrack.assert_called_once()
+        self.thing.databaseAccess.recordResults.assert_not_called()
 
     def testTrackersAreCalledWithStats(self):
         self.thing.timeTracker = MagicMock()
