@@ -69,25 +69,25 @@ class DatabaseAccess:
             logger.debug("Idle/Max RPM: %s - %s", str(idle_rpm), str(max_rpm))
             return list(index for (index, name) in cars)
 
-    def printCarUpdates(self, car, timestamp, track):
-        updates = self.database.getCarUpdateStatements(timestamp, car)
+    def handleCarUpdates(self, car_list, timestamp, track):
+        updates = self.database.getCarUpdateStatements(timestamp, car_list)
         for index, update in enumerate(updates):
-            elementId = car[index]
+            elementId = car_list[index]
             carName = self.database.getCarName(elementId)
             trackName = self.database.getTrackName(track) if identify(track) != -1 else 'UNKNOWN'
             
-            scriptName = self.ambiguousResultHandler.handleUpdateStatement(trackName, carName, timestamp, update)
+            scriptName = self.ambiguousResultHandler.writeScript(trackName, carName, timestamp, update)
             
             logger.info(" ==> %s", scriptName)
 
-    def handleTrackUpdates(self, track, timestamp, car):
-        updates = self.database.getTrackUpdateStatements(timestamp, track)
+    def handleTrackUpdates(self, track_list, timestamp, car):
+        updates = self.database.getTrackUpdateStatements(timestamp, track_list)
         for index, update in enumerate(updates):
-            elementId = track[index]
+            elementId = track_list[index]
             trackName = self.database.getTrackName(elementId)
             carName = self.database.getCarName(car) if identify(car) != -1 else 'UNKNOWN'
             
-            scriptName = self.ambiguousResultHandler.handleUpdateStatement(trackName, carName, timestamp, update)
+            scriptName = self.ambiguousResultHandler.writeScript(trackName, carName, timestamp, update)
             
             logger.info(" ==> %s", scriptName)
 

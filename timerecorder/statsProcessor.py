@@ -16,6 +16,7 @@ import time
 
 goLineProgress = 0.0
 completionProgress = 0.999
+instruction = "Please run one of the scripts below to link the recorded laptime to %s:"
 
 logger = getLogger(__name__)
 
@@ -49,7 +50,7 @@ class StatsProcessor():
     def formatLapTime(self, laptime):
         return '%.2f' % (laptime,)
 
-    def printResults(self, laptime, track, car):
+    def logResults(self, laptime, track, car):
         logger.debug("%s.%s.%s.time:%s|s", self.userArray[0], track, car, self.formatLapTime(laptime))
         logger.debug("%s.%s.%s.topspeed:%s|%s", self.userArray[0], track, car, self.formatTopSpeed(), self.speed_unit)
         logger.info("Completed stage in %ss.", self.formatLapTime(laptime))
@@ -124,35 +125,39 @@ class StatsProcessor():
         
         return heuristics.guessCar()
 
-    def instructUser(self, track, car, car_instruction, timestamp):
-        if isinstance(car, (list, )):
-            logger.info(car_instruction)
-            self.databaseAccess.printCarUpdates(car, timestamp, track)
-        if isinstance(track, (list, )):
-            logger.info("Please run one of the scripts below to link the recorded laptime to the correct track:")
-            self.databaseAccess.handleTrackUpdates(track, timestamp, car)
-
-    def handleAmbiguities(self, timestamp):
-        car_instruction = "Please run one of the scripts below to link the recorded laptime to the correct car:"
-        track = self.track
-        car = self.car
+    def handleAmbiguousCars(self, timestamp, car, track):
+        if isinstance(car, int):
+            return car
         
         # TODO #25 Needs to be opt-in per config.yaml
-        if isinstance(car, list):
-            logger.info("Guessing car...")
-            guessed_car = self.applyHeuristics(car)
-            if guessed_car is not None:
-                self.databaseAccess.logCar(self.database.getCarName(guessed_car))
-                car = guessed_car
-                car_instruction = "If heuristics-based guess IS WRONG, RUN THE SCRIPT provided to fix the recorded car:"
+        logger.info("Guessing car...")
+        guessed_car = self.applyHeuristics(car)
+        if guessed_car is None:
+            logger.info(instruction, "the correct car")
+            self.databaseAccess.handleCarUpdates(car, timestamp, track)
+        else:
+            self.databaseAccess.logCar(self.database.getCarName(guessed_car))
+            logger.info("If heuristics-based guess IS WRONG, RUN THE SCRIPT provided to fix the recorded car:")
+            self.databaseAccess.handleCarUpdates([c for c in car if c != guessed_car], timestamp, track)
+            car = guessed_car
+
+        return car
+
+    def handleAmbiguousTracks(self, timestamp, car, track):
+        if isinstance(track, list):
+            logger.info(instruction, "the correct track")
+            self.databaseAccess.handleTrackUpdates(track, timestamp, car)
         
-        # TODO #25 Only create script for non-matching cars
-        self.instructUser(track, self.car, car_instruction, timestamp)
+        return track
+
+    def handleAmbiguities(self, timestamp):
+        car = self.handleAmbiguousCars(timestamp, self.car, self.track)
+        track = self.handleAmbiguousTracks(timestamp, car, self.track)
+
         return identify(track), identify(car)
 
     def finishStage(self, stats):
         laptime = stats[62]
-
         timestamp = time.time()
         
         # TODO Debug
@@ -161,7 +166,7 @@ class StatsProcessor():
         track, car = self.handleAmbiguities(timestamp)
         
         self.databaseAccess.recordResults(track, car, timestamp, laptime, self.formatTopSpeed())
-        self.printResults(laptime, track, car)
+        self.logResults(laptime, track, car)
 
     def finishedDR2TimeTrial(self, stats, trackProgess):
         return trackProgess >= completionProgress and self.allZeroStats(stats)

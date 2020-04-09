@@ -128,7 +128,7 @@ class TestStatsProcessor(TestBase):
         format_lap_time = self.thing.formatLapTime(180.249)
         self.assertEqual(format_lap_time, '180.25')
  
-    def testHandleFinishStageAndPrintResults(self):
+    def testHandleFinishStageAndLogResults(self):
         stats = [1] * fieldCount
 
         self.thing.inStage = MagicMock(return_value=True)
@@ -182,13 +182,15 @@ class TestStatsProcessor(TestBase):
         self.thing.track = 1000
         
         self.thing.applyHeuristics = MagicMock(return_value = None)
-        self.thing.instructUser = MagicMock()
+        self.thing.databaseAccess = MagicMock()
         self.thing.databaseAccess.recordResults = MagicMock()
+        self.thing.databaseAccess.handleCarUpdates = MagicMock()
         
-        result = self.thing.handleAmbiguities(time.time())
+        timestamp = time.time()
+        result = self.thing.handleAmbiguities(timestamp)
         
         self.thing.applyHeuristics.assert_called_once_with(self.thing.car)
-        self.assertEqual(self.thing.instructUser.call_count, 1)
+        self.thing.databaseAccess.handleCarUpdates.assert_called_once_with([100, 200], timestamp, 1000)
         self.assertEqual(result, (1000, -1))
 
     def testHandleResultsWithAmbiguousCarsAndLuckyGuess(self):
@@ -196,13 +198,15 @@ class TestStatsProcessor(TestBase):
         self.thing.track = 1000
         
         self.thing.applyHeuristics = MagicMock(return_value = 200)
-        self.thing.instructUser = MagicMock()
+        self.thing.databaseAccess = MagicMock()
         self.thing.databaseAccess.recordResults = MagicMock()
+        self.thing.databaseAccess.handleCarUpdates = MagicMock()
         
-        result = self.thing.handleAmbiguities(time.time())
+        timestamp = time.time()
+        result = self.thing.handleAmbiguities(timestamp)
         
         self.thing.applyHeuristics.assert_called_once_with(self.thing.car)
-        self.assertEqual(self.thing.instructUser.call_count, 1)
+        self.thing.databaseAccess.handleCarUpdates.assert_called_once_with([100], timestamp, 1000)
         self.assertEqual(result, (1000, 200))
 
 if __name__ == "__main__":

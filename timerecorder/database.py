@@ -107,18 +107,12 @@ class Database:
             logger.exception("Error connecting to %s", self.laptimesDbName)
             
     def getCarUpdateStatements(self, timestamp, cars):
-        result = []
-        for index in cars:
-            result.append(UPDATE_STATEMENT % ('Car', index, timestamp))
-        
-        return result
+        to_update = lambda car: UPDATE_STATEMENT % ('Car', car, timestamp)
+        return list(map(to_update, cars))
     
     def getTrackUpdateStatements(self, timestamp, tracks):
-        result = []
-        for track in tracks:
-            result.append(UPDATE_STATEMENT % ('Track', track, timestamp))
-        
-        return result
+        to_update = lambda track: UPDATE_STATEMENT % ('Track', track, timestamp)
+        return list(map(to_update, tracks))
 
     def getCarInsertStatement(self, max_rpm, idle_rpm):
         return 'INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (ID, \'CAR_NAME\', %s, %s);' % (max_rpm, idle_rpm)

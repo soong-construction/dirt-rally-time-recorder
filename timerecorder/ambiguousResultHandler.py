@@ -22,7 +22,7 @@ class AmbiguousResultHandler(object):
     def buildScript(self, statement):
         return scriptTemplate % (self.dbName, statement)
 
-    def handleUpdateStatement(self, track, car, timestamp, updateStatement):
+    def writeScript(self, track, car, timestamp, updateStatement):
 
         fileName = self.buildFileName(track, car, timestamp)
 
