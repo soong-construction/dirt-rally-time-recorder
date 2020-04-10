@@ -2,7 +2,6 @@ import unittest
 from unittest.mock import MagicMock
 
 from statsProcessor import StatsProcessor
-from database import Database
 
 fieldCount = 66
 
@@ -10,17 +9,17 @@ class TestStatsProcessor(unittest.TestCase):
 
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
-        self.DatabaseSetupFunction = Database.setup
+        self.UpdateResourcesFunction = StatsProcessor.updateResources
 
     def setUp(self):
-        Database.setup = MagicMock()
+        StatsProcessor.updateResources = MagicMock()
         self.thing = StatsProcessor('mph', 'test.statsProcessor')
         
         self.stats = range(0, 256)
         self.allZeroStats = [0.0] * 256
 
     def tearDown(self):
-        Database.setup = self.DatabaseSetupFunction
+        StatsProcessor.updateResources = self.UpdateResourcesFunction
 
     def mockVisitorMethods(self):
         self.thing.resetRecognition = MagicMock()

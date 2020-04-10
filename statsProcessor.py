@@ -1,12 +1,12 @@
 from ambiguousResultHandler import AmbiguousResultHandler
 from database import Database
 from databaseAccess import DatabaseAccess
-from timeTracker import TimeTracker
 from gearTracker import GearTracker
-from progressTracker import ProgressTracker
-from speedTracker import SpeedTracker
-from respawnTracker import RespawnTracker
 from log import getLogger
+from progressTracker import ProgressTracker
+from respawnTracker import RespawnTracker
+from speedTracker import SpeedTracker
+from timeTracker import TimeTracker
 
 goLineProgress = 0.0
 completionProgress = 0.999
@@ -14,20 +14,25 @@ completionProgress = 0.999
 logger = getLogger(__name__)
 
 class StatsProcessor():
-    
+
     def __init__(self, speed_unit, approot):
         self.speed_unit = speed_unit
         self.speed_modifier = speed_unit == 'mph' and 0.6214 or 1
-        self.approot = approot
         self.track = 0
         self.car = 0
-        
-        self.database = Database(approot).setup()
+
         self.ambiguousResultHandler = AmbiguousResultHandler(Database.laptimesDbName)
+        self.database = self.updateResources(approot)
+
         self.databaseAccess = DatabaseAccess(self.database, self.ambiguousResultHandler)
         self.userArray = self.database.initializeLaptimesDb()
         self.initTrackers()
-        
+
+    def updateResources(self, approot):
+        self.ambiguousResultHandler.cleanUp(approot)
+        database = Database(approot).setup()
+        return database
+
     def formatTopSpeed(self):
         topSpeed_kmh = self.speedTracker.getTopSpeed() * 3.6
         return '%.1f' % (topSpeed_kmh * self.speed_modifier,)
@@ -66,12 +71,12 @@ class StatsProcessor():
             self.progressTracker.track(stats)
             self.gearTracker.track(stats)
             self.speedTracker.track(stats)
-            
+
         lap = self.progressTracker.getLap()
         stageProgress = self.progressTracker.getProgress()
-        
+
         self.handleGameState(self.stageAborted(), self.inStage(), lap, stageProgress, stats)
-    
+
     def resetRecognition(self):
         self.track = 0
         self.car = 0
@@ -89,11 +94,11 @@ class StatsProcessor():
 
     def startStage(self, stats):
         dbAccess = self.databaseAccess
-        
+
         track_z = stats[6]
         track_length = self.progressTracker.getTrackLength()
         self.track = dbAccess.identifyTrack(track_z, track_length)
-        
+
         car_data = stats[63:66] # max_rpm, idle_rpm, top_gear
         self.car = dbAccess.identifyCar(*tuple(car_data))
 
@@ -113,9 +118,9 @@ class StatsProcessor():
         if inStage and (lap == 1 or self.finishedDR2TimeTrial(stats, stageProgress)):
             self.finishStage(stats)
             self.resetRecognition()
-        
+
         elif isAborted:
             self.resetRecognition()
-         
+
         elif self.statsWithTelemetry(stats) and stageProgress <= goLineProgress and not inStage:
             self.startStage(stats)
