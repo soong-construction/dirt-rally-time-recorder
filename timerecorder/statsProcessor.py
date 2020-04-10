@@ -20,12 +20,13 @@ instruction = "Please run one of the scripts below to link the recorded laptime 
 
 logger = getLogger(__name__)
 
-# TODO Split off printing stuff
+# TODO Move ambiguity stuff to AmbiguousResultHandler
 class StatsProcessor():
 
     def __init__(self, approot):
         self.speed_unit = config.get.speed_unit
         self.speed_modifier = self.speed_unit == 'mph' and 0.6214 or 1
+        self.seed = random.randrange(1000)
         self.approot = approot
         
         self.track = 0
@@ -120,8 +121,7 @@ class StatsProcessor():
         car_shift_map = self.databaseAccess.mapCarsToShifting(car_candidates)
 
         heuristics = GearShiftHeuristics(list(car_shift_map), self.gearTracker)
-        # TODO The seed should only be fixed per program run, not always 0
-        heuristics.withFallback(LuckyGuessHeuristics(car_candidates, random.seed(0)))
+        heuristics.withFallback(LuckyGuessHeuristics(car_candidates, random.seed(self.seed)))
         
         return heuristics.guessCar()
 

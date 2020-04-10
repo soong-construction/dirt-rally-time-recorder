@@ -6,6 +6,7 @@ from timerecorder.statsProcessor import StatsProcessor
 from tests.test_base import TestBase
 from timerecorder import config
 from timerecorder.database import Database
+from builtins import range
 
 fieldCount = 66
 
@@ -209,5 +210,15 @@ class TestStatsProcessor(TestBase):
         self.thing.databaseAccess.handleCarUpdates.assert_called_once_with([100], timestamp, 1000)
         self.assertEqual(result, (1000, 200))
 
+    def testSeedIsRandomized(self):
+        instance = lambda _: StatsProcessor('test.statsProcessor')
+        seed = lambda statsProcessor: statsProcessor.seed
+        
+        manyStatsProcessor = map(instance, range(0, 100))
+        seeds = list(map(seed, manyStatsProcessor))
+        any_seed = seeds[0]
+        
+        self.assertNotEqual(seeds.count(any_seed), len(seeds), 'Seeds should be random')
+        
 if __name__ == "__main__":
     unittest.main()
