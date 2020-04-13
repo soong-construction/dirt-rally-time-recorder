@@ -1,4 +1,4 @@
-from log import getLogger
+from .log import getLogger
 
 recoverDelta = 2
 restartDelta = 30

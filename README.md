@@ -77,7 +77,7 @@ Steam updates of the game sometimes reset *hardware_settings_config.xml*. Then, 
 
 In case you modified the telemetry ip or port in *hardware_settings_config.xml*, adapt ``config.yml`` accordingly.
 
-Unless you use the bundled version, have a look at ``migrate.sql`` to find instructions how to migrate your database for new releases.  
+Unless you use the bundled version, have a look at ``resources/migrate.sql`` to find instructions how to migrate your database for new releases.  
 
 If you encounter errors at start-up, see if renaming the file `dirtrally-laptimes.db` helps (which will create a new database).    
 

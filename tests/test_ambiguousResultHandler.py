@@ -1,10 +1,7 @@
 from datetime import datetime, timezone
-import os
 import unittest
 from unittest.mock import MagicMock
-
-from ambiguousResultHandler import AmbiguousResultHandler
-
+from timerecorder.ambiguousResultHandler import AmbiguousResultHandler
 
 class TestAmbiguousResultHandler(unittest.TestCase):
 

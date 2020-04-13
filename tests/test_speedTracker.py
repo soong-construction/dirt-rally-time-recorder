@@ -1,6 +1,5 @@
 import unittest
-
-from speedTracker import SpeedTracker
+from timerecorder.speedTracker import SpeedTracker
 
 fieldCount = 66
 

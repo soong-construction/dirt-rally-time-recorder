@@ -2,8 +2,8 @@ import asyncore
 import socket
 import struct
 
-from statsProcessor import StatsProcessor
-from log import getLogger
+from .statsProcessor import StatsProcessor
+from .log import getLogger
 
 logger = getLogger(__name__)
     

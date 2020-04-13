@@ -1,8 +1,8 @@
 import sqlite3
 import getpass
 import time
-from databaseMigration import DatabaseMigration
-from log import getLogger
+from .databaseMigration import DatabaseMigration
+from .log import getLogger
 
 UPDATE_STATEMENT = 'UPDATE laptimes SET %s=%s WHERE Timestamp="%s";'
 

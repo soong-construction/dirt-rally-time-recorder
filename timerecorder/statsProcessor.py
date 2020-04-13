@@ -1,12 +1,12 @@
-from ambiguousResultHandler import AmbiguousResultHandler
-from database import Database
-from databaseAccess import DatabaseAccess
-from gearTracker import GearTracker
-from log import getLogger
-from progressTracker import ProgressTracker
-from respawnTracker import RespawnTracker
-from speedTracker import SpeedTracker
-from timeTracker import TimeTracker
+from .ambiguousResultHandler import AmbiguousResultHandler
+from .database import Database
+from .databaseAccess import DatabaseAccess
+from .gearTracker import GearTracker
+from .log import getLogger
+from .progressTracker import ProgressTracker
+from .respawnTracker import RespawnTracker
+from .speedTracker import SpeedTracker
+from .timeTracker import TimeTracker
 
 goLineProgress = 0.0
 completionProgress = 0.999

@@ -1,6 +1,5 @@
 import unittest
-
-from timeTracker import TimeTracker
+from timerecorder.timeTracker import TimeTracker
 
 
 fieldCount = 66

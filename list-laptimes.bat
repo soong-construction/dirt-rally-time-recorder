@@ -1,3 +1,3 @@
 @echo OFF
-sqlite3 -init list-laptimes.sql dirtrally-laptimes.db .exit
+sqlite3 -init resources/list-laptimes.sql dirtrally-laptimes.db .exit
 pause

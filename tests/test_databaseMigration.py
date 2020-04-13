@@ -1,7 +1,7 @@
 import unittest
 
-from databaseMigration import DatabaseMigration
 from unittest.mock import MagicMock
+from timerecorder.databaseMigration import DatabaseMigration
 
 class TestDatabase(unittest.TestCase):
 

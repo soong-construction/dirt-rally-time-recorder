@@ -1,5 +1,5 @@
 import unittest
-from respawnTracker import RespawnTracker
+from timerecorder.respawnTracker import RespawnTracker
 
 fieldCount = 66
 

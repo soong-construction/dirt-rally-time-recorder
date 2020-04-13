@@ -1,4 +1,4 @@
-from log import getLogger, VERBOSE
+from .log import getLogger, VERBOSE
 
 logger = getLogger(__name__)
 

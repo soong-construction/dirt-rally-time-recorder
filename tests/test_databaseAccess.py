@@ -1,8 +1,8 @@
 import unittest
 
 from unittest.mock import MagicMock
-from database import Database
-from databaseAccess import DatabaseAccess
+from timerecorder.database import Database
+from timerecorder.databaseAccess import DatabaseAccess
 
 class TestDatabaseAccess(unittest.TestCase):
 

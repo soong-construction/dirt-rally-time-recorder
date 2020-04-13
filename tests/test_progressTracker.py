@@ -1,6 +1,5 @@
 import unittest
-
-from progressTracker import ProgressTracker
+from timerecorder.progressTracker import ProgressTracker
 
 
 fieldCount = 66

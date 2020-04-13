@@ -2,7 +2,7 @@ import re
 from datetime import datetime, timedelta
 from _datetime import timezone
 import time
-from log import getLogger
+from .log import getLogger
 import os
 
 scriptRegex = r"(\d{9,10})_\S+_\S+\.bat"

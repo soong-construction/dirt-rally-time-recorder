@@ -3,8 +3,8 @@ import os.path
 import sys
 
 import yaml
-from receiver import Receiver
-from log import getLogger
+from .receiver import Receiver
+from .log import getLogger
 
 if __name__ == '__main__':
 

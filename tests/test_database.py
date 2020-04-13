@@ -1,8 +1,8 @@
 import unittest
 
-from database import Database
 import time
 from unittest.mock import MagicMock
+from timerecorder.database import Database
 
 class TestDatabase(unittest.TestCase):
 

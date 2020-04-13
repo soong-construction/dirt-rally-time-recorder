@@ -30,7 +30,7 @@ jobs:
           PyYAML==5.3
     
     - name: Run tests / pytest
-      run: pytest
+      run: python -m pytest tests
   
   assemble:
     runs-on: windows-latest
@@ -68,8 +68,8 @@ jobs:
     - name: Bundle DR2 executable / PyInstaller
       run: |
         Remove-Item -ErrorAction SilentlyContinue dirtrally-lb.db
-        ./bin/sqlite3 -batch -init setup-dr2.sql dirtrally-lb.db .exit 
-        pyinstaller timerecord.spec --noconfirm
+        ./bin/sqlite3 -batch -init resources/setup-dr2.sql dirtrally-lb.db .exit 
+        pyinstaller resources/timerecord.spec --noconfirm
 
     - name: Zip distribution / create-7z-action
       uses: DuckSoft/create-7z-action@v1.0

@@ -1,7 +1,6 @@
 import unittest
 from unittest.mock import MagicMock
-
-from statsProcessor import StatsProcessor
+from timerecorder.statsProcessor import StatsProcessor
 
 fieldCount = 66
 

@@ -1,7 +1,7 @@
 import unittest
-from gearTracker import GearTracker
 from unittest.mock import MagicMock
-from respawnTracker import RespawnTracker
+from timerecorder.respawnTracker import RespawnTracker
+from timerecorder.gearTracker import GearTracker
 
 fieldCount = 66
 

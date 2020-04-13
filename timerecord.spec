@@ -3,7 +3,7 @@
 block_cipher = None
 
 
-a = Analysis(['timerecord.py'],
+a = Analysis(['timerecorder/timerecord.py'],
              pathex=['.'],
              binaries=[],
              datas=[
@@ -13,7 +13,9 @@ a = Analysis(['timerecord.py'],
              	('LICENSE', '.'),
              	('VERSION', '.'),
              	('list-*', '.'),
+             	('resources/list-*', '.'),
              	('export-*', '.'),
+             	('resources/export-*', '.'),
              	('README.md', '.')
              ],
              hiddenimports=[],
