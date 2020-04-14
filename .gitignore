@@ -3,3 +3,5 @@
 .project
 __pycache__/
 .settings/
+*.log
+*.csv
