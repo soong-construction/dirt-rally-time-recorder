@@ -35,7 +35,7 @@ jobs:
   assemble:
     runs-on: windows-latest
     needs: build
-    if: startsWith(github.ref, 'refs/tags/')
+    if: startsWith(github.ref, 'refs/tags/') || endsWith(github.ref, 'project-structure-issue-26')
     
     steps:
     - name: Checkout repository
@@ -55,9 +55,7 @@ jobs:
     
     - name: Bundle DR1 executable / PyInstaller
       run: |
-        Remove-Item -ErrorAction SilentlyContinue dirtrally-lb.db
-        ./bin/sqlite3 -batch -init setup-dr1.sql dirtrally-lb.db .exit 
-        pyinstaller timerecord.spec --noconfirm
+        resources\bundle-dr1.bat
 
     - name: Zip distribution / create-7z-action
       uses: DuckSoft/create-7z-action@v1.0
@@ -67,9 +65,7 @@ jobs:
 
     - name: Bundle DR2 executable / PyInstaller
       run: |
-        Remove-Item -ErrorAction SilentlyContinue dirtrally-lb.db
-        ./bin/sqlite3 -batch -init resources/setup-dr2.sql dirtrally-lb.db .exit 
-        pyinstaller resources/timerecord.spec --noconfirm
+        resources\bundle-dr2.bat
 
     - name: Zip distribution / create-7z-action
       uses: DuckSoft/create-7z-action@v1.0

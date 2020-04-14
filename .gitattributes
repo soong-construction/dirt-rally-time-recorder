@@ -1,3 +1,4 @@
 *.md text
 *.py text
 *.sql text
+*.bat text

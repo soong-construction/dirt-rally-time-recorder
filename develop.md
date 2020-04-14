@@ -9,11 +9,24 @@ Cf. job `build` in `.github/workflows/main.yml`
 - `python -m timerecorder.timerecord` to run *dirt-rally-timerecorder* from a command line
 - `python -m pytest tests` to run all tests
 
+# Bundling
+
+Note that bundling with pyinstaller is OS dependent. Bundles for *dirt-rally-time-recorder* target x64 Windows platforms. 
+
+## Requirements
+Cf. job `assemble`, step `Install` in `.github/workflows/main.yml`
+
+## Tasks
+
+To bundle for DiRT Rally
+* Cf. job `assemble`, steps `Bundle DR1` in `.github/workflows/main.yml`
+
+To bundle for DiRT Rally 2.0
+* Cf. job `assemble`, steps `Bundle DR2` in `.github/workflows/main.yml`
+
 # Releasing
 
-Note that bundling with pyinstaller is OS dependent. Bundle releases for *dirt-rally-time-recorder* target x64 Windows platforms. 
-
-## Prepare a release
+## Requirements
 Not all steps are necessary for each release
 - check if a new SQLite version should be included
 - check if a new stable Python version is available
@@ -24,15 +37,10 @@ Finally
 - bump VERSION
 - create tag
 
-## Requirements
-Cf. job `assemble` in `.github/workflows/main.yml`
+## Tasks
 
-## Bundling locally 
-
-*Note:* Since v2.5.0, release are bundled automatically as part of the CI (GitHub Actions).
-
-To create a bundle (e.g. for DR1)
-- follow the steps of the `assemble` job in `.github/workflows/main.yml`
+To create a release bundle locally (e.g. for DR1)
+- follow the steps [above](#bundling)
 - zip `/dist/timerecorder` as `timerecorder-dirt-rally.zip`
 
 ## Publish release

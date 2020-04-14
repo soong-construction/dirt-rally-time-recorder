@@ -3,6 +3,7 @@ import os.path
 import sys
 import yaml
 
+# Cf. https://stackoverflow.com/a/45488820
 try:
     from .receiver import Receiver  # @UnusedImport
     from .log import getLogger  # @UnusedImport
