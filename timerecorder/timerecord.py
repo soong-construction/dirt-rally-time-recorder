@@ -1,20 +1,25 @@
 import asyncore
 import os.path
 import sys
-
 import yaml
-from .receiver import Receiver
-from .log import getLogger
+
+try:
+    from .receiver import Receiver  # @UnusedImport
+    from .log import getLogger  # @UnusedImport
+except ModuleNotFoundError:
+    from timerecorder.receiver import Receiver  # @Reimport
+    from timerecorder.log import getLogger  # @Reimport
+
+logger = getLogger(__name__)
 
 if __name__ == '__main__':
 
-    logger = getLogger(__name__)
-    
+    # TODO Is this condition the difference between the distributable and the dev version?
     if getattr(sys, 'frozen', None):
         approot = os.path.dirname(sys.executable)
     else:
         approot = os.path.dirname(os.path.realpath(__file__))
-
+        approot = os.path.dirname(approot) # Move to root
     try:
         config = yaml.load(open(approot + '/config.yml', 'r'), yaml.SafeLoader)
     except (yaml.YAMLError) as exc:
