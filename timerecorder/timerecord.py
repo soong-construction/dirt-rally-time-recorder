@@ -7,7 +7,7 @@ import yaml
 try:
     from .receiver import Receiver  # @UnusedImport
     from .log import getLogger  # @UnusedImport
-except ModuleNotFoundError:
+except (ImportError, ModuleNotFoundError):
     from timerecorder.receiver import Receiver  # @Reimport
     from timerecorder.log import getLogger  # @Reimport
 
