@@ -35,7 +35,7 @@ jobs:
   assemble:
     runs-on: windows-latest
     needs: build
-    if: startsWith(github.ref, 'refs/tags/') || endsWith(github.ref, 'project-structure-issue-26')
+    if: startsWith(github.ref, 'refs/tags/')
     
     steps:
     - name: Checkout repository
