@@ -12,8 +12,10 @@ Time tracking works for stage rallies and the Pikes Peak events of the original 
 You can choose to download *dirt-rally-time-recorder* as a ready-to-use bundle (tested to work on Windows 10 x64). If you don't trust pre-built .exe files, you can set it up from scratch. 
 
 ### Ready-to-use bundle
-- Download the [latest release](https://github.com/soong-construction/dirt-rally-time-recorder/releases/latest) for either the original DiRT Rally or 2.0 and unzip it somewhere
-- Start `timerecord.exe`  
+- Download the [latest release](https://github.com/soong-construction/dirt-rally-time-recorder/releases/latest) for either the original DiRT Rally or 2.0
+  - Unzip the installation folder somewhere
+- Start time tracking  
+  - in your installation folder, start `timerecord.exe` 
   - It should tell you to be *Waiting for data...*, otherwise take a look at [Troubleshooting](#troubleshooting)  
 
 ### ... or set up from scratch  
@@ -23,7 +25,7 @@ You can choose to download *dirt-rally-time-recorder* as a ready-to-use bundle (
   - this creates your *work folder*, e.g. `C:\dirtrally-time-recorder-master`
 - Install Python 3.7: https://wiki.python.org/moin/BeginnersGuide/Download
   - If Python was installed already, ensure [pip is set up properly](https://packaging.python.org/tutorials/installing-packages/#ensure-you-can-run-pip-from-the-command-line) 
-- Follow the bundling instructions in [develop.md](https://github.com/soong-construction/dirt-rally-time-recorder/tree/master/develop.md#Bundling) 
+- Follow the bundling instructions in [develop.md](https://github.com/soong-construction/dirt-rally-time-recorder/blob/master/develop.md#bundling) 
   - this creates your bundle in `dist`. You can move the *installation folder* `timerecorder` anywhere you like
   - you can delete the work folder afterwards
 - Start time tracking  
@@ -72,8 +74,7 @@ Steam updates of the game sometimes reset *hardware_settings_config.xml*. Then, 
 
 In case you modified the telemetry ip or port in *hardware_settings_config.xml*, adapt `config.yml` accordingly.
 
-TODO #26 No longer necessary?
-Unless you downloaded the bundled version, have a look at `resources/migrate.sql` to find instructions how to migrate your database for new releases.  
+Unless you downloaded the bundled version, have a look at `resources/migrate.sql` to find instructions how to update to new releases.  
 
 If you encounter errors at start-up, see if renaming the file `dirtrally-laptimes.db` helps (which will create a new database).    
 
