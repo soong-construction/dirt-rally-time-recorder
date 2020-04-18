@@ -33,7 +33,7 @@ class AmbiguousResultHandler(object):
 
     def listUpdateScripts(self, directory):
         file_list = os.listdir(directory)
-        return [file for file in file_list if re.match(scriptRegex, file)]
+        return [directory + '/' + file for file in file_list if re.match(scriptRegex, file)]
 
     def isBeforeDeadline(self, time, script):
         matches = re.finditer(scriptRegex, script)
@@ -59,5 +59,5 @@ class AmbiguousResultHandler(object):
         logger.debug('Cleaning up update scripts...')
         now = datetime.fromtimestamp(time.time(), timezone.utc)
         for file in self.listOldUpdateScripts(now, directory):
-            logger.debug('Deleting %s', file)
+            logger.debug('Deleting %s', os.path.basename(file))
             self.delete(file)

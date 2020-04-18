@@ -4,8 +4,10 @@ def __log_level__(value):
     return value
 
 VERBOSE = __log_level__(5)
+logFormat = '%(asctime)s %(levelname)s [%(name)s] %(message)s'
 
-logging.basicConfig(format='%(asctime)s %(levelname)s [%(name)s] %(message)s', filename='timerecord.log', level=logging.DEBUG)
+def init(filename):
+    logging.basicConfig(format=logFormat, filename=filename, level=logging.DEBUG)
 
 def getLogger(module):
     logger = logging.getLogger(module)

@@ -43,11 +43,11 @@ class TestAmbiguousResultHandler(unittest.TestCase):
 
         self.thing.delete = MagicMock()
 
-        self.thing.listOldUpdateScripts = MagicMock(return_value = ['file'])
+        self.thing.listOldUpdateScripts = MagicMock(return_value = ['dir/file'])
 
         self.thing.cleanUp(directory)
 
-        self.thing.delete.assert_called_with('file')
+        self.thing.delete.assert_called_with('dir/file')
 
 if __name__ == "__main__":
     unittest.main()
