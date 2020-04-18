@@ -48,8 +48,7 @@ Before starting DiRT Rally [2.0] you need to enable UDP telemetry like so:
   - it will look something like this:
 ```
 TRACK: Sweet Lamb
-CAR: Volkswagen Golf GTI 16V (94.2477798461914 - 785.398193359375)
-dirtrally.user1553422018.309.200.started:1|c
+CAR: Volkswagen Golf GTI 16V
 Volkswagen Golf GTI 16V: H-PATTERN shifting, 5 speed, with manual CLUTCH, with HANDBRAKE
 ```
 - On stage completion, it reports your top speed and time and saves it to the database 
@@ -60,7 +59,7 @@ Volkswagen Golf GTI 16V: H-PATTERN shifting, 5 speed, with manual CLUTCH, with H
 Since DiRT Rally [2.0] telemetry data doesn't allow to clearly identify every available car and track, this tool will sometimes ask you to resolve this after completing a stage.  
 
 In order to consolidate the database, the tool prepares update scripts for you, e.g. `1573403766_ElRodeo_PoloGTIR5.bat`
-- go the folder where you set up *dirt-rally-time-recorder*  
+- open your installation folder  
 - run the update script that matches the car or track you chose (e.g. double-click it)  
 - you will barely notice a window opening and closing, and that's it
 - each time you start *dirt-rally-time-recorder*, it automatically removes update scripts older than a week
