@@ -33,7 +33,7 @@ jobs:
       run: python -m pytest tests
   
   check:
-    runs-on: windows-2019
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
