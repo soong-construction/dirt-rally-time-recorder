@@ -32,6 +32,16 @@ jobs:
     - name: Run tests / pytest
       run: python -m pytest tests
   
+  check:
+    runs-on: windows-2019
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      
+    - name: Check markdown links
+      uses: gaurav-nelson/github-action-markdown-link-check@v1
+ 
   assemble:
     runs-on: windows-latest
     needs: build
