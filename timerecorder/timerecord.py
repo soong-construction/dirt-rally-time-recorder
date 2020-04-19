@@ -1,15 +1,14 @@
 import asyncore
 import os.path
 import sys
-import yaml
 
 # Cf. https://stackoverflow.com/a/45488820
 try:
+    from . import log, config  # @UnusedImport
     from .receiver import Receiver  # @UnusedImport
-    from . import log  # @UnusedImport
 except (ImportError, ModuleNotFoundError):
+    from timerecorder import log, config # @Reimport
     from timerecorder.receiver import Receiver  # @Reimport
-    from timerecorder import log # @Reimport
 
 if __name__ == '__main__':
 
@@ -22,18 +21,9 @@ if __name__ == '__main__':
         approot = os.path.dirname(approot) # Move to root
     
     log.init(approot + '/timerecord.log')
-    logger = log.getLogger('timerecorder.timerecord')
+    config.init(approot + '/config.yml')
 
-    logger.debug('Loading config')
-    try:
-        config = yaml.load(open(approot + '/config.yml', 'r'), yaml.SafeLoader)
-    except (yaml.YAMLError) as exc:
-        logger.exception("Error when loading configuration")
-
-    server = (config['telemetry_server']['host'], config['telemetry_server']['port'])
-    speed_unit = config['speed_unit']
-
-    receiver = Receiver(server, speed_unit, approot)
+    receiver = Receiver(approot)
     receiver.reconnect()
 
     asyncore.loop()

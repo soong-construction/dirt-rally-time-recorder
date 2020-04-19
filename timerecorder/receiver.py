@@ -4,16 +4,17 @@ import struct
 
 from .statsProcessor import StatsProcessor
 from .log import getLogger
+from . import config
 
 logger = getLogger(__name__)
     
 class Receiver(asyncore.dispatcher):
     
-    def __init__(self, address, speed_unit, approot):
+    def __init__(self, approot):
         asyncore.dispatcher.__init__(self)
-        self.address = address
+        self.address = config.get.server
         self.fieldCount = 66
-        self.statsProcessor = StatsProcessor(speed_unit, approot)
+        self.statsProcessor = StatsProcessor(approot)
 
     def reconnect(self):
         self.received_data = False

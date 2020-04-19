@@ -7,6 +7,7 @@ from .progressTracker import ProgressTracker
 from .respawnTracker import RespawnTracker
 from .speedTracker import SpeedTracker
 from .timeTracker import TimeTracker
+from . import config
 
 goLineProgress = 0.0
 completionProgress = 0.999
@@ -15,9 +16,11 @@ logger = getLogger(__name__)
 
 class StatsProcessor():
 
-    def __init__(self, speed_unit, approot):
-        self.speed_unit = speed_unit
-        self.speed_modifier = speed_unit == 'mph' and 0.6214 or 1
+    def __init__(self, approot):
+        self.speed_unit = config.get.speed_unit
+        self.speed_modifier = self.speed_unit == 'mph' and 0.6214 or 1
+        self.approot = approot
+        
         self.track = 0
         self.car = 0
 

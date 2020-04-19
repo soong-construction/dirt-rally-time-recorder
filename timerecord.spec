@@ -7,7 +7,6 @@ a = Analysis(['timerecorder/timerecord.py'],
              pathex=['.'],
              binaries=[],
              datas=[
-             	('config.yml', '.'),
              	('dirtrally-lb.db', '.'),
              	('bin/sqlite3.exe', '.'),
              	('LICENSE', '.'),

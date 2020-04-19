@@ -1,18 +1,21 @@
 import unittest
 from unittest.mock import MagicMock
+
 from timerecorder.statsProcessor import StatsProcessor
+from tests.test_base import TestBase
+from timerecorder import config
 
 fieldCount = 66
 
-class TestStatsProcessor(unittest.TestCase):
+class TestStatsProcessor(TestBase):
 
     def __init__(self, methodName):
-        unittest.TestCase.__init__(self, methodName)
+        TestBase.__init__(self, methodName, 'test-files')
         self.UpdateResourcesFunction = StatsProcessor.updateResources
 
     def setUp(self):
         StatsProcessor.updateResources = MagicMock()
-        self.thing = StatsProcessor('mph', 'test.statsProcessor')
+        self.thing = StatsProcessor('test.statsProcessor')
         
         self.stats = range(0, 256)
         self.allZeroStats = [0.0] * 256
@@ -105,13 +108,15 @@ class TestStatsProcessor(unittest.TestCase):
         self.assertFalse(self.thing.finishStage.called, 'Actually called unexpected receiver method')
         
     def testTopSpeedConversion(self):
-        self.thing = StatsProcessor('kmh', 'testroot')
+        config.set.speed_unit = 'kph'
+        self.thing = StatsProcessor('testroot')
         self.thing.speedTracker.topSpeed = 33.28
 
         format_top_speed = self.thing.formatTopSpeed()
         self.assertEqual(format_top_speed, '119.8')
 
-        self.thing = StatsProcessor('mph', 'testroot')
+        config.set.speed_unit = 'mph'
+        self.thing = StatsProcessor('testroot')
         self.thing.speedTracker.topSpeed = 33.28
 
         format_top_speed = self.thing.formatTopSpeed()

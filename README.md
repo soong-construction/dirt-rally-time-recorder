@@ -33,7 +33,7 @@ You can choose to download *dirt-rally-time-recorder* as a ready-to-use bundle (
   - It should tell you to be *Waiting for data...*, otherwise check the set up or take a look at [Troubleshooting](#troubleshooting)
 
 ### Configuration
-If you prefer imperial units (mph), you can change the `speed_unit` in `config.yml` (default: kmh). Afterwards, restart *dirt-rally-time-recorder*. If you change this later on, you will falsify top speeds of recorded stages (unless you migrate your database).  
+If you prefer imperial units (mph), you can change the `speed_unit` in `config.yml` (default: kph). Afterwards, restart *dirt-rally-time-recorder*. If you change this later on, you will falsify top speeds of recorded stages (unless you migrate your database).  
 
 Before starting DiRT Rally [2.0] you need to enable UDP telemetry like so:
 - Navigate to the settings directory of [DiRT Rally](https://www.pcgamingwiki.com/wiki/DiRT_Rally#Configuration_file.28s.29_location) or [DiRT Rally 2.0](https://www.pcgamingwiki.com/wiki/DiRT_Rally_2.0#Configuration_file.28s.29_location) (e.g. `%USERPROFILE%\Documents\My Games\DiRT Rally 2.0\hardwaresettings\`)

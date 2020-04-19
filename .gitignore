@@ -1,4 +1,5 @@
 *.db
+config.yml
 .pydevproject
 .project
 __pycache__/
