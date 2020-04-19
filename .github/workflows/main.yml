@@ -32,6 +32,18 @@ jobs:
     - name: Run tests / pytest
       run: python -m pytest tests
   
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      
+    - name: Check markdown links
+      uses: gaurav-nelson/github-action-markdown-link-check@v1
+      with:
+        use-verbose-mode: 'yes'
+ 
   assemble:
     runs-on: windows-latest
     needs: build
