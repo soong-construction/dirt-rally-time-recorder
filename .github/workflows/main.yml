@@ -41,6 +41,8 @@ jobs:
       
     - name: Check markdown links
       uses: gaurav-nelson/github-action-markdown-link-check@v1
+      with:
+        use-verbose-mode: 'yes'
  
   assemble:
     runs-on: windows-latest
