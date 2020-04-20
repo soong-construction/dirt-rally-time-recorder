@@ -77,7 +77,7 @@ Unless you downloaded the bundled version, have a look at `resources/migrate.sql
 
 If you encounter errors at start-up, see if renaming the file `dirtrally-laptimes.db` helps (which will create a new database).    
 
-In any case, feel free to [open an issue](https://github.com/soong-construction/dirt-rally-time-recorder/issues/new).  
+In any case, feel free to [open an issue](https://github.com/soong-construction/dirt-rally-time-recorder/issues/new) and attach the `timerecorder.log` from your installation folder. You can also contact the author through [Steam](https://steamcommunity.com/id/soong-construction).
 
 
 ## Resources
