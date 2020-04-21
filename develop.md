@@ -19,10 +19,10 @@ Cf. job `assemble`, step `Install` in `.github/workflows/main.yml`
 ## Tasks
 
 To bundle for DiRT Rally
-* Cf. job `assemble`, steps `Bundle DR1` in `.github/workflows/main.yml`
+* Cf. job `assemble`, step `Bundle DR1` in `.github/workflows/main.yml`
 
 To bundle for DiRT Rally 2.0
-* Cf. job `assemble`, steps `Bundle DR2` in `.github/workflows/main.yml`
+* Cf. job `assemble`, step `Bundle DR2` in `.github/workflows/main.yml`
 
 # Releasing
 
