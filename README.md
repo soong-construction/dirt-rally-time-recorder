@@ -32,6 +32,11 @@ You can choose to download *dirt-rally-time-recorder* as a ready-to-use bundle (
   - in your installation folder, start `timerecord.exe` 
   - It should tell you to be *Waiting for data...*, otherwise check the set up or take a look at [Troubleshooting](#troubleshooting)
 
+### Updating
+To update to a new version, simply download the new release or create a new bundle as instructed above. To be safe, backup your `dirtrally-laptimes.db`. You can overwrite your existing installation folder with the new `timerecorder` folder.  
+
+Make sure to start `timerecord.exe` once to allow to migrate the database and config. 
+
 ### Configuration
 If you prefer imperial units (mph), you can change the `speed_unit` in `config.yml` (default: kph). Afterwards, restart *dirt-rally-time-recorder*. If you change this later on, you will falsify top speeds of recorded stages (unless you migrate your database).  
 
