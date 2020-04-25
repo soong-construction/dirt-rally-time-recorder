@@ -36,16 +36,25 @@ class TestReceiver(TestBase):
 
         self.assertTrue(self.thing.parse.called, 'Never called parse')
 
-    def testCloseGracefullyOnError(self):
+    def testReRaiseErrorOnRead(self):
         self.thing.reconnect()
+        self.thing.handle_close = MagicMock()
 
-        self.thing.recv = MagicMock(return_value=sixtySixFields)
         self.thing.parse = MagicMock(side_effect=IOError)
-        self.thing.informCloseAndWaitForInput = MagicMock()
 
-        asyncore.read(self.thing)
+        with self.assertRaises(OSError):
+            asyncore.read(self.thing)
 
-        self.thing.informCloseAndWaitForInput.assert_called()
+        self.thing.handle_close.assert_called_once()
 
+    def testReRaiseException(self):
+        self.thing.reconnect()
+        self.thing.handle_close = MagicMock()
+
+        with self.assertRaises(OSError):
+            self.thing.handle_expt()
+
+        self.thing.handle_close.assert_called_once()
+        
 if __name__ == "__main__":
     unittest.main()

@@ -27,20 +27,15 @@ class Receiver(asyncore.dispatcher):
         return False
 
     def handle_expt(self):
-        logger.exception('An exception occured while reading from socket')
         self.handle_close()
+        raise IOError('An exception occured while reading from socket')
 
     def handle_error(self):
-        # TODO #17 Log errors to file and ask to contact developer
-        asyncore.dispatcher.handle_error(self)
-
-    def informCloseAndWaitForInput(self):
-        logger.info('The connection was closed.')
-        input('Press ENTER to end program.')
-
+        self.handle_close()
+        raise 
+    
     def handle_close(self):
         self.close()
-        self.informCloseAndWaitForInput()
 
     def readable(self):
         return True
