@@ -179,6 +179,7 @@ class TestStatsProcessor(TestBase):
         self.thing.timeTracker.track.assert_not_called()
         
     def testHandleResultsWithAmbiguousCarsAndNoHeuristics(self):
+        config.set.heuristicsMode = 1
         self.thing.car = [100, 200]
         self.thing.track = 1000
         
@@ -195,6 +196,7 @@ class TestStatsProcessor(TestBase):
         self.assertEqual(result, (1000, -1))
 
     def testHandleResultsWithAmbiguousCarsAndLuckyGuess(self):
+        config.set.heuristicsMode = 1
         self.thing.car = [100, 200]
         self.thing.track = 1000
         
@@ -209,6 +211,21 @@ class TestStatsProcessor(TestBase):
         self.thing.applyHeuristics.assert_called_once_with(self.thing.car)
         self.thing.databaseAccess.handleCarUpdates.assert_called_once_with([100], timestamp, 1000)
         self.assertEqual(result, (1000, 200))
+        
+    def testHeuristicsAreOnlyAppliedIfConfigured(self):
+        config.set.heuristicsMode = 0
+        self.thing.car = [100, 200]
+        self.thing.track = 1000
+        
+        self.thing.applyHeuristics = MagicMock(return_value = None)
+        self.thing.databaseAccess = MagicMock()
+        self.thing.databaseAccess.recordResults = MagicMock()
+        
+        timestamp = time.time()
+        result = self.thing.handleAmbiguities(timestamp)
+        
+        self.thing.applyHeuristics.assert_not_called()
+        self.assertEqual(result, (1000, -1))
 
     def testSeedIsRandomized(self):
         instance = lambda _: StatsProcessor('test.statsProcessor')

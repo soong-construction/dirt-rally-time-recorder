@@ -126,10 +126,9 @@ class StatsProcessor():
         return heuristics.guessCar()
 
     def handleAmbiguousCars(self, timestamp, car, track):
-        if isinstance(car, int):
+        if isinstance(car, int) or config.get.heuristicsMode == 0:
             return car
         
-        # TODO #25 Needs to be opt-in per config.yaml
         logger.info("Guessing car...")
         guessed_car = self.applyHeuristics(car)
         if guessed_car is None:
