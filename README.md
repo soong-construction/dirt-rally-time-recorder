@@ -70,17 +70,17 @@ In order to consolidate the database, the tool prepares update scripts for you, 
 - each time you start *dirt-rally-time-recorder*, it automatically removes update scripts older than a week
 
 ## Troubleshooting
-When you open the CSV file with your spreadsheet editor, make sure to select UTF-8 encoding to avoid corrupt characters. In MS Excel, use the [query tool.](https://support.office.com/en-us/article/import-data-from-external-data-sources-power-query-be4330b3-5356-486c-a168-b68e9e616f5a)   
+Starting:
+- if you encounter an error message about sockets, understand that this tool cannot run in parallel, but only in a single instance at the same time
+- unless you downloaded the bundled version, have a look at `resources/migrate.sql` to find instructions how to update to new releases
+- if you encounter errors at start-up, see if renaming the file `dirtrally-laptimes.db` helps (which will create a new database) 
 
-If you encounter an error message talking about sockets, understand that this tool cannot run in parallel, but only in a single instance at the same time.  
+Configuring the tool: 
+- Steam updates of the game sometimes reset *hardware_settings_config.xml*. Then, repeat the [configuration steps](#configuration) to enable UDP telemetry again
+- in case you modified the telemetry host or port in *hardware_settings_config.xml*, adapt `config.yml` accordingly
 
-Steam updates of the game sometimes reset *hardware_settings_config.xml*. Then, repeat the steps to enable UDP telemetry again.  
-
-In case you modified the telemetry ip or port in *hardware_settings_config.xml*, adapt `config.yml` accordingly.
-
-Unless you downloaded the bundled version, have a look at `resources/migrate.sql` to find instructions how to update to new releases.  
-
-If you encounter errors at start-up, see if renaming the file `dirtrally-laptimes.db` helps (which will create a new database).    
+Exporting:
+- when you export your stage times, be sure to avoid corrupt characters and import the CSV file in a spreadsheet editor with UTF-8 encoding. In MS Excel, use the [query tool.](https://support.office.com/en-us/article/import-data-from-external-data-sources-power-query-be4330b3-5356-486c-a168-b68e9e616f5a)   
 
 In any case, feel free to [open an issue](https://github.com/soong-construction/dirt-rally-time-recorder/issues/new) and attach the `timerecorder.log` from your installation folder. You can also contact the author through [Steam](https://steamcommunity.com/id/soong-construction).
 
