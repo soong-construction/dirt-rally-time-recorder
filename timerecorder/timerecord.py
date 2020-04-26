@@ -3,7 +3,6 @@ import os.path
 import sys
 
 # Cf. https://stackoverflow.com/a/45488820
-
 try:
     from . import log, config  # @UnusedImport
     from .receiver import Receiver  # @UnusedImport
@@ -12,12 +11,14 @@ except (ImportError, ModuleNotFoundError):
     from timerecorder.receiver import Receiver  # @Reimport
 
 logfile = 'timerecord.log'
-homepage = 'https://github.com/soong-construction/dirt-rally-time-recorder'
+gitHubOrg = 'https://github.com/soong-construction/'
+name = 'dirt-rally-time-recorder'
 
 def informUser():
     input('Press ENTER to end program.')
 
 def main(logfile):
+    logger = log.getLogger('timerecorder.timerecord')
     try:
         isBundled = getattr(sys, 'frozen', None)
         if isBundled:
@@ -27,6 +28,8 @@ def main(logfile):
             approot = os.path.dirname(approot) # Move to root
         
         log.init(approot + '/' + logfile)
+        logger.info('Starting %s %s', name, config.readVersion(approot))
+        
         config.init(approot + '/config.yml')
         
         receiver = Receiver(approot)
@@ -35,8 +38,7 @@ def main(logfile):
         asyncore.loop()
         
     except:
-        logger = log.getLogger('timerecorder.timerecord')
-        logger.exception('Unfortunately, timerecord crashed. Look for help at %s', homepage)
+        logger.exception('Unfortunately, timerecord crashed. Look for help at %s%s', gitHubOrg, name)
         informUser()
 
 if __name__ == '__main__':

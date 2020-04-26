@@ -11,7 +11,7 @@ class DatabaseMigration:
         self.lapDb.execute('PRAGMA user_version = '+ str(newVersion))
         
     def expandVersion(self, versionString):
-        segments = versionString.strip().split('.')
+        segments = versionString.split('.')
         if (len(segments) != 3):
             raise RuntimeError('VERSION must match pattern X.Y.Z')
         segments = list(map(lambda s: int(s), segments))

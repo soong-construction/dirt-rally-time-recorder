@@ -12,11 +12,16 @@ port = 'port'
 speed_unit = 'speed_unit'
 heuristicsMode = 'heuristics_mode'
 
+def readVersion(approot):
+    with open(approot + '/VERSION', encoding='utf-8', newline='\n') as file:
+        return file.readline().strip()
+    
 # TODO #25 Update docs
 def init(filename):
     global get
-    get = Config(filename)
-    get.load()
+    config = Config(filename)
+    config.load()
+    get = config
 
 # After https://codereview.stackexchange.com/a/186672 by Graipher
 class Config(dict):

@@ -3,6 +3,7 @@ import getpass
 import time
 from .databaseMigration import DatabaseMigration
 from .log import getLogger
+from . import config
 
 UPDATE_STATEMENT = 'UPDATE laptimes SET %s=%s WHERE Timestamp="%s";'
 
@@ -37,9 +38,8 @@ class Database:
         return userArray
 
     def setDbVersion(self, lapdb):
-        versionFile = open(self.approot + '/VERSION', 'r')
-        versionString = versionFile.readline()
         migration = DatabaseMigration(lapdb)
+        versionString = config.readVersion(self.approot)
         version = migration.expandVersion(versionString)
         migration.setUserVersion(version)
 
