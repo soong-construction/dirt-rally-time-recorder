@@ -44,7 +44,7 @@ class Database:
         migration.setUserVersion(version)
 
     def setupLaptimesDb(self, lapdb):
-        logger.info("First run, setting up recording tables")
+        logger.debug("First run, setting up recording tables")
         lapdb.execute('CREATE TABLE laptimes (Track INTEGER, Car INTEGER, Timestamp INTEGER, Time REAL, Topspeed REAL);')
         lapdb.execute('CREATE TABLE user (user TEXT);')
         userId = self.createUserId()
