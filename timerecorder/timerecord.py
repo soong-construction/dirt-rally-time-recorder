@@ -36,7 +36,7 @@ def main(logfile):
         
     except:
         logger = log.getLogger('timerecorder.timerecord')
-        logger.exception('Unfortunately, timerecord crashed. Look at %s for help', homepage)
+        logger.exception('Unfortunately, timerecord crashed. Look for help at %s', homepage)
         informUser()
 
 if __name__ == '__main__':
