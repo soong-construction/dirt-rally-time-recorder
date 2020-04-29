@@ -19,10 +19,10 @@ You can choose to download *dirt-rally-time-recorder* as a ready-to-use bundle (
   - It should tell you to be *Waiting for data...*, otherwise take a look at [Troubleshooting](#troubleshooting)  
 
 ### ... or set up from scratch  
-*These steps refer to Windows, Linux users will know how to use their package manager appropriately.*
+*These steps refer to Windows. Linux users should take a look at this [issue.](https://github.com/soong-construction/dirt-rally-time-recorder/issues/33#issue-606797917)*
 
-- Clone this repo or download and unpack its zip file to your disk
-  - this creates your *work folder*, e.g. `C:\dirtrally-time-recorder-master`
+- From the [latest release](https://github.com/soong-construction/dirt-rally-time-recorder/releases/latest), download and unpack the sources zip file to your disk. Instead, you can also clone the repository.
+  - this creates your *work folder*, e.g. `C:\dirtrally-time-recorder-dr2`
 - Install Python 3.7: https://wiki.python.org/moin/BeginnersGuide/Download
   - If Python was installed already, ensure [pip is set up properly](https://packaging.python.org/tutorials/installing-packages/#ensure-you-can-run-pip-from-the-command-line) 
 - Follow the bundling instructions in [develop.md](https://github.com/soong-construction/dirt-rally-time-recorder/blob/master/develop.md#bundling) 
