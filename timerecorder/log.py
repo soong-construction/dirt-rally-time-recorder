@@ -1,9 +1,10 @@
 import logging
 
-def __log_level__(value):
+def __log_level__(value, levelName):
+    logging.addLevelName(value, levelName)
     return value
 
-VERBOSE = __log_level__(5)
+VERBOSE = __log_level__(5, 'VERBOSE')
 logFormat = '%(asctime)s %(levelname)s [%(name)s] %(message)s'
 
 def init(filename):
