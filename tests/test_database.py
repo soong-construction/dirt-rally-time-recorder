@@ -33,6 +33,16 @@ class TestDatabase(unittest.TestCase):
 
         self.assertEqual(statements, [])
 
+    def testGetCarInsertStatement(self):
+        statement = self.thing.getCarInsertStatement(700, 200)
+
+        self.assertEqual(statement, 'INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (ID, \'CAR_NAME\', 700, 200);')
+
+    def testGetTrackInsertStatement(self):
+        statement = self.thing.getTrackInsertStatement(10000, -1220)
+
+        self.assertEqual(statement, 'INSERT INTO Tracks (id, name, length, startz) VALUES (ID, \'TRACK_NAME\', 10000, -1220);')
+
     def testGetUserId(self):
         userId = self.thing.createUserId();
         self.assertIsNotNone(userId, "userId must exist")

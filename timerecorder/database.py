@@ -120,6 +120,12 @@ class Database:
         
         return result
 
+    def getCarInsertStatement(self, max_rpm, idle_rpm):
+        return 'INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (ID, \'CAR_NAME\', %s, %s);' % (max_rpm, idle_rpm)
+    
+    def getTrackInsertStatement(self, tracklength, z):
+        return 'INSERT INTO Tracks (id, name, length, startz) VALUES (ID, \'TRACK_NAME\', %s, %s);' % (tracklength, z)
+    
     def getCarName(self, car):
         self.db.execute('SELECT name FROM cars WHERE id = ?', (car,))
         return self.db.fetchone()[0]
