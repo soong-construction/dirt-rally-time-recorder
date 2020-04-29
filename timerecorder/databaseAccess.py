@@ -1,5 +1,6 @@
 import time
 from .log import getLogger
+from timerecorder.log import VERBOSE
 
 logger = getLogger(__name__)
 
@@ -15,6 +16,11 @@ class DatabaseAccess:
         if (len(tracks) == 0):
             logger.warning("Failed to identify track")
             logger.debug("Length: %s", str(tracklength))
+            # TODO #35 Get statement from database
+            logger.debug("Enable verbose mode to get INSERT statements for new cars/tracks")
+            insert = 'INSERT INTO Tracks (id, name, length, startz) VALUES (ID, \'TRACK_NAME\', %s, %s);'
+            logger.log(VERBOSE, insert, tracklength, z)
+            
             return []
         
         elif (len(tracks) == 1):
@@ -50,6 +56,11 @@ class DatabaseAccess:
         if (len(cars) == 0):
             logger.warning("Failed to identify car")
             logger.debug("Idle/Max RPM: %s - %s", str(idle_rpm), str(max_rpm))
+            # TODO #35 Get statement from database
+            logger.debug("Enable verbose mode to get INSERT statements for new cars/tracks")
+            insert = 'INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (ID, \'CAR_NAME\', %s, %s);'
+            logger.log(VERBOSE, insert, max_rpm, idle_rpm)
+            
             return []
         
         elif (len(cars) == 1):
