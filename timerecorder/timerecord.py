@@ -38,7 +38,8 @@ def main(logfile):
         asyncore.loop()
         
     except:
-        logger.exception('Unfortunately, timerecord crashed. Look for help at %s%s', gitHubOrg, name)
+        logger.exception('***timerecord crashed***')
+        logger.error('This should not happen. Look for help at %s%s', gitHubOrg, name)
         informUser()
 
 if __name__ == '__main__':
