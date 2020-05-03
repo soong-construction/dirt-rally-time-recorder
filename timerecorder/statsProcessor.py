@@ -118,15 +118,18 @@ class StatsProcessor():
         self.showCarControlInformation()
 
     def applyHeuristics(self, car_candidates):
-        car_shift_map = self.databaseAccess.mapCarsToShifting(car_candidates)
-
-        heuristics = GearShiftHeuristics(list(car_shift_map), self.gearTracker)
-        heuristics.withFallback(LuckyGuessHeuristics(car_candidates, random.seed(self.seed)))
+        heuristics = LuckyGuessHeuristics(car_candidates, random.seed(self.seed))
+        
+        if config.get.authentic_shifting:
+            car_shift_map = self.databaseAccess.mapCarsToShifting(car_candidates)
+            gearShiftHeuristics = GearShiftHeuristics(list(car_shift_map), self.gearTracker)
+            gearShiftHeuristics.withFallback(heuristics)
+            heuristics = gearShiftHeuristics
         
         return heuristics.guessCar()
 
     def handleAmbiguousCars(self, timestamp, car, track):
-        if isinstance(car, int) or config.get.heuristicsMode == 0:
+        if isinstance(car, int) or not config.get.heuristics_activated:
             return car
         
         logger.info("Guessing car...")

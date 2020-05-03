@@ -5,7 +5,6 @@ from unittest.mock import MagicMock
 from timerecorder.statsProcessor import StatsProcessor
 from tests.test_base import TestBase
 from timerecorder import config
-from timerecorder.database import Database
 from builtins import range
 
 fieldCount = 66
@@ -111,14 +110,14 @@ class TestStatsProcessor(TestBase):
         self.assertFalse(self.thing.finishStage.called, 'Actually called unexpected receiver method')
         
     def testTopSpeedConversion(self):
-        config.set.speed_unit = 'kph'
+        config.get.speed_unit = 'kph'
         self.thing = StatsProcessor('testroot')
         self.thing.speedTracker.topSpeed = 33.28
 
         format_top_speed = self.thing.formatTopSpeed()
         self.assertEqual(format_top_speed, '119.8')
 
-        config.set.speed_unit = 'mph'
+        config.get.speed_unit = 'mph'
         self.thing = StatsProcessor('testroot')
         self.thing.speedTracker.topSpeed = 33.28
 
@@ -179,7 +178,7 @@ class TestStatsProcessor(TestBase):
         self.thing.timeTracker.track.assert_not_called()
         
     def testHandleResultsWithAmbiguousCarsAndNoHeuristics(self):
-        config.set.heuristicsMode = 1
+        config.get.heuristics_activated = 1
         self.thing.car = [100, 200]
         self.thing.track = 1000
         
@@ -196,7 +195,7 @@ class TestStatsProcessor(TestBase):
         self.assertEqual(result, (1000, -1))
 
     def testHandleResultsWithAmbiguousCarsAndLuckyGuess(self):
-        config.set.heuristicsMode = 1
+        config.get.heuristics_activated = 1
         self.thing.car = [100, 200]
         self.thing.track = 1000
         
@@ -213,7 +212,7 @@ class TestStatsProcessor(TestBase):
         self.assertEqual(result, (1000, 200))
         
     def testHeuristicsAreOnlyAppliedIfConfigured(self):
-        config.set.heuristicsMode = 0
+        config.get.heuristics_activated = 0
         self.thing.car = [100, 200]
         self.thing.track = 1000
         

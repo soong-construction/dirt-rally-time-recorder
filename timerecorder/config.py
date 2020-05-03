@@ -10,7 +10,10 @@ telemetry_server = 'telemetry_server'
 host = 'host'
 port = 'port'
 speed_unit = 'speed_unit'
-heuristicsMode = 'heuristics_mode'
+
+heuristics_settings = 'heuristics'
+heuristics_activate = 'activate'
+authentic_shifting = 'authentic_shifting'
 
 def readVersion(approot):
     with open(approot + '/VERSION', encoding='utf-8', newline='\n') as file:
@@ -56,6 +59,12 @@ class Config(dict):
         super(Config, self).update(kwargs)
         self.dump()
     
+    def setDefaultHeuristics(self):
+        default_heuristics = {heuristics_activate: 0, authentic_shifting: 0}
+        self.setdefault(heuristics_settings, default_heuristics)
+        self[heuristics_settings].setdefault(heuristics_activate, default_heuristics[heuristics_activate])
+        self[heuristics_settings].setdefault(authentic_shifting, default_heuristics[authentic_shifting])
+
     def migrate(self):
         default_server = {host:'127.0.0.1', port:20777}
         self.setdefault(telemetry_server, default_server)
@@ -63,7 +72,7 @@ class Config(dict):
         self[telemetry_server].setdefault(port, default_server[port])
         
         self.setdefault(speed_unit, 'kph')
-        self.setdefault(heuristicsMode, 0)
+        self.setDefaultHeuristics()
         self.dump()
         
     def load(self):
@@ -74,7 +83,11 @@ class Config(dict):
             telemetry = self[telemetry_server]
             self.server = (telemetry[host], int(telemetry[port]))
             self.speed_unit = self[speed_unit]
-            self.heuristicsMode = int(self[heuristicsMode])
+            heuristics = self[heuristics_settings]
+            
+            self.heuristics_activated = int(heuristics[heuristics_activate])
+            self.authentic_shifting = int(heuristics[authentic_shifting])
+            
         except Exception as e:
             logger.debug('Failed to load config file %s: %s', file, e)
             raise IOError(file + ' seems to be corrupt, please check or delete file.') from None

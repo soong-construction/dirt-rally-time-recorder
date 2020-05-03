@@ -15,6 +15,4 @@ class TestBase(unittest.TestCase):
         log.init(testLog)
         
         config.init(testroot + '/config.yml')
-        # Syntax sugar for tests
-        config.set = config.get
         
