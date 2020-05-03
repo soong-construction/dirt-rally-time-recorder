@@ -15,7 +15,7 @@ from .progressTracker import ProgressTracker
 from .respawnTracker import RespawnTracker
 from .speedTracker import SpeedTracker
 from .timeTracker import TimeTracker
-
+from .inputTracker import InputTracker
 
 goLineProgress = 0.0
 completionProgress = 0.999
@@ -91,6 +91,8 @@ class StatsProcessor():
             self.progressTracker.track(stats)
             self.gearTracker.track(stats)
             self.speedTracker.track(stats)
+            
+            self.inputTracker.track(stats)
 
         lap = self.progressTracker.getLap()
         stageProgress = self.progressTracker.getProgress()
@@ -111,6 +113,8 @@ class StatsProcessor():
         self.gearTracker = GearTracker(self.respawnTracker)
         self.progressTracker = ProgressTracker()
         self.speedTracker = SpeedTracker()
+        
+        self.inputTracker = InputTracker(self.speedTracker)
 
     def startStage(self, stats):
         dbAccess = self.databaseAccess
