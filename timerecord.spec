@@ -5,15 +5,17 @@ block_cipher = None
 
 a = Analysis(['timerecorder/timerecord.py'],
              pathex=['.'],
-             binaries=[],
+             binaries=[
+                ('bin/*', '.')
+             ],
              datas=[
              	('dirtrally-lb.db', '.'),
-             	('bin/sqlite3.exe', '.'),
              	('LICENSE', '.'),
              	('VERSION', '.'),
              	('resources/list-*', '.'),
              	('resources/export-*', '.'),
-             	('README.md', '.')
+             	('README.md', '.'),
+             	('docs/*', 'docs')
              ],
              hiddenimports=[],
              hookspath=[],
