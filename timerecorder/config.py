@@ -12,7 +12,7 @@ port = 'port'
 speed_unit = 'speed_unit'
 show_car_controls = 'show_car_controls'
 keep_update_scripts_days = 'keep_update_scripts_days'
-keep_update_scripts_days_default = 7    
+keep_update_scripts_days_default = 7
 
 heuristics_settings = 'heuristics'
 heuristics_activate = 'activate'

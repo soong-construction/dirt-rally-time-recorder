@@ -3,8 +3,12 @@ import unittest
 from unittest.mock import MagicMock
 from timerecorder.ambiguousResultHandler import AmbiguousResultHandler
 from timerecorder import config
+from tests.test_base import TestBase
 
-class TestAmbiguousResultHandler(unittest.TestCase):
+class TestAmbiguousResultHandler(TestBase):
+
+    def __init__(self, methodName):
+        TestBase.__init__(self, methodName, 'test-files')
 
     def setUp(self):
         self.now = datetime(2019, 10, 20, tzinfo=timezone.utc)
