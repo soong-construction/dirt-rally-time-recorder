@@ -85,7 +85,7 @@ class Config(dict):
             telemetry = self[telemetry_server]
             self.server = (telemetry[host], int(telemetry[port]))
             self.speed_unit = self[speed_unit]
-            self.show_car_controls = self[show_car_controls]
+            self.show_car_controls = int(self[show_car_controls])
             heuristics = self[heuristics_settings]
             
             self.heuristics_activated = int(heuristics[heuristics_activate])
