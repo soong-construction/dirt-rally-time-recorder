@@ -132,6 +132,9 @@ class TestStatsProcessor(TestBase):
         laptime = self.thing.prettyLapTime(180.240)
         self.assertEqual(str(laptime), '03:00.240')
 
+        laptime = self.thing.prettyLapTime(3612.240)
+        self.assertEqual(str(laptime), '1:00:12.240')
+
     def testHandleFinishStageAndLogResults(self):
         stats = [1] * fieldCount
 

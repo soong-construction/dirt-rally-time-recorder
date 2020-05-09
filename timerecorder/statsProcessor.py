@@ -57,9 +57,9 @@ class StatsProcessor():
     
     def prettyLapTime(self, laptime_seconds):
         fullDuration = str(timedelta(seconds=laptime_seconds))
-        minuteDuration = fullDuration.split(':', 1)[1]
+        hours, minuteDuration = fullDuration.split(':', 1)
         thousandthsDuration = minuteDuration[:-3]
-        return thousandthsDuration
+        return thousandthsDuration if hours == '0' else hours + ':' + thousandthsDuration
 
     def logResults(self, laptime, track, car):
         logger.debug("%s.%s.%s.time:%s|s", self.userArray[0], track, car, self.formatLapTime(laptime))
