@@ -28,9 +28,9 @@ To bundle for DiRT Rally 2.0
 
 ## Requirements
 Not all steps are necessary for each release
-- check if a new SQLite version should be included
-- check if a new stable Python version is available
-- check if PyInstaller can be updated
+- check if a new SQLite version should be included: https://www.sqlite.org/index.html
+- check if a new stable Python version is available: https://www.python.org/downloads/
+- check if PyInstaller can be updated https://pyinstaller.readthedocs.io/en/stable/CHANGES.html
 - update `migrate.sql`
 
 Finally
