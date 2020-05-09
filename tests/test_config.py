@@ -63,7 +63,7 @@ class TestConfig(TestBase):
         configPath = testroot + '/existingconfig.yml'
         self.writeFile(configPath, 'br0ken')
 
-        with self.assertRaisesRegex(IOError, '\S+ seems to be corrupt, please check or delete file\.'):
+        with self.assertRaisesRegex(IOError, r'\S+ seems to be corrupt, please check or delete file\.'):
             config = Config(configPath)
             config.load()
 
@@ -73,7 +73,7 @@ class TestConfig(TestBase):
                        ('heuristics:\n'
                         '  activate: bla\n'))
 
-        with self.assertRaisesRegex(IOError, '\S+ seems to be corrupt, please check or delete file\.'):
+        with self.assertRaisesRegex(IOError, r'\S+ seems to be corrupt, please check or delete file\.'):
             config = Config(configPath)
             config.load()
 
@@ -94,7 +94,7 @@ class TestConfig(TestBase):
         self.writeFile(testroot + '/VERSION', '1.2.34')
 
         version = readVersion(testroot)
-        self.assertEquals(version, '1.2.34')
+        self.assertEqual(version, '1.2.34')
 
     def writeFile(self, configPath, content):
         if os.path.exists(configPath):
