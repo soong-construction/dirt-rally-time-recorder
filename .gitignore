@@ -6,3 +6,6 @@ __pycache__/
 .settings/
 *.log
 *.csv
+build/
+dist/
+test-files/
