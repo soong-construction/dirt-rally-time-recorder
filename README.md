@@ -25,7 +25,7 @@ You can choose to download *dirt-rally-time-recorder* as a ready-to-use bundle (
   - this creates your *work folder*, e.g. `C:\dirtrally-time-recorder-dr2`
 - Install Python 3.7: https://wiki.python.org/moin/BeginnersGuide/Download
   - If Python was installed already, ensure [pip is set up properly](https://packaging.python.org/tutorials/installing-packages/#ensure-you-can-run-pip-from-the-command-line) 
-- Follow the bundling instructions in [develop.md](https://github.com/soong-construction/dirt-rally-time-recorder/blob/master/develop.md#bundling) 
+- Follow the bundling instructions in [develop.md](docs/develop.md#bundling) 
   - this creates your bundle in `dist`. You can move the *installation folder* `timerecorder` anywhere you like
   - you can delete the work folder afterwards
 - Start time tracking  
