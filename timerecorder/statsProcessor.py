@@ -20,6 +20,7 @@ instruction = "Please run one of the scripts below to link the recorded laptime 
 
 logger = getLogger(__name__)
 
+
 # TODO #25 Move ambiguity stuff to AmbiguousResultHandler
 class StatsProcessor():
 
@@ -109,12 +110,13 @@ class StatsProcessor():
         track_length = self.progressTracker.getTrackLength()
         self.track = dbAccess.identifyTrack(track_z, track_length)
 
-        car_data = stats[63:66] # max_rpm, idle_rpm, top_gear
+        car_data = stats[63:66]  # max_rpm, idle_rpm, top_gear
         self.car = dbAccess.identifyCar(*tuple(car_data))
 
         logger.debug("%s.%s.%s.started", self.userArray[0], identify(self.track), identify(self.car))
 
-        self.showCarControlInformation()
+        if config.get.show_car_controls:
+            self.showCarControlInformation()
 
     def applyHeuristics(self, car_candidates):
         heuristics = LuckyGuessHeuristics(car_candidates, random.seed(self.seed))

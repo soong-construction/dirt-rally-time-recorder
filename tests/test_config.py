@@ -26,8 +26,8 @@ class TestConfig(TestBase):
         config = Config(configPath)
         config.load()
 
-        self.assertEqual(3, len(config.keys()))
-        self.assertEqual(3, len(config.values()))
+        self.assertEqual(4, len(config.keys()))
+        self.assertEqual(4, len(config.values()))
         self.assertEqual(config['speed_unit'], 'kph')
 
     def testExistingValuesAreKeptOrExtended(self):
@@ -40,8 +40,8 @@ class TestConfig(TestBase):
         config = Config(configPath)
         config.load()
 
-        self.assertEqual(3, len(config.keys()))
-        self.assertEqual(3, len(config.values()))
+        self.assertEqual(4, len(config.keys()))
+        self.assertEqual(4, len(config.values()))
         self.assertEqual(config['speed_unit'], 'kph')
         self.assertEqual(config['telemetry_server']['port'], 12345)
         self.assertEqual(config['telemetry_server']['host'], '127.0.0.1')
@@ -54,8 +54,8 @@ class TestConfig(TestBase):
         config = Config(configPath)
         config.load()
 
-        self.assertEqual(4, len(config.keys()))
-        self.assertEqual(4, len(config.values()))
+        self.assertEqual(5, len(config.keys()))
+        self.assertEqual(5, len(config.values()))
         self.assertEqual(config['speed_unit'], 'kph')
 
     def testCorruptConfigIsReported(self):

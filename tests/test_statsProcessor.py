@@ -18,7 +18,7 @@ class TestStatsProcessor(TestBase):
     def setUp(self):
         StatsProcessor.updateResources = MagicMock()
         self.thing = StatsProcessor('test.statsProcessor')
-        
+
         self.stats = range(0, 256)
         self.allZeroStats = [0.0] * 256
 
@@ -35,7 +35,7 @@ class TestStatsProcessor(TestBase):
         self.thing.timeTracker.getTimeDelta = MagicMock(return_value=-1)
         self.thing.respawnTracker.isRestart = MagicMock(return_value=False)
         self.assertTrue(self.thing.stageAborted())
-    
+
         self.thing.timeTracker.getTimeDelta = MagicMock(return_value=1)
         self.thing.respawnTracker.isRestart = MagicMock(return_value=True)
         self.assertTrue(self.thing.stageAborted())
@@ -47,7 +47,7 @@ class TestStatsProcessor(TestBase):
     def testStartStage(self):
         self.mockVisitorMethods()
         self.thing.handleGameState(False, False, 0, -0.2, self.stats)
-    
+
         self.assertFalse(self.thing.resetRecognition.called, 'Actually called unexpected receiver method')
         self.assertTrue(self.thing.startStage.called, 'Never called expected receiver method')
         self.assertFalse(self.thing.finishStage.called, 'Actually called unexpected receiver method')
@@ -56,19 +56,19 @@ class TestStatsProcessor(TestBase):
     def testMoveCarBehindStartLineDoesNotBreakRecognition(self):
         self.mockVisitorMethods()
         self.thing.handleGameState(False, True, 0, -0.2, self.stats)
-    
+
         self.assertFalse(self.thing.resetRecognition.called, 'Actually called unexpected receiver method')
         self.assertFalse(self.thing.startStage.called, 'Actually called unexpected receiver method')
         self.assertFalse(self.thing.finishStage.called, 'Actually called unexpected receiver method')
-        
+
     def testStatsAfterAStageLeadToResetButNotStartStage(self):
         self.mockVisitorMethods()
         self.thing.handleGameState(True, True, 0, 0.9, self.allZeroStats)
-    
+
         self.assertTrue(self.thing.resetRecognition.called, 'Never called expected receiver method')
         self.assertFalse(self.thing.startStage.called, 'Actually called unexpected receiver method')
         self.assertFalse(self.thing.finishStage.called, 'Actually called unexpected receiver method')
-        
+
     def testResetRecognitionWhenStageIsAborted(self):
         self.mockVisitorMethods()
         self.thing.handleGameState(True, False, 0, 0.2, self.stats)
@@ -76,7 +76,7 @@ class TestStatsProcessor(TestBase):
         self.assertTrue(self.thing.resetRecognition.called, 'Never called expected receiver method')
         self.assertFalse(self.thing.startStage.called, 'Actually called unexpected receiver method')
         self.assertFalse(self.thing.finishStage.called, 'Actually called unexpected receiver method')
-        
+
     def testFinishStage(self):
         self.mockVisitorMethods()
         self.thing.handleGameState(False, True, 1, 0.9, self.stats)
@@ -108,7 +108,7 @@ class TestStatsProcessor(TestBase):
         self.assertFalse(self.thing.resetRecognition.called, 'Actually called unexpected receiver method')
         self.assertFalse(self.thing.startStage.called, 'Actually called unexpected receiver method')
         self.assertFalse(self.thing.finishStage.called, 'Actually called unexpected receiver method')
-        
+
     def testTopSpeedConversion(self):
         config.get.speed_unit = 'kph'
         self.thing = StatsProcessor('testroot')
@@ -123,11 +123,11 @@ class TestStatsProcessor(TestBase):
 
         format_top_speed = self.thing.formatTopSpeed()
         self.assertEqual(format_top_speed, '74.4')
-        
+
     def testLapTimeConversion(self):
         format_lap_time = self.thing.formatLapTime(180.249)
         self.assertEqual(format_lap_time, '180.25')
- 
+
     def testHandleFinishStageAndLogResults(self):
         stats = [1] * fieldCount
 
@@ -176,20 +176,20 @@ class TestStatsProcessor(TestBase):
         self.thing.handleStats(stats)
 
         self.thing.timeTracker.track.assert_not_called()
-        
+
     def testHandleResultsWithAmbiguousCarsAndNoHeuristics(self):
         config.get.heuristics_activated = 1
         self.thing.car = [100, 200]
         self.thing.track = 1000
-        
+
         self.thing.applyHeuristics = MagicMock(return_value = None)
         self.thing.databaseAccess = MagicMock()
         self.thing.databaseAccess.recordResults = MagicMock()
         self.thing.databaseAccess.handleCarUpdates = MagicMock()
-        
+
         timestamp = time.time()
         result = self.thing.handleAmbiguities(timestamp)
-        
+
         self.thing.applyHeuristics.assert_called_once_with(self.thing.car)
         self.thing.databaseAccess.handleCarUpdates.assert_called_once_with([100, 200], timestamp, 1000)
         self.assertEqual(result, (1000, -1))
@@ -198,43 +198,60 @@ class TestStatsProcessor(TestBase):
         config.get.heuristics_activated = 1
         self.thing.car = [100, 200]
         self.thing.track = 1000
-        
+
         self.thing.applyHeuristics = MagicMock(return_value = 200)
         self.thing.databaseAccess = MagicMock()
         self.thing.databaseAccess.recordResults = MagicMock()
         self.thing.databaseAccess.handleCarUpdates = MagicMock()
-        
+
         timestamp = time.time()
         result = self.thing.handleAmbiguities(timestamp)
-        
+
         self.thing.applyHeuristics.assert_called_once_with(self.thing.car)
         self.thing.databaseAccess.handleCarUpdates.assert_called_once_with([100], timestamp, 1000)
         self.assertEqual(result, (1000, 200))
-        
+
     def testHeuristicsAreOnlyAppliedIfConfigured(self):
         config.get.heuristics_activated = 0
         self.thing.car = [100, 200]
         self.thing.track = 1000
-        
+
         self.thing.applyHeuristics = MagicMock(return_value = None)
         self.thing.databaseAccess = MagicMock()
         self.thing.databaseAccess.recordResults = MagicMock()
-        
+
         timestamp = time.time()
         result = self.thing.handleAmbiguities(timestamp)
-        
+
         self.thing.applyHeuristics.assert_not_called()
         self.assertEqual(result, (1000, -1))
 
     def testSeedIsRandomized(self):
         instance = lambda _: StatsProcessor('test.statsProcessor')
         seed = lambda statsProcessor: statsProcessor.seed
-        
+
         manyStatsProcessor = map(instance, range(0, 100))
         seeds = list(map(seed, manyStatsProcessor))
         any_seed = seeds[0]
-        
+
         self.assertNotEqual(seeds.count(any_seed), len(seeds), 'Seeds should be random')
-        
+
+    def testCarControlsAreShownIfConfigured(self):
+        self.thing.inStage = MagicMock(return_value=False)
+        self.thing.databaseAccess = MagicMock()
+        self.thing.databaseAccess.identifyCar = MagicMock(return_value=10)
+        self.thing.databaseAccess.identifyTrack = MagicMock(return_value=11)
+
+        self.thing.showCarControlInformation = MagicMock()
+        stats = [1] * fieldCount
+
+        config.get.show_car_controls = 0
+        self.thing.startStage(stats)
+        self.thing.showCarControlInformation.assert_not_called()
+
+        config.get.show_car_controls = 1
+        self.thing.startStage(stats)
+        self.thing.showCarControlInformation.assert_called_once()
+
 if __name__ == "__main__":
     unittest.main()
