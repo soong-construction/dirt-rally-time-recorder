@@ -17,7 +17,7 @@ heuristics:
   authentic_shifting: 0
 ```
 
-Heuristics will try to resolve car ambiguities and decide for one of the possible cars. This can reduce the number of times you need to run update scripts after a session and keep your installation folder more tidy.
+Heuristics will try to resolve car ambiguities and decide for one of the possible cars. This can reduce the number of times you need to run update scripts after a session and keep your installation folder more tidy. Note that heuristics are only applied when you complete a stage, not before.
 
 Since heuristics are only correct to a certain degree (but better than tossing a coin), the update scripts are even more important. Always make sure to run the provided script in case the heuristics is wrong, otherwise the recorded data is false.  
 
