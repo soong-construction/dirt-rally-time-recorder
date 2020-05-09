@@ -10,6 +10,22 @@ before you change any settings. The following holds for any of the settings:
 create a fresh configuration file
 - changed settings only apply the next time you start `timerecord.exe`
 
+### Heuristics
+```
+heuristics:
+  activate: 0
+  authentic_shifting: 0
+```
+
+Heuristics will try to resolve car ambiguities and decide for one of the possible cars. This can reduce the number of times you need to run update scripts after a session and keep your installation folder more tidy.
+
+Since heuristics are only correct to a certain degree (but better than tossing a coin), the update scripts are even more important. Always make sure to run the provided script in case the heuristics is wrong, otherwise the recorded data is false.  
+
+You first need to activate heuristics with `activate: 1`. Afterwards, a very basic heuristics method is applied that will choose one of the possible cars by chance. 
+
+If you use authentic shifting (also cf. [this setting](#car-control-information)), i.e. use H-pattern shifting for cars that have such gearboxes, you can also configure `authentic_shifting: 1` to enable gear shift heuristics. It will detect skipped gears (which cannot occur for sequential shifting) to tell H-pattern cars from others.  
+
+
 ### Update script removal
 `keep_update_scripts_days: 7`
 

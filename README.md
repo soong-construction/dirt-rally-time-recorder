@@ -47,13 +47,13 @@ Volkswagen Golf GTI 16V: H-PATTERN shifting, 5 speed, with manual CLUTCH, with H
   - to dump the database into a CSV file consumable by your favorite spreadsheet editor, run `export-laptimes.bat`  
 
 ## Limitations
-Since DiRT Rally [2.0] telemetry data doesn't allow to clearly identify every available car and track, this tool will sometimes ask you to resolve this after completing a stage.  
+Since DiRT Rally [2.0] telemetry data doesn't allow to clearly identify every available car and track, this tool will sometimes ask you to resolve this after completing a stage. You can [enable heuristics](docs/configuration.md#heuristics) to somewhat alleviate this limitation.  
 
 In order to consolidate the database, the tool prepares update scripts for you, e.g. `1573403766_ElRodeo_PoloGTIR5.bat`
 - open your installation folder  
 - run the update script that matches the car or track you chose (e.g. double-click it)  
 - you will barely notice a window opening and closing, and that's it
-- each time you start *dirt-rally-time-recorder*, it automatically removes update scripts older than a week
+- each time you start *dirt-rally-time-recorder*, it automatically removes update scripts older than a week 
 
 ## Troubleshooting
 Starting:

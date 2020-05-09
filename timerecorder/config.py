@@ -22,7 +22,6 @@ def readVersion(approot):
     with open(approot + '/VERSION', encoding='utf-8', newline='\n') as file:
         return file.readline().strip()
     
-# TODO #25 Update docs
 def init(filename):
     global get
     config = Config(filename)
@@ -80,22 +79,29 @@ class Config(dict):
         
         self.setDefaultHeuristics()
         self.dump()
+
+    def loadBasicSettings(self):
+        telemetry = self[telemetry_server]
+        self.server = telemetry[host], int(telemetry[port])
+        self.speed_unit = self[speed_unit]
+        self.show_car_controls = int(self[show_car_controls])
+        self.keep_update_scripts_days = int(self[keep_update_scripts_days])
+
+    def loadHeuristics(self):
+        heuristics = self[heuristics_settings]
+        self.heuristics_activated = int(heuristics[heuristics_activate])
+        self.authentic_shifting = int(heuristics[authentic_shifting])
         
+        if self.heuristics_activated:
+            logger.info('HEURISTICS activated')
+
     def load(self):
         logger.debug('Loading config')
         file = os.path.basename(self.filename)
 
         try:
-            telemetry = self[telemetry_server]
-            self.server = (telemetry[host], int(telemetry[port]))
-            self.speed_unit = self[speed_unit]
-            self.show_car_controls = int(self[show_car_controls])
-            self.keep_update_scripts_days = int(self[keep_update_scripts_days])
-            
-            heuristics = self[heuristics_settings]
-            
-            self.heuristics_activated = int(heuristics[heuristics_activate])
-            self.authentic_shifting = int(heuristics[authentic_shifting])
+            self.loadBasicSettings()
+            self.loadHeuristics()
             
         except Exception as e:
             logger.debug('Failed to load config file %s: %s', file, e)
