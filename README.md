@@ -9,7 +9,7 @@ Time tracking works for stage rallies and the Pikes Peak events of the original 
 
 ## First time set up
 
-You can choose to download *dirt-rally-time-recorder* as a ready-to-use bundle (tested to work on Windows 10 x64). If you don't trust pre-built .exe files, you can set it up from scratch. 
+You can choose to download *dirt-rally-time-recorder* as a ready-to-use bundle (tested to work on Windows 10 x64). If you don't trust pre-built .exe files, you can [set it up from scratch](docs/setup-from-scratch.md). 
 
 ### Ready-to-use bundle
 - Download the [latest release](https://github.com/soong-construction/dirt-rally-time-recorder/releases/latest) for either the original DiRT Rally or 2.0
@@ -17,20 +17,6 @@ You can choose to download *dirt-rally-time-recorder* as a ready-to-use bundle (
 - Start time tracking  
   - in your installation folder, start `timerecord.exe` 
   - It should tell you to be *Waiting for data...*, otherwise take a look at [Troubleshooting](#troubleshooting)  
-
-### ... or set up from scratch  
-*These steps refer to Windows. Linux users should take a look at this [issue.](https://github.com/soong-construction/dirt-rally-time-recorder/issues/33#issue-606797917)*
-
-- From the [latest release](https://github.com/soong-construction/dirt-rally-time-recorder/releases/latest), download and unpack the sources zip file to your disk. Instead, you can also clone the repository.
-  - this creates your *work folder*, e.g. `C:\dirtrally-time-recorder-dr2`
-- Install Python 3.7: https://wiki.python.org/moin/BeginnersGuide/Download
-  - If Python was installed already, ensure [pip is set up properly](https://packaging.python.org/tutorials/installing-packages/#ensure-you-can-run-pip-from-the-command-line) 
-- Follow the bundling instructions in [develop.md](docs/develop.md#bundling) 
-  - this creates your bundle in `dist`. You can move the *installation folder* `timerecorder` anywhere you like
-  - you can delete the work folder afterwards
-- Start time tracking  
-  - in your installation folder, start `timerecord.exe` 
-  - It should tell you to be *Waiting for data...*, otherwise check the set up or take a look at [Troubleshooting](#troubleshooting)
 
 ### Updating
 To update to a new version, simply download the new release or create a new bundle as instructed above. To be safe, backup your `dirtrally-laptimes.db`. You can overwrite your existing installation folder with the new `timerecorder` folder.  
