@@ -4,11 +4,11 @@ This document describes all the configuration options for *dirt-rally-time-recor
 before you change any settings. The following holds for any of the settings:
 - never change the option name, only its value
 - 0 means disabled or inactive, 1 means enabled or active
-- mistakes when editing the file may lead to crashes at start up of timerecord.exe or strange behaviour
-- check `timerecord.log` for hints what might be wrong with your `config.yml'
+- mistakes when editing the file may lead to crashes at start up of `timerecord.exe` or strange behaviour
+- check `timerecord.log` for hints what might be wrong with your `config.yml`
 - in case of problems, you can always delete `config.yml` altogether and restart the tool in order to 
 create a fresh configuration file
-- any setting only applies the next time you start timerecord.exe
+- changed settings only apply the next time you start `timerecord.exe`
 
 ### Update script removal
 `keep_update_scripts_days: 7`
