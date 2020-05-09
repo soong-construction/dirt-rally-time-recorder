@@ -20,7 +20,7 @@ instruction = "Please run one of the scripts below to link the recorded laptime 
 
 logger = getLogger(__name__)
 
-# TODO Move ambiguity stuff to AmbiguousResultHandler
+# TODO #25 Move ambiguity stuff to AmbiguousResultHandler
 class StatsProcessor():
 
     def __init__(self, approot):
@@ -114,7 +114,6 @@ class StatsProcessor():
 
         logger.debug("%s.%s.%s.started", self.userArray[0], identify(self.track), identify(self.car))
 
-        # TODO #25 Still show in case of ambiguities?
         self.showCarControlInformation()
 
     def applyHeuristics(self, car_candidates):
@@ -162,7 +161,7 @@ class StatsProcessor():
         laptime = stats[62]
         timestamp = time.time()
         
-        # TODO Debug
+        # TODO #25 Remove?
         logger.debug("TOTAL GEAR SHIFT/SKIP: %s/%s", self.gearTracker.getGearChangeCount(), self.gearTracker.getGearSkipCount())
         
         track, car = self.handleAmbiguities(timestamp)

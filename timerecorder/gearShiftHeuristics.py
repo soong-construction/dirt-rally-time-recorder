@@ -21,7 +21,6 @@ class GearShiftHeuristics:
         cars_with_h_pattern_shifting = list(filter(select_match, self.car_shift_list))
         cars_without_h_pattern_shifting = list(filter(select_mismatch, self.car_shift_list))
 
-        # TODO #25 Check for skipCount > M to account for missed Recovers?
         sufficientData = self.gearTracker.getGearChangeCount() >= REQUIRED_SHIFT_COUNT
         canDiscriminate = len(self.car_shift_list) == 2 and len(cars_with_h_pattern_shifting) == 1
         applicable = sufficientData and canDiscriminate

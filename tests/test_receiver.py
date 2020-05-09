@@ -18,7 +18,6 @@ class TestReceiver(TestBase):
         self.thing = Receiver('test-files')
 
     def tearDown(self):
-        # TODO This restoration should be used throughout the test base
         StatsProcessor.updateResources = self.UpdateResourcesFunction
         try:
             self.thing.close()
