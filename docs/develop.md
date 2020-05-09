@@ -41,7 +41,7 @@ Finally
 
 Bundles are automatically created by GitHub Actions for all tagged versions and provided in `artifacts.zip`. To create a release bundle locally (e.g. for DR1)
 - follow the steps [above](#bundling)
-- zip `/dist/timerecorder` as `timerecorder-dirt-rally.zip`
+- zip `/dist/timerecorder-dr1` as `timerecorder-dirt-rally.zip`
 
 ## Publish release
 - draft a new GitHub release

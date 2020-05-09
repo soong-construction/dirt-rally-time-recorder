@@ -2,6 +2,10 @@
 
 block_cipher = None
 
+# Get name parameter from arguments
+import sys
+index = sys.argv.index('--name')
+namearg = str(sys.argv[index + 1])
 
 a = Analysis(['timerecorder/timerecord.py'],
              pathex=['.'],
@@ -44,4 +48,4 @@ coll = COLLECT(exe,
                strip=False,
                upx=True,
                upx_exclude=[],
-               name='timerecorder')
+               name=namearg)

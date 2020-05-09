@@ -72,7 +72,7 @@ jobs:
     - name: Zip distribution / create-7z-action
       uses: DuckSoft/create-7z-action@v1.0
       with:
-        pathSource: ./dist/timerecorder
+        pathSource: ./dist/timerecorder-dr1
         pathTarget: artifacts/timerecorder-dirt-rally.zip
 
     - name: Bundle DR2 executable / PyInstaller
@@ -82,7 +82,7 @@ jobs:
     - name: Zip distribution / create-7z-action
       uses: DuckSoft/create-7z-action@v1.0
       with:
-        pathSource: ./dist/timerecorder
+        pathSource: ./dist/timerecorder-dr2
         pathTarget: artifacts/timerecorder-dirt-rally-2.0.zip
 
     - name: Archive artifacts
