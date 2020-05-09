@@ -127,6 +127,10 @@ class TestStatsProcessor(TestBase):
     def testLapTimeConversion(self):
         format_lap_time = self.thing.formatLapTime(180.249)
         self.assertEqual(format_lap_time, '180.25')
+        
+    def testNiceLapTimeConversion(self):
+        laptime = self.thing.prettyLapTime(180.240)
+        self.assertEqual(str(laptime), '03:00.240')
 
     def testHandleFinishStageAndLogResults(self):
         stats = [1] * fieldCount

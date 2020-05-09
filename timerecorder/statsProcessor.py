@@ -1,18 +1,21 @@
+from datetime import timedelta
+import random
+import time
+
+from . import config
 from .ambiguousResultHandler import AmbiguousResultHandler
 from .database import Database
 from .databaseAccess import DatabaseAccess
 from .databaseAccess import identify
+from .gearShiftHeuristics import GearShiftHeuristics
 from .gearTracker import GearTracker
 from .log import getLogger
+from .luckyGuessHeuristics import LuckyGuessHeuristics
 from .progressTracker import ProgressTracker
 from .respawnTracker import RespawnTracker
 from .speedTracker import SpeedTracker
 from .timeTracker import TimeTracker
-from . import config
-from .gearShiftHeuristics import GearShiftHeuristics
-from .luckyGuessHeuristics import LuckyGuessHeuristics
-import random
-import time
+
 
 goLineProgress = 0.0
 completionProgress = 0.999
@@ -51,11 +54,17 @@ class StatsProcessor():
 
     def formatLapTime(self, laptime):
         return '%.2f' % (laptime,)
+    
+    def prettyLapTime(self, laptime_seconds):
+        fullDuration = str(timedelta(seconds=laptime_seconds))
+        minuteDuration = fullDuration.split(':', 1)[1]
+        thousandthsDuration = minuteDuration[:-3]
+        return thousandthsDuration
 
     def logResults(self, laptime, track, car):
         logger.debug("%s.%s.%s.time:%s|s", self.userArray[0], track, car, self.formatLapTime(laptime))
         logger.debug("%s.%s.%s.topspeed:%s|%s", self.userArray[0], track, car, self.formatTopSpeed(), self.speed_unit)
-        logger.info("Completed stage in %ss.", self.formatLapTime(laptime))
+        logger.info("Completed stage in %s.", self.prettyLapTime(laptime))
 
     def showCarControlInformation(self):
         if isinstance(self.car, (list,)):
