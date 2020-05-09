@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 import unittest
 from unittest.mock import MagicMock
 from timerecorder.ambiguousResultHandler import AmbiguousResultHandler
+from timerecorder import config
 
 class TestAmbiguousResultHandler(unittest.TestCase):
 
@@ -23,6 +24,17 @@ class TestAmbiguousResultHandler(unittest.TestCase):
         result = self.thing.listOldUpdateScripts(self.now, 'test')
 
         self.assertEqual(result, scripts[:1])
+
+    def testFindsOldUpdateScriptsForUserConfiguredRetentionTime(self):
+        scripts = ['1570011200_ElRodeo_AudiQuattro.bat', '1571511200_ElRodeo_PoloGTIR5.bat']
+        config.get.keep_update_scripts_days = 0
+        self.thing.listUpdateScripts = MagicMock(return_value = scripts)
+        self.thing.warnShortRetentionTime = MagicMock()
+
+        result = self.thing.listOldUpdateScripts(self.now, 'test')
+
+        self.assertEqual(result, scripts)
+        self.thing.warnShortRetentionTime.assert_called_once()
 
     def testNoMatchForNewUpdateScripts(self):
         scripts = ['1586335179_ElRodeo_AudiQuattro.bat', '1586335180_ElRodeo_PoloGTIR5.bat']

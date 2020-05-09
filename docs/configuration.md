@@ -10,17 +10,22 @@ before you change any settings. The following holds for any of the settings:
 create a fresh configuration file
 - any setting only applies the next time you start timerecord.exe
 
+### Update script removal
+`keep_update_scripts_days: 7`
+
+Update scripts allow you to resolve unclear recordings for ambiguous cars and tracks. Whether you use them or not, they will ultimately gather and pollute the installation folder. After a certain time (one week per default), update scripts will be removed at start up. You can select a different number of days for that time. If you go below the default value, a warning will be shown.
+
+### Car control information
+`show_car_controls: 1`
+
+If you do not care for car control information like forward gears and the actual shifting and handbrake options, you can change this setting to `0` to disable them.
+
 ### Speed unit
 `speed_unit: kph`
 
 If you prefer imperial units (mph), you can change the `speed_unit` in `config.yml` (default: kph). 
 If you change this later on, you will falsify top speeds of recorded stages (unless you migrate your database).
 So this should be a setting you configure once.  
-
-### Car control information
-`show_car_controls: 1`
-
-If you do not care for car control information like forward gears and the actual shifting and handbrake options, you can change this setting to `0` to disable them.
 
 ### Telemetry 
 ```

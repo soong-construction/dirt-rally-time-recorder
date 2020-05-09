@@ -11,6 +11,8 @@ host = 'host'
 port = 'port'
 speed_unit = 'speed_unit'
 show_car_controls = 'show_car_controls'
+keep_update_scripts_days = 'keep_update_scripts_days'
+keep_update_scripts_days_default = 7    
 
 heuristics_settings = 'heuristics'
 heuristics_activate = 'activate'
@@ -74,6 +76,8 @@ class Config(dict):
         
         self.setdefault(speed_unit, 'kph')
         self.setdefault(show_car_controls, 1)
+        self.setdefault(keep_update_scripts_days, keep_update_scripts_days_default)
+        
         self.setDefaultHeuristics()
         self.dump()
         
@@ -86,6 +90,8 @@ class Config(dict):
             self.server = (telemetry[host], int(telemetry[port]))
             self.speed_unit = self[speed_unit]
             self.show_car_controls = int(self[show_car_controls])
+            self.keep_update_scripts_days = int(self[keep_update_scripts_days])
+            
             heuristics = self[heuristics_settings]
             
             self.heuristics_activated = int(heuristics[heuristics_activate])

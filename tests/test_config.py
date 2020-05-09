@@ -5,6 +5,7 @@ from timerecorder.config import Config, readVersion
 import os
 
 testroot = 'test-files'
+default_config_count = 5
 
 class TestConfig(TestBase):
 
@@ -26,8 +27,8 @@ class TestConfig(TestBase):
         config = Config(configPath)
         config.load()
 
-        self.assertEqual(4, len(config.keys()))
-        self.assertEqual(4, len(config.values()))
+        self.assertEqual(default_config_count, len(config.keys()))
+        self.assertEqual(default_config_count, len(config.values()))
         self.assertEqual(config['speed_unit'], 'kph')
 
     def testExistingValuesAreKeptOrExtended(self):
@@ -40,8 +41,8 @@ class TestConfig(TestBase):
         config = Config(configPath)
         config.load()
 
-        self.assertEqual(4, len(config.keys()))
-        self.assertEqual(4, len(config.values()))
+        self.assertEqual(default_config_count, len(config.keys()))
+        self.assertEqual(default_config_count, len(config.values()))
         self.assertEqual(config['speed_unit'], 'kph')
         self.assertEqual(config['telemetry_server']['port'], 12345)
         self.assertEqual(config['telemetry_server']['host'], '127.0.0.1')
@@ -54,8 +55,8 @@ class TestConfig(TestBase):
         config = Config(configPath)
         config.load()
 
-        self.assertEqual(5, len(config.keys()))
-        self.assertEqual(5, len(config.values()))
+        self.assertEqual(default_config_count + 1, len(config.keys()))
+        self.assertEqual(default_config_count + 1, len(config.values()))
         self.assertEqual(config['speed_unit'], 'kph')
 
     def testCorruptConfigIsReported(self):

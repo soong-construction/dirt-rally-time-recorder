@@ -4,6 +4,7 @@ from _datetime import timezone
 import time
 from .log import getLogger
 import os
+from . import config
 
 scriptRegex = r"(\d{9,10})_\S+_\S+\.bat"
 scriptTemplate = 'sqlite3 %s "%s"'
@@ -35,20 +36,31 @@ class AmbiguousResultHandler(object):
         file_list = os.listdir(directory)
         return [directory + '/' + file for file in file_list if re.match(scriptRegex, file)]
 
-    def isBeforeDeadline(self, time, script):
+    def isBeforeDeadline(self, time, keep_for_days, script):
         matches = re.finditer(scriptRegex, script)
         match = next(matches)
         
+        deadline = time - timedelta(days = keep_for_days)
+
         creation_timestamp = int(match.group(1))
         creation_time = datetime.fromtimestamp(creation_timestamp, timezone.utc)
-        deadline = time - timedelta(days = 7)
+
 
         return creation_time < deadline
 
+    def warnShortRetentionTime(self):
+        return logger.warning(
+            ('CAUTION: You chose to keep update scripts for less than %s days. '
+                'Make sure to run ALL CREATED SCRIPTS after your session.'), config.keep_update_scripts_days_default)
+
     def listOldUpdateScripts(self, time, directory):
+        keep_for_days = config.get.keep_update_scripts_days
+        if keep_for_days < config.keep_update_scripts_days_default:
+            self.warnShortRetentionTime()
+
         scripts = self.listUpdateScripts(directory)
 
-        old_scripts = filter(lambda script: self.isBeforeDeadline(time, script), scripts)
+        old_scripts = filter(lambda script: self.isBeforeDeadline(time, keep_for_days, script), scripts)
 
         return list(old_scripts)
 
