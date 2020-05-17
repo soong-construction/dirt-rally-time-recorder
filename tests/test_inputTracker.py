@@ -18,36 +18,64 @@ class TestInputTracker(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def testSignalBeforeData(self):
+    def testNoSignalBeforeData(self):
+        self.assertIsNone(self.thing.input, 'Input must be initially None')
         self.assertIsNone(self.thing.signal, 'Signal must be initially None')
 
-    def testSignalThrottleLeft(self):
-        stats = [0] * fieldCount
-        stats[29] = 0.6
-        stats[30] = -0.6
+    def testIsSignalLeft(self):
+        self.assertTrue(self.thing.isSignalLeft(0.6, -0.6))
 
-        self.thing.track(stats)
-        self.assertEqual(self.thing.signal, Signal.THROTTLE_LEFT)
+    def testIsSignalRight(self):
+        self.assertTrue(self.thing.isSignalRight(0.6, 0.6))
+
+    def testIsNoSignal(self):
+        thing = self.thing
+
+        throttle = 0.6
+        steer = -0.2
+        self.assertFalse(thing.isSignalLeft(throttle, steer))
+        self.assertFalse(thing.isSignalRight(throttle, steer))
+
+        throttle = 0.6
+        steer= 0.2
+        self.assertFalse(thing.isSignalLeft(throttle, steer))
+        self.assertFalse(thing.isSignalRight(throttle, steer))
+
+        throttle = 0.2
+        steer = -0.6
+        self.assertFalse(thing.isSignalLeft(throttle, steer))
+        self.assertFalse(thing.isSignalRight(throttle, steer))
+
+        throttle = 0.2
+        steer = 0.6
+        self.assertFalse(thing.isSignalLeft(throttle, steer))
+        self.assertFalse(thing.isSignalRight(throttle, steer))
 
     def testNoTrackingIfNotEnabled(self):
         self.thing.enabled = True
         stats = [0] * fieldCount
-        
+
         self.thing.track(stats)
         self.speedTracker.getTopSpeed.assert_called_once()
         self.speedTracker.getTopSpeed.reset_mock()
-        
+
         self.thing.enabled = False
         self.thing.track(stats)
         self.speedTracker.getTopSpeed.assert_not_called()
-        
-    def testSignalThrottleRight(self):
+
+    def testSignalOnlyAfterInputGone(self):
         self.speedTracker.getTopSpeed = MagicMock(return_value = 0)
         stats = [0] * fieldCount
         stats[29] = 0.6
         stats[30] = 0.6
 
         self.thing.track(stats)
+        self.assertEqual(self.thing.input, Signal.THROTTLE_RIGHT)
+        self.assertIsNone(self.thing.signal)
+        stats[29] = 0.0
+        self.thing.track(stats)
+
+        self.assertIsNone(self.thing.input)
         self.assertEqual(self.thing.signal, Signal.THROTTLE_RIGHT)
 
 if __name__ == '__main__':

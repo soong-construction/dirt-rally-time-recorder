@@ -21,6 +21,7 @@ class TestAmbiguousResultHandler(TestBase):
         result = self.thing.buildFileName('Flugzeugring Reverse', 'Audi Quattro', self.now.timestamp())
         self.assertEqual(result, '1571529600_FlugzeugringReverse_AudiQuattro.bat', 'did not build file name correctly')
 
+    # TODO Test that other bat (or dll) files are not listed
     def testFindsOldUpdateScripts(self):
         scripts = ['1570011200_ElRodeo_AudiQuattro.bat', '1571511200_ElRodeo_PoloGTIR5.bat']
         self.thing.listUpdateScripts = MagicMock(return_value = scripts)
