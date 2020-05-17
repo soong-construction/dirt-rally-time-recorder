@@ -17,6 +17,7 @@ keep_update_scripts_days_default = 7
 heuristics_settings = 'heuristics'
 heuristics_activate = 'activate'
 authentic_shifting = 'authentic_shifting'
+user_signals = 'user_signals'
 
 def readVersion(approot):
     with open(approot + '/VERSION', encoding='utf-8', newline='\n') as file:
@@ -62,10 +63,11 @@ class Config(dict):
         self.dump()
     
     def setDefaultHeuristics(self):
-        default_heuristics = {heuristics_activate: 0, authentic_shifting: 0}
+        default_heuristics = {heuristics_activate: 0, authentic_shifting: 0, user_signals: 0}
         self.setdefault(heuristics_settings, default_heuristics)
         self[heuristics_settings].setdefault(heuristics_activate, default_heuristics[heuristics_activate])
         self[heuristics_settings].setdefault(authentic_shifting, default_heuristics[authentic_shifting])
+        self[heuristics_settings].setdefault(user_signals, default_heuristics[user_signals])
 
     def migrate(self):
         default_server = {host:'127.0.0.1', port:20777}
@@ -91,6 +93,7 @@ class Config(dict):
         heuristics = self[heuristics_settings]
         self.heuristics_activated = int(heuristics[heuristics_activate])
         self.authentic_shifting = int(heuristics[authentic_shifting])
+        self.user_signals = int(heuristics[user_signals])
         
         if self.heuristics_activated:
             logger.info('HEURISTICS activated')

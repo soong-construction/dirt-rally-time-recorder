@@ -16,6 +16,7 @@ from .respawnTracker import RespawnTracker
 from .speedTracker import SpeedTracker
 from .timeTracker import TimeTracker
 from .inputTracker import InputTracker
+from .userSignalsHeuristics import UserSignalsHeuristics
 
 goLineProgress = 0.0
 completionProgress = 0.999
@@ -139,6 +140,11 @@ class StatsProcessor():
             gearShiftHeuristics = GearShiftHeuristics(list(car_shift_map), self.gearTracker)
             gearShiftHeuristics.withFallback(heuristics)
             heuristics = gearShiftHeuristics
+            
+        if config.get.user_signals:
+            userSignalHeuristics = UserSignalsHeuristics(car_candidates, self.inputTracker)
+            userSignalHeuristics.withFallback(heuristics)
+            heuristics = userSignalHeuristics
         
         return heuristics.guessCar()
 
