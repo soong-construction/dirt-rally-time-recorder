@@ -2,7 +2,7 @@ import random
 import unittest
 from timerecorder.luckyGuessHeuristics import LuckyGuessHeuristics
 
-class TestGearShiftHeuristics(unittest.TestCase):
+class TestLuckyGuessHeuristics(unittest.TestCase):
 
     def __init__(self, methodName):
         unittest.TestCase.__init__(self, methodName)
