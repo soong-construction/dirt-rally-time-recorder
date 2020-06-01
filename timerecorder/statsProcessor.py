@@ -153,7 +153,6 @@ class StatsProcessor():
             return car
         
         if config.get.heuristics_activated:
-            logger.info("Guessing car...")
             guessed_car = self.applyHeuristics(car)
             
             if guessed_car is not None:
@@ -164,7 +163,7 @@ class StatsProcessor():
 
         logger.info(instruction, "the correct car")
         self.databaseAccess.handleCarUpdates(car, timestamp, track)
-                
+
         return car
 
     def handleAmbiguousTracks(self, timestamp, car, track):

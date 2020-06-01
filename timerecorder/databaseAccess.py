@@ -1,5 +1,4 @@
-from .log import getLogger
-from timerecorder.log import VERBOSE
+from .log import getLogger, VERBOSE
 
 logger = getLogger(__name__)
 
