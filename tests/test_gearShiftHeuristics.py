@@ -49,7 +49,7 @@ class TestLuckyGuessHeuristics(unittest.TestCase):
         car = self.thing.guessCar()
         
         fallback.guessCar.assert_called_once()
-        self.assertIn(car, [100, 200])
+        self.assertEqual(car, 100, 'Did not return fallback guess')
     
     def testCallsFallbackWithoutSufficientShifts(self):
         car_candidates = [(100, 'H-PATTERN'), (200, 'SEQUENTIAL')]
@@ -64,7 +64,7 @@ class TestLuckyGuessHeuristics(unittest.TestCase):
         car = self.thing.guessCar()
         
         fallback.guessCar.assert_called_once()
-        self.assertIn(car, [100, 200])
+        self.assertEqual(car, 100, 'Did not return fallback guess')
 
     def testCallsFallbackForManyCandidates(self):
         car_candidates = [(100, 'H-PATTERN'), (200, 'H-PATTERN'), (300, 'H-PATTERN')]
@@ -76,7 +76,7 @@ class TestLuckyGuessHeuristics(unittest.TestCase):
         car = self.thing.guessCar()
         
         fallback.guessCar.assert_called_once()
-        self.assertIn(car, [100, 200, 300])
+        self.assertEqual(car, 100, 'Did not return fallback guess')
         
 if __name__ == '__main__':
     unittest.main()

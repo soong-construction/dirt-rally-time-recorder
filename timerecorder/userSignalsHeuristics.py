@@ -3,7 +3,6 @@ from timerecorder.inputTracker import Signal
 
 logger = getLogger(__name__)
 
-# TODO Test
 # TODO Abstract base class: guessCar, withFallback, isApplicable
 class UserSignalsHeuristics():
     
