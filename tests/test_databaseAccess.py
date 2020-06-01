@@ -1,6 +1,6 @@
 import unittest
 
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, call
 from timerecorder.database import Database
 from timerecorder.databaseAccess import DatabaseAccess
 
@@ -10,8 +10,7 @@ class TestDatabaseAccess(unittest.TestCase):
     def setUp(self):
         self.database = Database('test')
         self.database.recordResults = MagicMock()
-        self.ambiguousResultHandler = MagicMock()
-        self.thing = DatabaseAccess(self.database, self.ambiguousResultHandler)
+        self.thing = DatabaseAccess(self.database)
 
     def tearDown(self):
         pass
@@ -19,7 +18,7 @@ class TestDatabaseAccess(unittest.TestCase):
     def testIdentifyTrackNoResult(self):
         tracks = []
         self.database.loadTracks = MagicMock(return_value=tracks)
-        
+
         loadedTrack = self.thing.identifyTrack(10, 10000)
 
         self.assertEqual(loadedTrack, [], "Shouldn't identify track")
@@ -27,7 +26,7 @@ class TestDatabaseAccess(unittest.TestCase):
     def testIdentifyTrackUnambiguous(self):
         tracks = [(1, 'track1', 10)]
         self.database.loadTracks = MagicMock(return_value=tracks)
-        
+
         loadedTrack = self.thing.identifyTrack(10, 10000)
 
         self.assertEqual(loadedTrack, 1, "Wrong ID")
@@ -35,7 +34,7 @@ class TestDatabaseAccess(unittest.TestCase):
     def testIdentifyTrackByZValue(self):
         tracks = [(1, 'track1', 10), (2, 'track2', 100)]
         self.database.loadTracks = MagicMock(return_value=tracks)
-        
+
         loadedTrack = self.thing.identifyTrack(10, 10000)
 
         self.assertEqual(loadedTrack, 1, "Wrong ID")
@@ -43,7 +42,7 @@ class TestDatabaseAccess(unittest.TestCase):
     def testCannotIdentifyTrackByZValueIfIdentical(self):
         tracks = [(1, 'track1', 100), (2, 'track2', 100)]
         self.database.loadTracks = MagicMock(return_value=tracks)
-        
+
         loadedTrack = self.thing.identifyTrack(100, 10000)
 
         self.assertEqual(loadedTrack, [1, 2], "Should return all tracks")
@@ -51,7 +50,7 @@ class TestDatabaseAccess(unittest.TestCase):
     def testIdentifyTrackAmbiguous(self):
         tracks = [(1, 'track1', 100), (2, 'track2', 100)]
         self.database.loadTracks = MagicMock(return_value=tracks)
-        
+
         loadedTrack = self.thing.identifyTrack(10, 10000)
 
         self.assertEqual(loadedTrack, [1, 2], "Should return all tracks")
@@ -59,7 +58,7 @@ class TestDatabaseAccess(unittest.TestCase):
     def testIdentifyCarUnambiguous(self):
         cars = [(1, 'car1')]
         self.database.loadCars = MagicMock(return_value=cars)
-        
+
         loadedCar = self.thing.identifyCar(1000, 100, 5)
 
         self.assertEqual(loadedCar, 1, "Wrong ID")
@@ -67,7 +66,7 @@ class TestDatabaseAccess(unittest.TestCase):
     def testIdentifyCarNoResult(self):
         cars = []
         self.database.loadCars = MagicMock(return_value=cars)
-        
+
         loadedCar = self.thing.identifyCar(1000, 100, 5)
 
         self.assertEqual(loadedCar, [], "Shouldn't identify car")
@@ -75,7 +74,7 @@ class TestDatabaseAccess(unittest.TestCase):
     def testIdentifyCarAmbiguous(self):
         cars = [(1, 'car1'), (2, 'car2')]
         self.database.loadCars = MagicMock(return_value=cars)
-        
+
         loadedCar = self.thing.identifyCar(1000, 100, 5)
         self.assertEqual(loadedCar, [1, 2], "Should return all cars")
 
@@ -87,9 +86,9 @@ class TestDatabaseAccess(unittest.TestCase):
         self.database.loadShiftingData = MagicMock(side_effect=noneData)
         self.database.loadGearsData = MagicMock(side_effect=noneData)
         self.database.loadClutchData = MagicMock(side_effect=noneData)
-        
+
         self.database.getCarName = MagicMock(side_effect=carNames)
-        
+
         self.assertEqual(self.thing.describeCarInterfaces([1]), "Unknown Car: NO CONTROL DATA")
 
     def testGetCarInterfacesStatements(self):
@@ -103,21 +102,49 @@ class TestDatabaseAccess(unittest.TestCase):
         self.database.loadGearsData = MagicMock(side_effect=gearsData)
         clutchData = [(1), (0)]
         self.database.loadClutchData = MagicMock(side_effect=clutchData)
-        
+
         firstCarInterface = self.thing.describeCarInterfaces(1)
         self.assertEqual(firstCarInterface, "Classic Car: H-PATTERN shifting, 4 speed, with manual CLUTCH")
 
         secondCarInterface = self.thing.describeCarInterfaces(2)
         self.assertEqual(secondCarInterface, "Modern Car: 2 PADDLES shifting, 6 speed, with HANDBRAKE")
-    
+
     def testMapToShiftingData(self):
         shiftingData = [('H-PATTERN'), ('SEQUENTIAL')]
         self.database.loadShiftingData = MagicMock(side_effect=shiftingData)
-        
+
         car_candidates = [100, 200]
         result = self.thing.mapCarsToShifting(car_candidates)
-        
+
         self.assertEqual(list(result), [(100, 'H-PATTERN'), (200,'SEQUENTIAL')])
-        
+
+    def testHandleCarUpdatesInvokesLambda(self):
+        self.database.getCarUpdateStatements = MagicMock(return_value=['update100', 'update200'])
+
+        carNames = ['Classic Car', 'Modern Car']
+        self.database.getCarName = MagicMock(side_effect=carNames)
+
+        updateHandler = MagicMock()
+        self.thing.handleCarUpdates([100, 200], 123456789, [], updateHandler)
+
+        call1 = call('UNKNOWN', 'Classic Car', 123456789, 'update100')
+        call2 = call('UNKNOWN', 'Modern Car', 123456789, 'update200')
+
+        updateHandler.assert_has_calls([call1, call2])
+
+    def testHandleTrackUpdatesInvokesLambda(self):
+        self.database.getTrackUpdateStatements = MagicMock(return_value=['update100', 'update200'])
+
+        trackNames = ['Sprint', 'Complete']
+        self.database.getTrackName = MagicMock(side_effect=trackNames)
+
+        updateHandler = MagicMock()
+        self.thing.handleTrackUpdates([100, 200], 123456789, [], updateHandler)
+
+        call1 = call('Sprint', 'UNKNOWN', 123456789, 'update100')
+        call2 = call('Complete', 'UNKNOWN', 123456789, 'update200')
+
+        updateHandler.assert_has_calls([call1, call2])
+
 if __name__ == "__main__":
     unittest.main()

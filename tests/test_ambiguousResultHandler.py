@@ -1,9 +1,11 @@
 from datetime import datetime, timezone
+import time
 import unittest
-from unittest.mock import MagicMock
-from timerecorder.ambiguousResultHandler import AmbiguousResultHandler
-from timerecorder import config
+from unittest.mock import MagicMock, ANY
+
 from tests.test_base import TestBase
+from timerecorder import config
+from timerecorder.ambiguousResultHandler import AmbiguousResultHandler
 
 class TestAmbiguousResultHandler(TestBase):
 
@@ -12,59 +14,77 @@ class TestAmbiguousResultHandler(TestBase):
 
     def setUp(self):
         self.now = datetime(2019, 10, 20, tzinfo=timezone.utc)
-        self.thing = AmbiguousResultHandler('db')
+        self.databaseAccess = MagicMock()
+        self.gearTracker = MagicMock()
+        self.inputTracker = MagicMock()
+        self.thing = AmbiguousResultHandler(self.databaseAccess, 'test-files')
 
     def tearDown(self):
         pass
 
-    def testBuildFileName(self):
-        result = self.thing.buildFileName('Flugzeugring Reverse', 'Audi Quattro', self.now.timestamp())
-        self.assertEqual(result, '1571529600_FlugzeugringReverse_AudiQuattro.bat', 'did not build file name correctly')
+    def testHandleResultsWithAmbiguousCarsAndNoHeuristics(self):
+        config.get.heuristics_activated = 1
+        car = [100, 200]
+        track = 1000
 
-    # TODO Test that other bat (or dll) files are not listed
-    def testFindsOldUpdateScripts(self):
-        scripts = ['1570011200_ElRodeo_AudiQuattro.bat', '1571511200_ElRodeo_PoloGTIR5.bat']
-        self.thing.listUpdateScripts = MagicMock(return_value = scripts)
+        self.thing.applyHeuristics = MagicMock(return_value = None)
+        self.thing.databaseAccess.handleCarUpdates = MagicMock()
 
-        result = self.thing.listOldUpdateScripts(self.now, 'test')
+        timestamp = time.time()
+        result = self.thing.handleAmbiguousCars(timestamp, car, track, self.gearTracker, self.inputTracker)
 
-        self.assertEqual(result, scripts[:1])
+        self.thing.applyHeuristics.assert_called_once_with(car, self.gearTracker, self.inputTracker)
+        self.thing.databaseAccess.handleCarUpdates.assert_called_once_with(car, timestamp, 1000, ANY)
+        self.assertEqual(result, car)
 
-    def testFindsOldUpdateScriptsForUserConfiguredRetentionTime(self):
-        scripts = ['1570011200_ElRodeo_AudiQuattro.bat', '1571511200_ElRodeo_PoloGTIR5.bat']
-        config.get.keep_update_scripts_days = 0
-        self.thing.listUpdateScripts = MagicMock(return_value = scripts)
-        self.thing.warnShortRetentionTime = MagicMock()
+    def testHandleResultsWithAmbiguousCarsAndLuckyGuess(self):
+        config.get.heuristics_activated = 1
+        car = [100, 200]
+        track = 1000
 
-        result = self.thing.listOldUpdateScripts(self.now, 'test')
+        self.thing.applyHeuristics = MagicMock(return_value = 200)
+        self.thing.databaseAccess.handleCarUpdates = MagicMock()
 
-        self.assertEqual(result, scripts)
-        self.thing.warnShortRetentionTime.assert_called_once()
+        timestamp = time.time()
+        result = self.thing.handleAmbiguousCars(timestamp, car, track, self.gearTracker, self.inputTracker)
 
-    def testNoMatchForNewUpdateScripts(self):
-        scripts = ['1586335179_ElRodeo_AudiQuattro.bat', '1586335180_ElRodeo_PoloGTIR5.bat']
-        self.thing.listUpdateScripts = MagicMock(return_value = scripts)
+        self.thing.applyHeuristics.assert_called_once_with(car, self.gearTracker, self.inputTracker)
+        self.thing.databaseAccess.handleCarUpdates.assert_called_once_with([100], timestamp, 1000, ANY)
+        self.assertEqual(result, 200)
 
-        result = self.thing.listOldUpdateScripts(self.now, 'test')
-        self.assertEqual(result, [])
+    def testHeuristicsAreOnlyAppliedIfConfigured(self):
+        config.get.heuristics_activated = 0
+        car = [100, 200]
+        track = 1000
 
-    def testNoMatchForEmptyUpdateScripts(self):
-        scripts = []
-        self.thing.listUpdateScripts = MagicMock(return_value = scripts)
+        self.thing.applyHeuristics = MagicMock(return_value = None)
 
-        result = self.thing.listOldUpdateScripts(self.now, 'test')
-        self.assertEqual(result, [])
+        timestamp = time.time()
+        result = self.thing.handleAmbiguousCars(timestamp, car, track, self.gearTracker, self.inputTracker)
 
-    def testCleanUp(self):
-        directory = MagicMock()
+        self.thing.applyHeuristics.assert_not_called()
+        self.assertEqual(result, car)
 
-        self.thing.delete = MagicMock()
+    def testHandleAmbiguousTracks(self):
+        car = 100
+        track = [1000, 1002]
 
-        self.thing.listOldUpdateScripts = MagicMock(return_value = ['dir/file'])
+        timestamp = time.time()
+        result = self.thing.handleAmbiguousTracks(timestamp, car, track)
 
-        self.thing.cleanUp(directory)
+        self.thing.databaseAccess.handleTrackUpdates.assert_called_once_with(track, timestamp, 100, ANY)
+        self.assertEqual(result, track)
 
-        self.thing.delete.assert_called_with('dir/file')
+    def testSeedIsRandomized(self):
+        instance = lambda _: AmbiguousResultHandler(MagicMock(), 'test-files')
+        seed = lambda instance: instance.seed
+
+        manyInstances = map(instance, range(0, 100))
+        seeds = list(map(seed, manyInstances))
+        any_seed = seeds[0]
+
+        self.assertNotEqual(seeds.count(any_seed), len(seeds), 'Seeds should be random')
+
 
 if __name__ == "__main__":
     unittest.main()

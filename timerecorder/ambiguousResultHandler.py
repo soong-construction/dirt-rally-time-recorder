@@ -1,75 +1,77 @@
-import re
-from datetime import datetime, timedelta
-from _datetime import timezone
-import time
-from .log import getLogger
-import os
-from . import config
+import random
 
-scriptRegex = r"(\d{9,10})_\S+_\S+\.bat"
-scriptTemplate = 'sqlite3 %s "%s"'
+from . import config
+from .gearShiftHeuristics import GearShiftHeuristics
+from .luckyGuessHeuristics import LuckyGuessHeuristics
+from .userSignalsHeuristics import UserSignalsHeuristics
+from .log import getLogger
+from .databaseAccess import identify
+from .updateScriptHandler import UpdateScriptHandler
+from .database import Database
 
 logger = getLogger(__name__)
 
-class AmbiguousResultHandler(object):
+instruction = "Please run one of the scripts below to link the recorded laptime to %s:"
 
-    def __init__(self, dbName):
-        self.dbName = dbName
-        pass
+class AmbiguousResultHandler():
+    
+    def __init__(self, databaseAccess, approot):
+        self.databaseAccess = databaseAccess
+        self.updateScriptHandler = UpdateScriptHandler(Database.laptimesDbName)
+        self.updateScriptHandler.cleanUp(approot)
 
-    def buildFileName(self, track, car, timestamp):
-        return str(int(timestamp)) + '_' + track.replace(' ', '') + '_' + car.replace(' ', '') + '.bat'
-
-    def buildScript(self, statement):
-        return scriptTemplate % (self.dbName, statement)
-
-    def writeScript(self, track, car, timestamp, updateStatement):
-
-        fileName = self.buildFileName(track, car, timestamp)
-
-        insertFile = open(file=fileName, mode='w', encoding='utf-8', newline='\n')
-        insertFile.write(self.buildScript(updateStatement))
-
-        return fileName
-
-    def listUpdateScripts(self, directory):
-        file_list = os.listdir(directory)
-        return [directory + '/' + file for file in file_list if re.match(scriptRegex, file)]
-
-    def isBeforeDeadline(self, time, keep_for_days, script):
-        matches = re.finditer(scriptRegex, script)
-        match = next(matches)
+        self.seed = random.randrange(1000)
+    
+    def applyHeuristics(self, car_candidates, gearTracker, inputTracker):
+        heuristics = LuckyGuessHeuristics(car_candidates, random.seed(self.seed))
         
-        deadline = time - timedelta(days = keep_for_days)
+        if config.get.authentic_shifting:
+            car_shift_map = self.databaseAccess.mapCarsToShifting(car_candidates)
+            gearShiftHeuristics = GearShiftHeuristics(list(car_shift_map), gearTracker)
+            gearShiftHeuristics.withFallback(heuristics)
+            heuristics = gearShiftHeuristics
+            
+        if config.get.user_signals:
+            userSignalHeuristics = UserSignalsHeuristics(car_candidates, inputTracker)
+            userSignalHeuristics.withFallback(heuristics)
+            heuristics = userSignalHeuristics
+        
+        return heuristics.guessCar()
 
-        creation_timestamp = int(match.group(1))
-        creation_time = datetime.fromtimestamp(creation_timestamp, timezone.utc)
+    def handleAmbiguousCars(self, timestamp, car, track, gearTracker, inputTracker):
+        if isinstance(car, int):
+            return car
+        
+        if config.get.heuristics_activated:
+            guessed_car = self.applyHeuristics(car, gearTracker, inputTracker)
+            
+            if guessed_car is not None:
+                # TODO #41 Where to map car ID to name?
+                carName = 'TBD' # self.database.getCarName(guessed_car)
+                self.databaseAccess.logCar(carName)
+                logger.info("If heuristics-based guess IS WRONG, RUN THE SCRIPT provided to fix the recorded car:")
+                dismissedCars = [c for c in car if c != guessed_car]
+                self.databaseAccess.handleCarUpdates(dismissedCars, timestamp, track, self.handleUpdate)
+                return guessed_car
 
+        logger.info(instruction, "the correct car")
+        self.databaseAccess.handleCarUpdates(car, timestamp, track, self.handleUpdate)
 
-        return creation_time < deadline
+        return car
+    
+    def handleAmbiguousTracks(self, timestamp, car, track):
+        if isinstance(track, list):
+            logger.info(instruction, "the correct track")
+            self.databaseAccess.handleTrackUpdates(track, timestamp, car, self.handleUpdate)
+        
+        return track
 
-    def warnShortRetentionTime(self):
-        return logger.warning(
-            ('CAUTION: You chose to keep update scripts for less than %s days. '
-                'Make sure to run ALL CREATED SCRIPTS after your session.'), config.keep_update_scripts_days_default)
+    def handleAmbiguities(self, timestamp, car, track):
+        car = self.handleAmbiguousCars(timestamp, car, track)
+        track = self.handleAmbiguousTracks(timestamp, car, track)
 
-    def listOldUpdateScripts(self, time, directory):
-        keep_for_days = config.get.keep_update_scripts_days
-        if keep_for_days < config.keep_update_scripts_days_default:
-            self.warnShortRetentionTime()
+        return identify(track), identify(car)
 
-        scripts = self.listUpdateScripts(directory)
-
-        old_scripts = filter(lambda script: self.isBeforeDeadline(time, keep_for_days, script), scripts)
-
-        return list(old_scripts)
-
-    def delete(self, file):
-        os.remove(file)
-
-    def cleanUp(self, directory):
-        logger.debug('Cleaning up update scripts...')
-        now = datetime.fromtimestamp(time.time(), timezone.utc)
-        for file in self.listOldUpdateScripts(now, directory):
-            logger.debug('Deleting %s', os.path.basename(file))
-            self.delete(file)
+    def handleUpdate(self, trackName, carName, timestamp, update):
+        scriptName = self.updateScriptHandler.writeScript(trackName, carName, timestamp, update)
+        logger.info(" ==> %s", scriptName)

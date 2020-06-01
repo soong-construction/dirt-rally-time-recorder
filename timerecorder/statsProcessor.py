@@ -1,5 +1,4 @@
 from datetime import timedelta
-import random
 import time
 
 from . import config
@@ -7,45 +6,39 @@ from .ambiguousResultHandler import AmbiguousResultHandler
 from .database import Database
 from .databaseAccess import DatabaseAccess
 from .databaseAccess import identify
-from .gearShiftHeuristics import GearShiftHeuristics
 from .gearTracker import GearTracker
+from .inputTracker import InputTracker
 from .log import getLogger
-from .luckyGuessHeuristics import LuckyGuessHeuristics
 from .progressTracker import ProgressTracker
 from .respawnTracker import RespawnTracker
 from .speedTracker import SpeedTracker
 from .timeTracker import TimeTracker
-from .inputTracker import InputTracker
-from .userSignalsHeuristics import UserSignalsHeuristics
+
+
 
 goLineProgress = 0.0
 completionProgress = 0.999
-instruction = "Please run one of the scripts below to link the recorded laptime to %s:"
 
 logger = getLogger(__name__)
 
-
-# TODO #25 Move ambiguity stuff to AmbiguousResultHandler
 class StatsProcessor():
 
     def __init__(self, approot):
         self.speed_unit = config.get.speed_unit
         self.speed_modifier = self.speed_unit == 'mph' and 0.6214 or 1
-        self.seed = random.randrange(1000)
         self.approot = approot
         
         self.track = 0
         self.car = 0
 
-        self.ambiguousResultHandler = AmbiguousResultHandler(Database.laptimesDbName)
         self.database = self.updateResources(approot)
+        self.databaseAccess = DatabaseAccess(self.database)
+        self.ambiguousResultHandler = AmbiguousResultHandler(self.databaseAccess, approot)
 
-        self.databaseAccess = DatabaseAccess(self.database, self.ambiguousResultHandler)
         self.userArray = self.database.initializeLaptimesDb()
         self.initTrackers()
 
     def updateResources(self, approot):
-        self.ambiguousResultHandler.cleanUp(approot)
         database = Database(approot).setup()
         return database
 
@@ -132,53 +125,6 @@ class StatsProcessor():
         if config.get.show_car_controls:
             self.showCarControlInformation()
 
-    def applyHeuristics(self, car_candidates):
-        heuristics = LuckyGuessHeuristics(car_candidates, random.seed(self.seed))
-        
-        if config.get.authentic_shifting:
-            car_shift_map = self.databaseAccess.mapCarsToShifting(car_candidates)
-            gearShiftHeuristics = GearShiftHeuristics(list(car_shift_map), self.gearTracker)
-            gearShiftHeuristics.withFallback(heuristics)
-            heuristics = gearShiftHeuristics
-            
-        if config.get.user_signals:
-            userSignalHeuristics = UserSignalsHeuristics(car_candidates, self.inputTracker)
-            userSignalHeuristics.withFallback(heuristics)
-            heuristics = userSignalHeuristics
-        
-        return heuristics.guessCar()
-
-    def handleAmbiguousCars(self, timestamp, car, track):
-        if isinstance(car, int):
-            return car
-        
-        if config.get.heuristics_activated:
-            guessed_car = self.applyHeuristics(car)
-            
-            if guessed_car is not None:
-                self.databaseAccess.logCar(self.database.getCarName(guessed_car))
-                logger.info("If heuristics-based guess IS WRONG, RUN THE SCRIPT provided to fix the recorded car:")
-                self.databaseAccess.handleCarUpdates([c for c in car if c != guessed_car], timestamp, track)
-                return guessed_car
-
-        logger.info(instruction, "the correct car")
-        self.databaseAccess.handleCarUpdates(car, timestamp, track)
-
-        return car
-
-    def handleAmbiguousTracks(self, timestamp, car, track):
-        if isinstance(track, list):
-            logger.info(instruction, "the correct track")
-            self.databaseAccess.handleTrackUpdates(track, timestamp, car)
-        
-        return track
-
-    def handleAmbiguities(self, timestamp):
-        car = self.handleAmbiguousCars(timestamp, self.car, self.track)
-        track = self.handleAmbiguousTracks(timestamp, car, self.track)
-
-        return identify(track), identify(car)
-
     def finishStage(self, stats):
         laptime = stats[62]
         timestamp = time.time()
@@ -190,6 +136,12 @@ class StatsProcessor():
         
         self.databaseAccess.recordResults(track, car, timestamp, laptime, self.formatTopSpeed())
         self.logResults(laptime, track, car)
+
+    def handleAmbiguities(self, timestamp):
+        car = self.ambiguousResultHandler.handleAmbiguousCars(timestamp, self.car, self.track, self.gearTracker, self.inputTracker)
+        track = self.ambiguousResultHandler.handleAmbiguousTracks(timestamp, car, self.track)
+
+        return identify(track), identify(car)
 
     def finishedDR2TimeTrial(self, stats, trackProgess):
         return trackProgess >= completionProgress and self.allZeroStats(stats)

@@ -1,4 +1,3 @@
-import time
 import unittest
 from unittest.mock import MagicMock
 
@@ -6,6 +5,7 @@ from timerecorder.statsProcessor import StatsProcessor
 from tests.test_base import TestBase
 from timerecorder import config
 from builtins import range
+from timerecorder.updateScriptHandler import UpdateScriptHandler
 
 fieldCount = 66
 
@@ -13,9 +13,11 @@ class TestStatsProcessor(TestBase):
 
     def __init__(self, methodName):
         TestBase.__init__(self, methodName, 'test-files')
+        self.CleanUpFunction = UpdateScriptHandler.cleanUp
         self.UpdateResourcesFunction = StatsProcessor.updateResources
 
     def setUp(self):
+        UpdateScriptHandler.cleanUp = MagicMock()
         StatsProcessor.updateResources = MagicMock()
         self.thing = StatsProcessor('test.statsProcessor')
 
@@ -23,6 +25,7 @@ class TestStatsProcessor(TestBase):
         self.allZeroStats = [0.0] * 256
 
     def tearDown(self):
+        UpdateScriptHandler.cleanUp = self.CleanUpFunction
         StatsProcessor.updateResources = self.UpdateResourcesFunction
 
     def mockVisitorMethods(self):
@@ -127,7 +130,7 @@ class TestStatsProcessor(TestBase):
     def testLapTimeConversion(self):
         format_lap_time = self.thing.formatLapTime(180.249)
         self.assertEqual(format_lap_time, '180.25')
-        
+
     def testNiceLapTimeConversion(self):
         laptime = self.thing.prettyLapTime(180.240)
         self.assertEqual(str(laptime), '03:00.240')
@@ -140,6 +143,7 @@ class TestStatsProcessor(TestBase):
 
         self.thing.inStage = MagicMock(return_value=True)
         self.thing.databaseAccess = MagicMock()
+        self.thing.handleAmbiguities = MagicMock(return_value=(100, 1000))
         self.thing.databaseAccess.identifyCar = MagicMock(return_value=10)
         self.thing.databaseAccess.identifyTrack = MagicMock(return_value=11)
 
@@ -147,6 +151,7 @@ class TestStatsProcessor(TestBase):
         stats[59] = 1
         self.thing.handleStats(stats)
 
+        self.thing.handleAmbiguities.assert_called_once()
         self.thing.databaseAccess.identifyCar.assert_not_called()
         self.thing.databaseAccess.identifyTrack.assert_not_called()
         self.thing.databaseAccess.recordResults.assert_called_once()
@@ -184,65 +189,6 @@ class TestStatsProcessor(TestBase):
 
         self.thing.timeTracker.track.assert_not_called()
 
-    def testHandleResultsWithAmbiguousCarsAndNoHeuristics(self):
-        config.get.heuristics_activated = 1
-        self.thing.car = [100, 200]
-        self.thing.track = 1000
-
-        self.thing.applyHeuristics = MagicMock(return_value = None)
-        self.thing.databaseAccess = MagicMock()
-        self.thing.databaseAccess.recordResults = MagicMock()
-        self.thing.databaseAccess.handleCarUpdates = MagicMock()
-
-        timestamp = time.time()
-        result = self.thing.handleAmbiguities(timestamp)
-
-        self.thing.applyHeuristics.assert_called_once_with(self.thing.car)
-        self.thing.databaseAccess.handleCarUpdates.assert_called_once_with([100, 200], timestamp, 1000)
-        self.assertEqual(result, (1000, -1))
-
-    def testHandleResultsWithAmbiguousCarsAndLuckyGuess(self):
-        config.get.heuristics_activated = 1
-        self.thing.car = [100, 200]
-        self.thing.track = 1000
-
-        self.thing.applyHeuristics = MagicMock(return_value = 200)
-        self.thing.databaseAccess = MagicMock()
-        self.thing.databaseAccess.recordResults = MagicMock()
-        self.thing.databaseAccess.handleCarUpdates = MagicMock()
-
-        timestamp = time.time()
-        result = self.thing.handleAmbiguities(timestamp)
-
-        self.thing.applyHeuristics.assert_called_once_with(self.thing.car)
-        self.thing.databaseAccess.handleCarUpdates.assert_called_once_with([100], timestamp, 1000)
-        self.assertEqual(result, (1000, 200))
-
-    def testHeuristicsAreOnlyAppliedIfConfigured(self):
-        config.get.heuristics_activated = 0
-        self.thing.car = [100, 200]
-        self.thing.track = 1000
-
-        self.thing.applyHeuristics = MagicMock(return_value = None)
-        self.thing.databaseAccess = MagicMock()
-        self.thing.databaseAccess.recordResults = MagicMock()
-
-        timestamp = time.time()
-        result = self.thing.handleAmbiguities(timestamp)
-
-        self.thing.applyHeuristics.assert_not_called()
-        self.assertEqual(result, (1000, -1))
-
-    def testSeedIsRandomized(self):
-        instance = lambda _: StatsProcessor('test.statsProcessor')
-        seed = lambda statsProcessor: statsProcessor.seed
-
-        manyStatsProcessor = map(instance, range(0, 100))
-        seeds = list(map(seed, manyStatsProcessor))
-        any_seed = seeds[0]
-
-        self.assertNotEqual(seeds.count(any_seed), len(seeds), 'Seeds should be random')
-
     def testCarControlsAreShownIfConfigured(self):
         self.thing.inStage = MagicMock(return_value=False)
         self.thing.databaseAccess = MagicMock()
@@ -259,6 +205,18 @@ class TestStatsProcessor(TestBase):
         config.get.show_car_controls = 1
         self.thing.startStage(stats)
         self.thing.showCarControlInformation.assert_called_once()
+
+    def testHandleAmbiguities(self):
+        self.thing.ambiguousResultHandler = MagicMock()
+        self.thing.ambiguousResultHandler.handleAmbiguousCars = MagicMock(return_value=100)
+        self.thing.ambiguousResultHandler.handleAmbiguousTracks = MagicMock(return_value=1000)
+
+        result = self.thing.handleAmbiguities(123456789)
+
+        self.thing.ambiguousResultHandler.handleAmbiguousCars.assert_called_once()
+        self.thing.ambiguousResultHandler.handleAmbiguousTracks.assert_called_once()
+
+        self.assertEqual(result, (1000, 100))
 
 if __name__ == "__main__":
     unittest.main()

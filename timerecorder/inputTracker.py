@@ -20,7 +20,7 @@ class InputTracker():
         self.signal = None
         self.enabled = True
 
-    # TODO Must ignore approaching start line (DR1), check handbrake?
+    # TODO #41 Must ignore approaching start line (DR1), check handbrake?
     def hasLaunched(self):
         return self.speedTracker.getTopSpeed() > 1.0
 
