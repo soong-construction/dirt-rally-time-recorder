@@ -139,20 +139,22 @@ class StatsProcessor():
         return heuristics.guessCar()
 
     def handleAmbiguousCars(self, timestamp, car, track):
-        if isinstance(car, int) or not config.get.heuristics_activated:
+        if isinstance(car, int):
             return car
         
-        logger.info("Guessing car...")
-        guessed_car = self.applyHeuristics(car)
-        if guessed_car is None:
-            logger.info(instruction, "the correct car")
-            self.databaseAccess.handleCarUpdates(car, timestamp, track)
-        else:
-            self.databaseAccess.logCar(self.database.getCarName(guessed_car))
-            logger.info("If heuristics-based guess IS WRONG, RUN THE SCRIPT provided to fix the recorded car:")
-            self.databaseAccess.handleCarUpdates([c for c in car if c != guessed_car], timestamp, track)
-            car = guessed_car
+        if config.get.heuristics_activated:
+            logger.info("Guessing car...")
+            guessed_car = self.applyHeuristics(car)
+            
+            if guessed_car is not None:
+                self.databaseAccess.logCar(self.database.getCarName(guessed_car))
+                logger.info("If heuristics-based guess IS WRONG, RUN THE SCRIPT provided to fix the recorded car:")
+                self.databaseAccess.handleCarUpdates([c for c in car if c != guessed_car], timestamp, track)
+                return guessed_car
 
+        logger.info(instruction, "the correct car")
+        self.databaseAccess.handleCarUpdates(car, timestamp, track)
+                
         return car
 
     def handleAmbiguousTracks(self, timestamp, car, track):
