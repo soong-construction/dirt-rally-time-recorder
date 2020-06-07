@@ -60,3 +60,6 @@ class InputTracker():
         if self.isSignalRight(throttle, steer):
             self.input = Signal.THROTTLE_RIGHT
             logger.log(VERBOSE, 'engage THROTTLE turning RIGHT')
+            
+        # TODO #41 Play sound so user can end signal
+        

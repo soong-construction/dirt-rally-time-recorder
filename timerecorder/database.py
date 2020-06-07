@@ -85,6 +85,7 @@ class Database:
         self.db.execute('SELECT id, name, startz FROM Tracks WHERE abs(length - ?) < 0.001', (tracklength,))
         return self.db.fetchall()
 
+    # TODO #41 order by to ensure ascending IDs 
     def loadCars(self, idle_rpm, max_rpm, top_gear):
         carSelectStatement = ('SELECT cars.id, cars.name ' 
                               'FROM cars INNER JOIN controls USING(id) ' 
