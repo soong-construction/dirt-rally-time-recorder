@@ -5,7 +5,7 @@ from . import config
 from .ambiguousResultHandler import AmbiguousResultHandler
 from .database import Database
 from .databaseAccess import DatabaseAccess
-from .databaseAccess import identify
+from .databaseAccess import identify, AMBIGUOUS
 from .gearTracker import GearTracker
 from .inputTracker import InputTracker
 from .log import getLogger
@@ -13,7 +13,6 @@ from .progressTracker import ProgressTracker
 from .respawnTracker import RespawnTracker
 from .speedTracker import SpeedTracker
 from .timeTracker import TimeTracker
-
 
 
 goLineProgress = 0.0
@@ -27,7 +26,7 @@ class StatsProcessor():
         self.speed_unit = config.get.speed_unit
         self.speed_modifier = self.speed_unit == 'mph' and 0.6214 or 1
         self.approot = approot
-        
+
         self.track = 0
         self.car = 0
 
@@ -48,7 +47,7 @@ class StatsProcessor():
 
     def formatLapTime(self, laptime):
         return '%.2f' % (laptime,)
-    
+
     def prettyLapTime(self, laptime_seconds):
         fullDuration = str(timedelta(seconds=laptime_seconds))
         hours, minuteDuration = fullDuration.split(':', 1)
@@ -60,8 +59,16 @@ class StatsProcessor():
         logger.debug("%s.%s.%s.topspeed:%s|%s", self.userArray[0], track, car, self.formatTopSpeed(), self.speed_unit)
         logger.info("Completed stage in %s.", self.prettyLapTime(laptime))
 
+    def logTrack(self, trackId):
+        trackName = self.database.getTrackName(trackId)
+        logger.info("TRACK: %s", trackName)
+
+    def logCar(self, carId):
+        carName = self.database.getCarName(carId)
+        logger.info("CAR: %s", carName)
+
     def showCarControlInformation(self):
-        if isinstance(self.car, (list,)):
+        if identify(self.car) == AMBIGUOUS:
             for car in self.car:
                 logger.info(self.databaseAccess.describeCarInterfaces(car))
         else:
@@ -85,7 +92,7 @@ class StatsProcessor():
             self.progressTracker.track(stats)
             self.gearTracker.track(stats)
             self.speedTracker.track(stats)
-            
+
             self.inputTracker.track(stats)
 
         lap = self.progressTracker.getLap()
@@ -107,7 +114,7 @@ class StatsProcessor():
         self.gearTracker = GearTracker(self.respawnTracker)
         self.progressTracker = ProgressTracker()
         self.speedTracker = SpeedTracker()
-        
+
         self.inputTracker = InputTracker(self.speedTracker)
 
     def startStage(self, stats):
@@ -116,11 +123,17 @@ class StatsProcessor():
         track_z = stats[6]
         track_length = self.progressTracker.getTrackLength()
         self.track = dbAccess.identifyTrack(track_z, track_length)
+        trackId = identify(self.track)
+        if trackId != AMBIGUOUS:
+            self.logTrack(trackId)
 
         car_data = stats[63:66]  # max_rpm, idle_rpm, top_gear
         self.car = dbAccess.identifyCar(*tuple(car_data))
+        carId = identify(self.car)
+        if carId != AMBIGUOUS:
+            self.logCar(carId)
 
-        logger.debug("%s.%s.%s.started", self.userArray[0], identify(self.track), identify(self.car))
+        logger.debug("%s.%s.%s.started", self.userArray[0], trackId, carId)
 
         if config.get.show_car_controls:
             self.showCarControlInformation()
@@ -128,17 +141,20 @@ class StatsProcessor():
     def finishStage(self, stats):
         laptime = stats[62]
         timestamp = time.time()
-        
+
         # TODO #25 Remove?
         logger.debug("TOTAL GEAR SHIFT/SKIP: %s/%s", self.gearTracker.getGearChangeCount(), self.gearTracker.getGearSkipCount())
-        
+
         track, car = self.handleAmbiguities(timestamp)
-        
+
         self.databaseAccess.recordResults(track, car, timestamp, laptime, self.formatTopSpeed())
         self.logResults(laptime, track, car)
 
     def handleAmbiguities(self, timestamp):
         car = self.ambiguousResultHandler.handleAmbiguousCars(timestamp, self.car, self.track, self.gearTracker, self.inputTracker)
+        if identify(self.car) == AMBIGUOUS and identify(car) != AMBIGUOUS:
+            self.logCar(car)
+
         track = self.ambiguousResultHandler.handleAmbiguousTracks(timestamp, car, self.track)
 
         return identify(track), identify(car)

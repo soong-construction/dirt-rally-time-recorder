@@ -1,9 +1,10 @@
 from .log import getLogger, VERBOSE
 
 logger = getLogger(__name__)
+AMBIGUOUS = -1
 
 def identify(element):
-    return element if isinstance(element, int) else -1
+    return element if isinstance(element, int) else AMBIGUOUS
 
 class DatabaseAccess:
 
@@ -22,7 +23,6 @@ class DatabaseAccess:
 
         elif (len(tracks) == 1):
             index, name, startZ = tracks[0]
-            self.logTrack(name)
             return index
 
         # TODO Can't Z-based recognition be part of the SQL query? Looks much too complicated...
@@ -38,18 +38,11 @@ class DatabaseAccess:
 
             if matchingTrack and tracksDiffer:
                 index, name = matchingTrack
-                self.logTrack(name)
                 return index
 
         logger.warning("Ambiguous track data, %s matches", len(tracks))
         logger.debug("Length: %s (Z: %s)", str(tracklength), str(z))
-        return list(index for (index, name, startZ) in tracks)
-
-    def logTrack(self, name):
-        logger.info("TRACK: %s", str(name))
-
-    def logCar(self, name):
-        logger.info("CAR: %s", name)
+        return list(index for (index, _, _) in tracks)
 
     def identifyCar(self, max_rpm, idle_rpm, top_gear):
         cars = self.database.loadCars(idle_rpm, max_rpm, top_gear)
@@ -61,21 +54,20 @@ class DatabaseAccess:
             return []
 
         elif (len(cars) == 1):
-            index, name = cars[0]
-            self.logCar(name)
+            index, _ = cars[0]
             return index
 
         else:
             logger.warning("Ambiguous car data, %s matches", len(cars))
             logger.debug("Idle/Max RPM: %s - %s", str(idle_rpm), str(max_rpm))
-            return list(index for (index, name) in cars)
+            return list(index for (index, _) in cars)
 
     def handleCarUpdates(self, car_list, timestamp, track, updateHandler):
         updates = self.database.getCarUpdateStatements(timestamp, car_list)
         for index, update in enumerate(updates):
             elementId = car_list[index]
             carName = self.database.getCarName(elementId)
-            trackName = self.database.getTrackName(track) if identify(track) != -1 else 'UNKNOWN'
+            trackName = self.database.getTrackName(track) if identify(track) != AMBIGUOUS else 'UNKNOWN'
 
             updateHandler(trackName, carName, timestamp, update)
 
@@ -84,7 +76,7 @@ class DatabaseAccess:
         for index, update in enumerate(updates):
             elementId = track_list[index]
             trackName = self.database.getTrackName(elementId)
-            carName = self.database.getCarName(car) if identify(car) != -1 else 'UNKNOWN'
+            carName = self.database.getCarName(car) if identify(car) != AMBIGUOUS else 'UNKNOWN'
 
             updateHandler(trackName, carName, timestamp, update)
 

@@ -206,8 +206,22 @@ class TestStatsProcessor(TestBase):
         self.thing.startStage(stats)
         self.thing.showCarControlInformation.assert_called_once()
 
+    def testLogTrack(self):
+        self.thing.database.getTrackName = MagicMock(return_value = 'Mugello')
+        self.thing.logTrack(1001)
+        
+        self.thing.database.getTrackName.assert_called_once()
+
+    def testLogCar(self):
+        self.thing.database.getCarName = MagicMock(return_value = 'Porsche 911')
+        self.thing.logCar(911)
+        
+        self.thing.database.getCarName.assert_called_once()
+        
     def testHandleAmbiguities(self):
         self.thing.ambiguousResultHandler = MagicMock()
+        self.thing.car = [100, 200]
+        self.thing.logCar = MagicMock()
         self.thing.ambiguousResultHandler.handleAmbiguousCars = MagicMock(return_value=100)
         self.thing.ambiguousResultHandler.handleAmbiguousTracks = MagicMock(return_value=1000)
 
@@ -215,6 +229,7 @@ class TestStatsProcessor(TestBase):
 
         self.thing.ambiguousResultHandler.handleAmbiguousCars.assert_called_once()
         self.thing.ambiguousResultHandler.handleAmbiguousTracks.assert_called_once()
+        self.thing.logCar.assert_called_once_with(100)
 
         self.assertEqual(result, (1000, 100))
 

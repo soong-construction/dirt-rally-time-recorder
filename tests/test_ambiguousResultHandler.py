@@ -22,6 +22,19 @@ class TestAmbiguousResultHandler(TestBase):
     def tearDown(self):
         pass
 
+    def testHandleResultsWithUnambiguousCars(self):
+        car = 100
+        track = 1000
+        
+        self.thing.applyHeuristics = MagicMock(return_value = None)
+        
+        timestamp = time.time()
+        result = self.thing.handleAmbiguousCars(timestamp, car, track, self.gearTracker, self.inputTracker)
+
+        self.thing.applyHeuristics.assert_not_called()
+        self.thing.databaseAccess.handleCarUpdates.assert_not_called()
+        self.assertEqual(result, car)
+
     def testHandleResultsWithAmbiguousCarsAndNoHeuristics(self):
         config.get.heuristics_activated = 1
         car = [100, 200]
@@ -63,6 +76,7 @@ class TestAmbiguousResultHandler(TestBase):
         result = self.thing.handleAmbiguousCars(timestamp, car, track, self.gearTracker, self.inputTracker)
 
         self.thing.applyHeuristics.assert_not_called()
+        self.thing.databaseAccess.handleCarUpdates.assert_called_once_with([100, 200], timestamp, 1000, ANY)
         self.assertEqual(result, car)
 
     def testHandleAmbiguousTracks(self):

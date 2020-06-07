@@ -46,9 +46,6 @@ class AmbiguousResultHandler():
             guessed_car = self.applyHeuristics(car, gearTracker, inputTracker)
             
             if guessed_car is not None:
-                # TODO #41 Where to map car ID to name?
-                carName = 'TBD' # self.database.getCarName(guessed_car)
-                self.databaseAccess.logCar(carName)
                 logger.info("If heuristics-based guess IS WRONG, RUN THE SCRIPT provided to fix the recorded car:")
                 dismissedCars = [c for c in car if c != guessed_car]
                 self.databaseAccess.handleCarUpdates(dismissedCars, timestamp, track, self.handleUpdate)
