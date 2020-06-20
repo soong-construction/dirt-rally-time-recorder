@@ -9,18 +9,21 @@ throttle_offset = 0.5
 class Signal(Enum):
     THROTTLE_LEFT = 1
     THROTTLE_RIGHT = 2
-    
+
 # Steer (left-neutral-right): -1.0..1.0
 # Throttle (no-full): 0.0..1.0
 class InputTracker():
-    
-    def __init__(self, speedTracker):
+
+    def __init__(self, speedTracker, notify):
         self.speedTracker = speedTracker
+        self.notify = notify
         self.input = None
         self.signal = None
         self.enabled = True
 
-    # TODO #41 Must ignore approaching start line (DR1), check handbrake?
+        self.toggle = False
+
+    # TODO #41 Must ignore approaching start line (DR1), wait for brake: 1.0, speed: 0 (car stops)?
     def hasLaunched(self):
         return self.speedTracker.getTopSpeed() > 1.0
 
@@ -36,9 +39,15 @@ class InputTracker():
     def track(self, stats):
         throttle, steer = (stats[29:31])
 
+        # #41 Debug
+        brake = stats[31]
+        self.toggle = not self.toggle
+        if self.toggle:
+            print('brake: %s, speed: %s' % (brake, self.speedTracker.getSpeed()))
+
         if not self.enabled:
             return
-        
+
         if self.hasLaunched():
             self.enabled = False
             logger.debug('LAUNCHED')
@@ -52,14 +61,13 @@ class InputTracker():
 
         if self.input is not None:
             return
-        
+
         if self.isSignalLeft(throttle, steer):
             self.input = Signal.THROTTLE_LEFT
             logger.log(VERBOSE, 'engage THROTTLE turning LEFT')
-            
+            self.notify()
+
         if self.isSignalRight(throttle, steer):
             self.input = Signal.THROTTLE_RIGHT
             logger.log(VERBOSE, 'engage THROTTLE turning RIGHT')
-            
-        # TODO #41 Play sound so user can end signal
-        
+            self.notify()
