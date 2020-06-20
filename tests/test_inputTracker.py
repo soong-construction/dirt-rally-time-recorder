@@ -2,7 +2,6 @@ import unittest
 from timerecorder.inputTracker import InputTracker, Signal
 from unittest.mock import MagicMock
 
-
 fieldCount = 66
 
 class TestInputTracker(unittest.TestCase):
@@ -13,7 +12,8 @@ class TestInputTracker(unittest.TestCase):
     def setUp(self):
         self.speedTracker = MagicMock()
         self.speedTracker.getTopSpeed = MagicMock(return_value = 0)
-        self.thing = InputTracker(self.speedTracker)
+        self.notify = MagicMock()
+        self.thing = InputTracker(self.speedTracker, self.notify)
 
     def tearDown(self):
         pass
@@ -63,7 +63,26 @@ class TestInputTracker(unittest.TestCase):
         self.thing.track(stats)
         self.speedTracker.getTopSpeed.assert_not_called()
 
-    def testSignalOnlyAfterInputGone(self):
+    def testSignalLeftOnlyAfterInputGone(self):
+        self.notify.assert_not_called()
+        self.speedTracker.getTopSpeed = MagicMock(return_value = 0)
+        stats = [0] * fieldCount
+        stats[29] = 0.6
+        stats[30] = -0.6
+
+        self.thing.track(stats)
+        self.assertEqual(self.thing.input, Signal.THROTTLE_LEFT)
+        self.notify.assert_called_once()
+        self.assertIsNone(self.thing.signal)
+
+        stats[29] = 0.0
+        self.thing.track(stats)
+        self.assertIsNone(self.thing.input)
+        self.notify.assert_called_once()
+        self.assertEqual(self.thing.signal, Signal.THROTTLE_LEFT)
+
+    def testSignalRightOnlyAfterInputGone(self):
+        self.notify.assert_not_called()
         self.speedTracker.getTopSpeed = MagicMock(return_value = 0)
         stats = [0] * fieldCount
         stats[29] = 0.6
@@ -71,12 +90,13 @@ class TestInputTracker(unittest.TestCase):
 
         self.thing.track(stats)
         self.assertEqual(self.thing.input, Signal.THROTTLE_RIGHT)
+        self.notify.assert_called_once()
         self.assertIsNone(self.thing.signal)
+
         stats[29] = 0.0
         self.thing.track(stats)
-
         self.assertIsNone(self.thing.input)
+        self.notify.assert_called_once()
         self.assertEqual(self.thing.signal, Signal.THROTTLE_RIGHT)
-
 if __name__ == '__main__':
     unittest.main()

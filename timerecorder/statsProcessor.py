@@ -1,5 +1,6 @@
 from datetime import timedelta
 import time
+import simpleaudio as sa
 
 from . import config
 from .ambiguousResultHandler import AmbiguousResultHandler
@@ -115,7 +116,7 @@ class StatsProcessor():
         self.progressTracker = ProgressTracker()
         self.speedTracker = SpeedTracker()
 
-        self.inputTracker = InputTracker(self.speedTracker)
+        self.inputTracker = InputTracker(self.speedTracker, self.playNotificationSound)
 
     def startStage(self, stats):
         dbAccess = self.databaseAccess
@@ -172,3 +173,7 @@ class StatsProcessor():
 
         elif self.statsWithTelemetry(stats) and stageProgress <= goLineProgress and not inStage:
             self.startStage(stats)
+            
+    def playNotificationSound(self):
+        waveObj = sa.WaveObject.from_wave_file('notify.wav')
+        waveObj.play()

@@ -6,10 +6,14 @@ from tests.test_base import TestBase
 from timerecorder import config
 from builtins import range
 from timerecorder.updateScriptHandler import UpdateScriptHandler
+import simpleaudio
 
 fieldCount = 66
 
 class TestStatsProcessor(TestBase):
+    
+    def mockAwaySideEffects(self):
+        simpleaudio.WaveObject = MagicMock()
 
     def __init__(self, methodName):
         TestBase.__init__(self, methodName, 'test-files')
