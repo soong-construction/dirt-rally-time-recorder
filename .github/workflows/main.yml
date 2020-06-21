@@ -28,6 +28,7 @@ jobs:
         packages: |
           pytest
           PyYAML==5.3
+          simpleaudio==1.0.4
     
     - name: Run tests / pytest
       run: python -m pytest tests
@@ -64,6 +65,7 @@ jobs:
         packages: |
           PyYAML==5.3
           pyinstaller==3.6
+          simpleaudio==1.0.4
     
     - name: Bundle DR1 executable / PyInstaller
       run: |
