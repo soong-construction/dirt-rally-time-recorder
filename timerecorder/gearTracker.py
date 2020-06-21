@@ -1,8 +1,9 @@
 from .log import getLogger, VERBOSE
+from .baseTracker import BaseTracker
 
 logger = getLogger(__name__)
 
-class GearTracker():
+class GearTracker(BaseTracker):
 
     def __init__(self, respawnTracker):
         self.respawnTracker = respawnTracker

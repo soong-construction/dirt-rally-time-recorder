@@ -1,4 +1,6 @@
-class ProgressTracker():
+from .baseTracker import BaseTracker
+
+class ProgressTracker(BaseTracker):
     
     def __init__(self):
         self.distance = None

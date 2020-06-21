@@ -1,5 +1,7 @@
+from .baseTracker import BaseTracker
+
 # Field Time is not reset when restarting events (but for: new/proceeding events, second runs on PP).
-class TimeTracker():
+class TimeTracker(BaseTracker):
     
     def __init__(self):
         self.time = 0

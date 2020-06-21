@@ -14,6 +14,7 @@ from .progressTracker import ProgressTracker
 from .respawnTracker import RespawnTracker
 from .speedTracker import SpeedTracker
 from .timeTracker import TimeTracker
+from .baseTracker import BaseTracker
 
 
 goLineProgress = 0.0
@@ -115,8 +116,7 @@ class StatsProcessor():
         self.gearTracker = GearTracker(self.respawnTracker)
         self.progressTracker = ProgressTracker()
         self.speedTracker = SpeedTracker()
-
-        self.inputTracker = InputTracker(self.speedTracker, self.playNotificationSound)
+        self.inputTracker = InputTracker(self.speedTracker, self.playNotificationSound) if config.get.user_signals else BaseTracker()
 
     def startStage(self, stats):
         dbAccess = self.databaseAccess
@@ -175,5 +175,8 @@ class StatsProcessor():
             self.startStage(stats)
             
     def playNotificationSound(self):
-        waveObj = sa.WaveObject.from_wave_file('notify.wav')
-        waveObj.play()
+        try:
+            waveObj = sa.WaveObject.from_wave_file('notify.wav')
+            waveObj.play()
+        except:
+            logger.debug('Failed to play notification')
