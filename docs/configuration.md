@@ -36,7 +36,7 @@ The program has an internal order of cars that match the car's position in the i
 - inside one class, signal LEFT for the first car in the list, RIGHT for the other
 - if the cars are in different classes, signal LEFT for the car in the class first in the list, RIGHT for the other
 
-After a while, you will know which cars cannot be told apart by the UDP telemetry, what their in-game order is, and which one is LEFT/RIGHT.  
+After a while, you will know which cars cannot be told apart by the UDP telemetry, what their in-game order is, and which one is LEFT/RIGHT. Note that the received signal holds for the current stage. A stage restart will reset signal detection.
 
 Caveat: User signals currently only work for DiRT Rally 2.0.
 
