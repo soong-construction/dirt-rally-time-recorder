@@ -37,6 +37,8 @@ def main(logfile):
         
         asyncore.loop()
         
+    except KeyboardInterrupt:
+        pass
     except:
         logger.exception('***timerecord crashed***')
         logger.error('This should not happen. Look for help at %s%s', gitHubOrg, name)
