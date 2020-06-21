@@ -49,10 +49,9 @@ class UpdateScriptHandler(object):
         return creation_time < deadline
 
     def warnShortRetentionTime(self):
-        # TODO Hint is misleading, might not create scripts or might not need to run scripts
         return logger.warning(
             ('CAUTION: You chose to keep update scripts for less than %s days. '
-                'Make sure to run ALL CREATED SCRIPTS after your session.'), config.keep_update_scripts_days_default)
+                'Follow possible hints to update scripts directly after your session.'), config.keep_update_scripts_days_default)
 
     def listOldUpdateScripts(self, time, directory):
         keep_for_days = config.get.keep_update_scripts_days
