@@ -1,3 +1,4 @@
+from .baseTracker import BaseTracker
 from .log import getLogger
 
 recoverDelta = 2
@@ -7,7 +8,7 @@ restartDistance = 10
 logger = getLogger(__name__)
 
 # Should handle most respawns, except successive recovers in one place (only DR1)
-class RespawnTracker():
+class RespawnTracker(BaseTracker):
     
     def __init__(self):
         self.last_x = None

@@ -1,4 +1,6 @@
-class SpeedTracker():
+from .baseTracker import BaseTracker
+
+class SpeedTracker(BaseTracker):
     # unit: m/s
     
     def __init__(self):

@@ -1,5 +1,6 @@
 from enum import Enum
 from .log import getLogger, VERBOSE
+from .baseTracker import BaseTracker
 
 logger = getLogger(__name__)
 
@@ -12,7 +13,7 @@ class Signal(Enum):
 
 # Steer (left-neutral-right): -1.0..1.0
 # Throttle (no-full): 0.0..1.0
-class InputTracker():
+class InputTracker(BaseTracker):
 
     def __init__(self, speedTracker, notify):
         self.speedTracker = speedTracker
