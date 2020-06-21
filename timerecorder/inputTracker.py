@@ -22,7 +22,7 @@ class InputTracker(BaseTracker):
         self.signal = None
         self.enabled = True
 
-    # TODO #41 Triggered when approaching start line (DR1), wait for brake: 1.0, speed: 0 (car stops)?
+    # TODO #41 Must ignore approaching start line (DR1), await full second of speed: 0 (car stopped)?
     def hasLaunched(self):
         return self.speedTracker.getTopSpeed() > 1.0
 

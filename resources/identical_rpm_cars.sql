@@ -7,5 +7,5 @@ join controls co2 on c2.id = co2.id
 -- with equal top gear
 and co1.topgear = co2.topgear
 -- with equal shifting
-and co1.shifting = co2.shifting
+-- and co1.shifting = co2.shifting
 ;

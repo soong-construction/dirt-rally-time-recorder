@@ -8,8 +8,7 @@ VERBOSE = __log_level__(5, 'VERBOSE')
 logFormat = '%(asctime)s %(levelname)s [%(name)s] %(message)s'
 
 def init(filename):
-    # TODO #41 level=DEBUG
-    logging.basicConfig(format=logFormat, filename=filename, level=VERBOSE)
+    logging.basicConfig(format=logFormat, filename=filename, level=logging.DEBUG)
 
 def getLogger(module):
     logger = logging.getLogger(module)
