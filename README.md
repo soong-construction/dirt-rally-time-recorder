@@ -5,8 +5,6 @@ This tool allows you to track your stage times in DiRT Rally and DiRT Rally 2.0 
 
 Time tracking works for stage rallies and the Pikes Peak events of the original DiRT Rally.  
 
-> To check if the latest DiRT Rally 2.0 DLC is supported, look for or create an [issue.](https://github.com/soong-construction/dirt-rally-time-recorder/issues?q=label%3ADLC) 
-
 ## First time set up
 
 You can choose to download *dirt-rally-time-recorder* as a ready-to-use bundle (tested to work on Windows 10 x64). If you don't trust pre-built .exe files, you can [set it up from scratch](docs/setup-from-scratch.md). 
