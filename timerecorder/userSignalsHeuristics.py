@@ -11,7 +11,6 @@ class UserSignalsHeuristics(Heuristics):
         self.car_candidates = car_candidates
         self.userSignal = inputTracker.getSignal()
 
-    # TODO #41 If not applicable, advise signal for fallback guess?        
     def isApplicable(self):
         return len(self.car_candidates) <= 2 and self.userSignal
 

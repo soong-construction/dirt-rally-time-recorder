@@ -21,9 +21,7 @@ class InputTracker():
         self.signal = None
         self.enabled = True
 
-        self.toggle = False
-
-    # TODO #41 Must ignore approaching start line (DR1), wait for brake: 1.0, speed: 0 (car stops)?
+    # TODO #41 Triggered when approaching start line (DR1), wait for brake: 1.0, speed: 0 (car stops)?
     def hasLaunched(self):
         return self.speedTracker.getTopSpeed() > 1.0
 
@@ -38,12 +36,6 @@ class InputTracker():
 
     def track(self, stats):
         throttle, steer = (stats[29:31])
-
-        # #41 Debug
-        brake = stats[31]
-        self.toggle = not self.toggle
-        if self.toggle:
-            print('brake: %s, speed: %s' % (brake, self.speedTracker.getSpeed()))
 
         if not self.enabled:
             return
