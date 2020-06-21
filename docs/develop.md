@@ -48,3 +48,14 @@ Bundles are automatically created by GitHub Actions for all tagged versions and 
 - upload all bundles
 - publish the release
 
+# License matters
+The `LICENSE` must be kept up-to-date, although it should rarely change.  
+
+The `THIRD_PARTY_LICENSES` include all works from outside this project, which must be compatible to the chosen `LICENSE`.
+- All used libraries like PyYAML: Include necessary texts
+- All used build tools like pytest: same
+- PyInstaller because we built bundles with it that are not bound to its license
+- CPython license including special module licenses for the bundles: https://docs.python.org/3.7/license.html#psf-license-agreement-for-python-release
+- All used binaries like sounds
+
+`xref-timerecord.html` from the bundling process can help identify dependencies.
