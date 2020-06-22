@@ -151,7 +151,7 @@ INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (502, 'Mitsubishi Lancer Evo
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (40, 'Subaru Impreza 2001', 785.398193359375, 157.07962036132812);
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (601, 'Ford Focus RS Rally 2001', 785.398193359375, 178.0236053466797);
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (602, 'Ford Focus RS Rally 2007', 733.038330078125, 209.43943786621094);
-INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (603, 'Citroen C4 Rally 2007', 733.038330078125, 209.43943786621094);
+INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (603, 'Citroen C4 Rally 2010', 733.038330078125, 209.43943786621094);
 
 -- 2010s
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (19, 'Mini Countryman Rally Edition', 785.398193359375, 167.55160522460938);
