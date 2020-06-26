@@ -42,6 +42,13 @@ exe = EXE(pyz,
           strip=False,
           upx=True,
           console=True )
+
+# Exclude Universal CRT to spare licensing issues
+a.binaries = [x for x in a.binaries if not x[0] == 'VCRUNTIME140.dll']
+a.binaries = [x for x in a.binaries if not x[0] == 'ucrtbase.dll']
+a.binaries = [x for x in a.binaries if not x[0].startswith('api-ms-win-core-')]
+a.binaries = [x for x in a.binaries if not x[0].startswith('api-ms-win-crt-')]
+
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,
