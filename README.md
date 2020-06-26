@@ -85,3 +85,5 @@ UDP data recognition in collaboration with ErlerPhilipp: https://github.com/Erle
 Thanks to Slocan for the initial version: https://github.com/Slocan/timerecord
 
 Credits to Billiam for the core code: https://github.com/Billiam/pygauge
+
+See `LICENSE` and `THIRD_PARTY_LICENSES.txt` for works used under license.
