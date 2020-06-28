@@ -22,7 +22,7 @@ class InputTracker(BaseTracker):
         self.signal = None
         self.enabled = True
 
-    # TODO #41 Must ignore approaching start line (DR1), await full second of speed: 0 (car stopped)?
+    # Is reported when approaching start line in DR1, and no straight forward solution like handbrake pulled check  
     def hasLaunched(self):
         return self.speedTracker.getTopSpeed() > 1.0
 
