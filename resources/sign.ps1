@@ -17,5 +17,6 @@ try {
 } catch {
     Write-Host "An error occurred:"
     Write-Host $_
+    Write-Host $_.ScriptStackTrace
     exit 1
 }
