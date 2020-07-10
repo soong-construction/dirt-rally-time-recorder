@@ -15,5 +15,7 @@ try {
     $cert = Get-PfxCertificate -FilePath .\code_signing.pfx -Password (ConvertTo-SecureString -String $DRTR_CODESIGN_CERTIFICATE_PASS)
     Set-AuthenticodeSignature $Exe -Certificate $cert
 } catch {
+    Write-Host "An error occurred:"
+    Write-Host $_
     exit 1
 }
