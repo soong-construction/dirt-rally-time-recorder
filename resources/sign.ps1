@@ -12,7 +12,7 @@ param ($Exe = $(throw "Exe parameter is required."))
 
 ## Apply it in CI (PWSH 6+)
 try {
-    $cert = Get-PfxCertificate -FilePath .\code_signing.pfx -Password (ConvertTo-SecureString -String $env:DRTR_CODESIGN_CERTIFICATE_PASS)
+    $cert = Get-PfxCertificate -FilePath .\code_signing.pfx -Password (ConvertTo-SecureString -AsPlainText -String $env:DRTR_CODESIGN_CERTIFICATE_PASS)
     Set-AuthenticodeSignature $Exe -Certificate $cert
 } catch {
     Write-Host "An error occurred:"
