@@ -69,7 +69,8 @@ jobs:
     
     - name: Bundle DR1 executable / PyInstaller
       run: |
-        resources\bundle-dr1.bat
+        resources\bundle-dr1.ps1
+      shell: pwsh
       env:
         DRTR_CODESIGN_CERTIFICATE_PASS: ${{ secrets.DRTR_CODESIGN_CERTIFICATE_PASS }}
 
