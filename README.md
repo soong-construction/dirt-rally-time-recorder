@@ -7,7 +7,7 @@ Time tracking works for stage rallies and the Pikes Peak events of the original 
 
 ## First time set up
 
-You can choose to download *dirt-rally-time-recorder* as a ready-to-use bundle (tested to work on Windows 10 x64). If you don't trust pre-built .exe files, you can [set it up from scratch](docs/setup-from-scratch.md). 
+You can choose to download *dirt-rally-time-recorder* as a ready-to-use bundle (tested to work on Windows 10 x64). Read about certificate issues [here](docs/unknown-publisher-warning.md) or [set it up from scratch](docs/setup-from-scratch.md). 
 
 ### Ready-to-use bundle
 - Download the [latest release](https://github.com/soong-construction/dirt-rally-time-recorder/releases/latest) for either the original DiRT Rally or 2.0
@@ -55,6 +55,7 @@ In order to consolidate the database, the tool prepares update scripts for you, 
 
 ## Troubleshooting
 Starting:
+- to understand Windows SmartScreen Defender warnings for `timerecord.exe`, read [this](docs/unknown-publisher-warning.md)
 - if you encounter an error message about sockets, understand that this tool cannot run in parallel, but only in a single instance at the same time
 - unless you downloaded the bundled version, have a look at `resources/migrate.sql` to find instructions how to update to new releases
 - if you encounter errors at start-up, see if renaming the file `dirtrally-laptimes.db` helps (which will create a new database) 
