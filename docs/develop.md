@@ -26,6 +26,9 @@ To bundle for DiRT Rally
 To bundle for DiRT Rally 2.0
 * Cf. job `assemble`, step `Bundle DR2` in `.github/workflows/main.yml`
 
+Hint: To invoke the .ps1 scripts, you need the Powershell Core (6 or newer) and to [allow script execution](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7). You should also remove the signing step 
+in the scripts if you bundle locally.
+
 # Releasing
 
 ## Requirements

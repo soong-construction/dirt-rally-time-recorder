@@ -82,7 +82,10 @@ jobs:
 
     - name: Bundle DR2 executable / PyInstaller
       run: |
-        resources\bundle-dr2.bat
+        resources\bundle-dr2.ps1
+      shell: pwsh
+      env:
+        DRTR_CODESIGN_CERTIFICATE_PASS: ${{ secrets.DRTR_CODESIGN_CERTIFICATE_PASS }}
 
     - name: Zip distribution / create-7z-action
       uses: DuckSoft/create-7z-action@v1.0

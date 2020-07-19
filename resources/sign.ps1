@@ -7,8 +7,6 @@ param ($Exe = $(throw "Exe parameter is required."))
 # (Get-ChildItem Cert:\CurrentUser\My -CodeSigningCert)[0] | Export-PfxCertificate -FilePath code_signing.pfx -Password $mypwd
 ## or unprotected, or use certmgr.msc
 # Export-Certificate -Cert (Get-ChildItem Cert:\CurrentUser\My -CodeSigningCert)[0] -FilePath code_signing.crt
-## Short circuit locally
-# $env:DRTR_CODESIGN_CERTIFICATE_PASS = ConvertFrom-SecureString -SecureString $mypwd
 
 ## Apply it in CI (PWSH 6+)
 try {
