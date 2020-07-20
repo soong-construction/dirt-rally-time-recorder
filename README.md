@@ -49,7 +49,7 @@ Since DiRT Rally [2.0] telemetry data doesn't allow to clearly identify every av
 
 In order to consolidate the database, the tool prepares update scripts for you, e.g. `1573403766_ElRodeo_PoloGTIR5.bat`
 - open your installation folder  
-- run the update script that matches the car or track you chose (e.g. double-click it)  
+- run the update script that matches the car and track you chose (e.g. double-click it)  
 - you will barely notice a window opening and closing, and that's it
 - each time you start *dirt-rally-time-recorder*, it automatically removes update scripts older than a week 
 
