@@ -42,7 +42,7 @@ class AmbiguousResultHandler():
         if isinstance(car, int):
             return car
         
-        if config.get.heuristics_activated:
+        if config.get.heuristics_activated and len(car) > 0:
             guessed_car = self.applyHeuristics(car, gearTracker, inputTracker)
             
             if guessed_car is not None:

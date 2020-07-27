@@ -50,6 +50,21 @@ class TestAmbiguousResultHandler(TestBase):
         self.thing.databaseAccess.handleCarUpdates.assert_called_once_with(car, timestamp, 1000, ANY)
         self.assertEqual(result, car)
 
+    def testHandleResultsWithNoCarCandidatesShouldSkipHeuristics(self):
+        config.get.heuristics_activated = 1
+        car = []
+        track = 1000
+
+        self.thing.applyHeuristics = MagicMock(return_value = 200)
+        self.thing.databaseAccess.handleCarUpdates = MagicMock()
+
+        timestamp = time.time()
+        result = self.thing.handleAmbiguousCars(timestamp, car, track, self.gearTracker, self.inputTracker)
+
+        self.thing.applyHeuristics.assert_not_called()
+        self.thing.databaseAccess.handleCarUpdates.assert_called_once_with([], timestamp, 1000, ANY)
+        self.assertEqual(result, [])
+        
     def testHandleResultsWithAmbiguousCarsAndLuckyGuess(self):
         config.get.heuristics_activated = 1
         car = [100, 200]
