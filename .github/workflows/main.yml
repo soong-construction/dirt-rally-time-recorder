@@ -93,6 +93,14 @@ jobs:
         pathSource: ./dist/timerecorder-dr2
         pathTarget: artifacts/timerecorder-dirt-rally-2.0.zip
 
+    - name: Hash zip files
+      env:
+        dr1_hash: ${{hashFiles('artifacts/timerecorder-dirt-rally.zip')}}
+        dr2_hash: ${{hashFiles('artifacts/timerecorder-dirt-rally-2.0.zip')}}
+      run: |
+        echo "timerecorder-dirt-rally-2.0.zip SHA256: $env:dr2_hash" 
+        echo "timerecorder-dirt-rally.zip SHA256: $env:dr1_hash"
+
     - name: Archive artifacts
       uses: actions/upload-artifact@v1
       with:
