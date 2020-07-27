@@ -24,6 +24,7 @@ class TestStatsProcessor(TestBase):
         UpdateScriptHandler.cleanUp = MagicMock()
         StatsProcessor.updateResources = MagicMock()
         self.thing = StatsProcessor('test.statsProcessor')
+        self.thing.logResults = MagicMock()
 
         self.stats = range(0, 256)
         self.allZeroStats = [0.0] * 256

@@ -85,7 +85,7 @@ class DatabaseAccess:
         return zip(car_candidates, shifting_data)
 
     def recordResults(self, track, car, timestamp, laptime, topspeed):
-        self.database.recordResults(track, car, timestamp, laptime, topspeed)
+        return self.database.recordResults(track, car, timestamp, laptime, topspeed)
 
     def describeHandbrake(self, car):
         hasHandbrake = self.database.loadHandbrakeData(car)

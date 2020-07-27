@@ -56,10 +56,15 @@ class StatsProcessor():
         thousandthsDuration = minuteDuration[:-3]
         return thousandthsDuration if hours == '0' else hours + ':' + thousandthsDuration
 
-    def logResults(self, laptime, track, car):
+    def logResults(self, laptime, track, car, previousBest):
         logger.debug("%s.%s.%s.time:%s|s", self.userArray[0], track, car, self.formatLapTime(laptime))
         logger.debug("%s.%s.%s.topspeed:%s|%s", self.userArray[0], track, car, self.formatTopSpeed(), self.speed_unit)
         logger.info("Completed stage in %s.", self.prettyLapTime(laptime))
+        
+        # TODO #46 Only meaningful if car could be identified without heuristics...
+        if previousBest is not None:
+            previousBestTime = previousBest[1]
+            logger.info("Beating previous best time of %s.", self.prettyLapTime(previousBestTime))
 
     def logTrack(self, trackId):
         trackName = self.database.getTrackName(trackId)
@@ -145,8 +150,8 @@ class StatsProcessor():
 
         track, car = self.handleAmbiguities(timestamp)
 
-        self.databaseAccess.recordResults(track, car, timestamp, laptime, self.formatTopSpeed())
-        self.logResults(laptime, track, car)
+        previousBest = self.databaseAccess.recordResults(track, car, timestamp, laptime, self.formatTopSpeed())
+        self.logResults(laptime, track, car, previousBest)
 
     def handleAmbiguities(self, timestamp):
         car = self.ambiguousResultHandler.handleAmbiguousCars(timestamp, self.car, self.track, self.gearTracker, self.inputTracker)
