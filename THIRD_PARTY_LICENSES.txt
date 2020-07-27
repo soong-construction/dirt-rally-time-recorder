@@ -1,5 +1,17 @@
 This project uses the following works under license:
 
+SQLite - Small. Fast. Reliable. Choose any three.
+
+SQLite Is Public Domain
+
+All of the code and documentation in SQLite has been dedicated to the public domain by the authors. All code authors, and 
+representatives of the companies they work for, have signed affidavits dedicating their contributions to the public domain 
+and originals of those signed affidavits are stored in a firesafe at the main offices of Hwaci. Anyone is free to copy, 
+modify, publish, use, compile, sell, or distribute the original SQLite code, either in source code form or as a compiled 
+binary, for any purpose, commercial or non-commercial, and by any means. 
+
+################################################################################################################################################################
+
 PyYAML - The next generation YAML parser and emitter for Python is licensed under the MIT License
 
 Copyright (c) 2017-2020 Ingy döt Net
