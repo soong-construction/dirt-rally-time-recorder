@@ -55,7 +55,7 @@ In order to consolidate the database, the tool prepares update scripts for you, 
 
 ## Troubleshooting
 Starting:
-- to understand Windows SmartScreen Defender warnings for *dirt-rally-time-recorder*, read [this](docs/unknown-publisher-warning.md)
+- to understand MS Defender SmartScreen warnings for *dirt-rally-time-recorder*, read [this](docs/unknown-publisher-warning.md)
 - if you encounter an error message about sockets, understand that this tool cannot run in parallel, but only in a single instance at the same time
 - unless you downloaded the bundled version, have a look at `resources/migrate.sql` to find instructions how to update to new releases
 - if you encounter errors at start-up, see if renaming the file `dirtrally-laptimes.db` helps (which will create a new database) 
