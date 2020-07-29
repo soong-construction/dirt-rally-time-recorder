@@ -56,14 +56,12 @@ class StatsProcessor():
         thousandthsDuration = minuteDuration[:-3]
         return thousandthsDuration if hours == '0' else hours + ':' + thousandthsDuration
 
-    def logResults(self, laptime, track, car, previousBest):
+    def logResults(self, laptime, track, car, previousBestTime = None):
         logger.debug("%s.%s.%s.time:%s|s", self.userArray[0], track, car, self.formatLapTime(laptime))
         logger.debug("%s.%s.%s.topspeed:%s|%s", self.userArray[0], track, car, self.formatTopSpeed(), self.speed_unit)
         logger.info("Completed stage in %s.", self.prettyLapTime(laptime))
-        
-        # TODO #46 Only meaningful if car could be identified without heuristics...
-        if previousBest is not None:
-            previousBestTime = previousBest[1]
+
+        if previousBestTime is not None:
             logger.info("Beating previous best time of %s.", self.prettyLapTime(previousBestTime))
 
     def logTrack(self, trackId):
@@ -149,9 +147,14 @@ class StatsProcessor():
         timestamp = time.time()
 
         track, car = self.handleAmbiguities(timestamp)
-
         previousBest = self.databaseAccess.recordResults(track, car, timestamp, laptime, self.formatTopSpeed())
-        self.logResults(laptime, track, car, previousBest)
+        ambiguities = identify(self.car) == AMBIGUOUS or identify(self.track) == AMBIGUOUS
+
+        if ambiguities or previousBest is None:
+            self.logResults(laptime, track, car)
+        else:
+            previousBestTime = previousBest[1]
+            self.logResults(laptime, track, car, previousBestTime)
 
     def handleAmbiguities(self, timestamp):
         car = self.ambiguousResultHandler.handleAmbiguousCars(timestamp, self.car, self.track, self.gearTracker, self.inputTracker)
@@ -175,7 +178,7 @@ class StatsProcessor():
 
         elif self.statsWithTelemetry(stats) and stageProgress <= goLineProgress and not inStage:
             self.startStage(stats)
-            
+
     def playNotificationSound(self):
         try:
             waveObj = sa.WaveObject.from_wave_file('notify.wav')

@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, ANY
 
 from timerecorder.statsProcessor import StatsProcessor
 from tests.test_base import TestBase
@@ -11,7 +11,7 @@ import simpleaudio
 fieldCount = 66
 
 class TestStatsProcessor(TestBase):
-    
+
     def mockAwaySideEffects(self):
         simpleaudio.WaveObject = MagicMock()
 
@@ -143,23 +143,62 @@ class TestStatsProcessor(TestBase):
         laptime = self.thing.prettyLapTime(3612.240)
         self.assertEqual(str(laptime), '1:00:12.240')
 
-    def testHandleFinishStageAndLogResults(self):
+    def testHandleFinishStage(self):
         stats = [1] * fieldCount
 
         self.thing.inStage = MagicMock(return_value=True)
-        self.thing.databaseAccess = MagicMock()
-        self.thing.handleAmbiguities = MagicMock(return_value=(100, 1000))
-        self.thing.databaseAccess.identifyCar = MagicMock(return_value=10)
-        self.thing.databaseAccess.identifyTrack = MagicMock(return_value=11)
+        self.thing.finishStage = MagicMock()
 
         # stats[59] == 1 means lap/stage complete
         stats[59] = 1
         self.thing.handleStats(stats)
 
+        self.thing.finishStage.assert_called_once()
+
+    def testFinishStageRecordAndLogResultsWithNewPersonalBest(self):
+        stats = [1] * fieldCount
+        stats[62] = 100.2
+        self.thing.databaseAccess = MagicMock()
+        self.thing.car = 10
+        self.thing.track = 11
+        self.thing.handleAmbiguities = MagicMock(return_value=(10, 11))
+        self.thing.databaseAccess.recordResults = MagicMock(return_value=(123456789, 111.2))
+
+        self.thing.finishStage(stats)
+
         self.thing.handleAmbiguities.assert_called_once()
-        self.thing.databaseAccess.identifyCar.assert_not_called()
-        self.thing.databaseAccess.identifyTrack.assert_not_called()
-        self.thing.databaseAccess.recordResults.assert_called_once()
+        self.thing.databaseAccess.recordResults.assert_called_once_with(10, 11, ANY, ANY, ANY)
+        self.thing.logResults.assert_called_once_with(100.2, 10, 11, 111.2)
+
+    def testFinishStageRecordAndLogResultsWithNoNewPersonalBest(self):
+        stats = [1] * fieldCount
+        stats[62] = 100.2
+        self.thing.databaseAccess = MagicMock()
+        self.thing.car = 10
+        self.thing.track = 11
+        self.thing.handleAmbiguities = MagicMock(return_value=(10, 11))
+        self.thing.databaseAccess.recordResults = MagicMock(return_value=None)
+
+        self.thing.finishStage(stats)
+
+        self.thing.handleAmbiguities.assert_called_once()
+        self.thing.databaseAccess.recordResults.assert_called_once_with(10, 11, ANY, ANY, ANY)
+        self.thing.logResults.assert_called_once_with(100.2, 10, 11)
+
+    def testFinishStageRecordAndLogResultsWithAmbiguity(self):
+        stats = [1] * fieldCount
+        stats[62] = 100.2
+        self.thing.databaseAccess = MagicMock()
+        self.thing.car = 10
+        self.thing.track = (11, 110)
+        self.thing.handleAmbiguities = MagicMock(return_value=(10, 11))
+        self.thing.databaseAccess.recordResults = MagicMock(return_value=(123456789, 111.2))
+
+        self.thing.finishStage(stats)
+
+        self.thing.handleAmbiguities.assert_called_once()
+        self.thing.databaseAccess.recordResults.assert_called_once_with(10, 11, ANY, ANY, ANY)
+        self.thing.logResults.assert_called_once_with(100.2, 10, 11)
 
     def testHandleStartStageAndDatabaseCalled(self):
         stats = [1] * fieldCount
@@ -214,15 +253,15 @@ class TestStatsProcessor(TestBase):
     def testLogTrack(self):
         self.thing.database.getTrackName = MagicMock(return_value = 'Mugello')
         self.thing.logTrack(1001)
-        
+
         self.thing.database.getTrackName.assert_called_once()
 
     def testLogCar(self):
         self.thing.database.getCarName = MagicMock(return_value = 'Porsche 911')
         self.thing.logCar(911)
-        
+
         self.thing.database.getCarName.assert_called_once()
-        
+
     def testHandleAmbiguities(self):
         self.thing.ambiguousResultHandler = MagicMock()
         self.thing.car = [100, 200]
