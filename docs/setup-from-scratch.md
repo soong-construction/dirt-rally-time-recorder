@@ -1,6 +1,7 @@
 ### Set up from scratch  
 *These steps refer to Windows. Linux users should take a look at this [issue.](https://github.com/soong-construction/dirt-rally-time-recorder/issues/33#issue-606797917)*
 
+TODO Describe how to use build-local.sh on Windows (Bash!) and Linux (Script handling)
 - From the [latest release](https://github.com/soong-construction/dirt-rally-time-recorder/releases/latest), download and unpack the sources zip file to your disk. Instead, you can also clone the repository.
   - this creates your *work folder*, e.g. `C:\dirtrally-time-recorder-dr2`
 - Install Python 3.7: https://wiki.python.org/moin/BeginnersGuide/Download
