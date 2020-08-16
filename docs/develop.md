@@ -13,21 +13,22 @@ Install coverage
 
 # Bundling
 
-Note that bundling with pyinstaller is OS dependent. Bundles for *dirt-rally-time-recorder* target x64 Windows platforms. 
+Note that bundling with pyinstaller is OS dependent.
 
 ## Requirements
-Cf. job `assemble`, step `Install` in `.github/workflows/main.yml`
+Cf. job `assemble`, step `Install job dependencies` in `.github/workflows/main.yml`
 
 ## Tasks
 
 To bundle for DiRT Rally
-* Cf. job `assemble`, step `Bundle DR1` in `.github/workflows/main.yml`
+* Cf. job `assemble`, step `Bundle DR1 executable` in `.github/workflows/main.yml`
 
 To bundle for DiRT Rally 2.0
-* Cf. job `assemble`, step `Bundle DR2` in `.github/workflows/main.yml`
+* Cf. job `assemble`, step `Bundle DR2 executable` in `.github/workflows/main.yml`
 
-Hint: To invoke the .ps1 scripts, you need the Powershell Core (6 or newer) and to [allow script execution](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7). You should also remove the signing step 
-in the scripts if you bundle locally.
+*Hint*: You can disregard the `shell` and `env` parameters. To invoke the .ps1 scripts, you need the Powershell and to [allow script execution](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7). You should also remove the signing step in the scripts if you bundle locally.
+
+*Hint regarding Linux*: Use `sh resources/build-local.sh dr1` to build the installation folder for DiRT Rally. 
 
 # Releasing
 

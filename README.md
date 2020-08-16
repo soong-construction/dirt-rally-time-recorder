@@ -7,7 +7,7 @@ Time tracking works for stage rallies and the Pikes Peak events of the original 
 
 ## First time set up
 
-You can choose to download *dirt-rally-time-recorder* as a ready-to-use bundle (tested to work on Windows 10 x64). Read about certificate issues [here](docs/unknown-publisher-warning.md) or [set it up from scratch](docs/setup-from-scratch.md). 
+You can choose to download *dirt-rally-time-recorder* as a ready-to-use bundle (tested to work on Windows 10 x64, read about signing issues [here](docs/unknown-publisher-warning.md). You can also [set it up from scratch](docs/setup-from-scratch.md). 
 
 ### Ready-to-use bundle
 - Download the [latest release](https://github.com/soong-construction/dirt-rally-time-recorder/releases/latest) for either the original DiRT Rally or 2.0
@@ -17,9 +17,9 @@ You can choose to download *dirt-rally-time-recorder* as a ready-to-use bundle (
   - It should tell you to be *Waiting for data...*, otherwise take a look at [Troubleshooting](#troubleshooting)  
 
 ### Updating
-To update to a new version, simply download the new release or create a new bundle as instructed above. To be safe, backup your `dirtrally-laptimes.db`. You can overwrite your existing installation folder with the new `timerecorder` folder.  
+To update to a new version, simply download the new release or create a new bundle as instructed above. To be safe, backup your `dirtrally-laptimes.db`. You can overwrite your existing installation folder with the new one.
 
-Make sure to start `timerecord.exe` once to allow to migrate the database and config. 
+Make sure to start *dirt-rally-time-recorder* once to allow to migrate the database and config. 
 
 ### Configuration
 Before starting DiRT Rally [2.0] you need to enable UDP telemetry like so:
@@ -69,6 +69,8 @@ Exporting:
 
 In any case, feel free to [open an issue](https://github.com/soong-construction/dirt-rally-time-recorder/issues/new) and attach the `timerecord.log` from your installation folder. You can also contact the author through [Steam](https://steamcommunity.com/id/soong-construction).
 
+## Note to Linux user
+Please refer to this [issue](https://github.com/soong-construction/dirt-rally-time-recorder/issues/36#issuecomment-674543057) for set-up and usage instructions on Linux.
 
 ## Resources
 UDP telemetry documentation (cf. DiRT 4 for DiRT Rally 2.0):  
