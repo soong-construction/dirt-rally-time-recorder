@@ -9,6 +9,6 @@
   - you can delete the work folder afterwards
 - Start time tracking  
   - in your installation folder, start `timerecord.exe`
-  > on Linux, call `python -m timerecorder.timerecord` 
+    > on Linux, call `python -m timerecorder.timerecord` 
   - It should tell you to be *Waiting for data...*, otherwise check the set up or take a look at [Troubleshooting](../README.md#troubleshooting)
 
