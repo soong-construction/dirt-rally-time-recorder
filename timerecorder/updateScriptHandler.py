@@ -7,7 +7,7 @@ import os
 from . import config
 
 scriptRegex = r"(\d{9,10})_\S+_\S+\.bat"
-scriptTemplate = 'sqlite3 %s "%s"'
+scriptTemplate = 'sqlite3.exe %s "%s"'
 
 logger = getLogger(__name__)
 
