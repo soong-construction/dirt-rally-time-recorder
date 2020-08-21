@@ -28,7 +28,7 @@ To bundle for DiRT Rally 2.0
 
 *Hint*: You can disregard the `shell` and `env` parameters. To invoke the .ps1 scripts, you need the Powershell and to [allow script execution](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7). You should also remove the signing step in the scripts if you bundle locally.
 
-*Hint regarding Linux*: Use `sh resources/build-local.sh dr1` to build the installation folder for DiRT Rally. 
+*Hint regarding Linux*: Use `sh resources/build-local.sh dr1` to build the installation folder for DiRT Rally. You might need to install an additional library under Debian: `sudo apt-get install libasound2-dev`
 
 # Releasing
 
