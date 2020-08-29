@@ -27,7 +27,7 @@ jobs:
       with:
         packages: |
           pytest
-          PyYAML==5.3
+          PyYAML==5.3.1
           simpleaudio==1.0.4
     
     - name: Run tests / pytest
@@ -63,8 +63,8 @@ jobs:
       uses: BSFishy/pip-action@v1
       with:
         packages: |
-          PyYAML==5.3
-          pyinstaller==3.6
+          PyYAML==5.3.1
+          pyinstaller==4.0
           simpleaudio==1.0.4
     
     - name: Bundle DR1 executable / PyInstaller
