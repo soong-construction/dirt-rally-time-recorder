@@ -1,11 +1,9 @@
-# TODO Line-ending in repo must be Unix
 game=$1
 echo "Building for $game"
 rm -f dirtrally-lb.db
 ./bin/sqlite3.exe -batch -init resources/setup-${game}.sql dirtrally-lb.db .exit 
 pyinstaller timerecord.spec --noconfirm --name timerecorder-${game}
 
-# TODO SQL script not working, cannot cope with laptimes.db from Windows?
 cd dist/timerecorder-${game}
 mv list-laptimes.bat list-laptimes.sh
 mv export-laptimes.bat export-laptimes.sh
