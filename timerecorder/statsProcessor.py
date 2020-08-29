@@ -143,9 +143,6 @@ class StatsProcessor():
         laptime = stats[62]
         timestamp = time.time()
 
-        # TODO #25 Remove?
-        logger.debug("TOTAL GEAR SHIFT/SKIP: %s/%s", self.gearTracker.getGearChangeCount(), self.gearTracker.getGearSkipCount())
-
         track, car = self.handleAmbiguities(timestamp)
 
         self.databaseAccess.recordResults(track, car, timestamp, laptime, self.formatTopSpeed())
