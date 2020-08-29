@@ -69,8 +69,8 @@ Exporting:
 
 In any case, feel free to [open an issue](https://github.com/soong-construction/dirt-rally-time-recorder/issues/new) and attach the `timerecord.log` from your installation folder. You can also contact the author through [Steam](https://steamcommunity.com/id/soong-construction).
 
-## Note to Linux user
-Please refer to this [issue](https://github.com/soong-construction/dirt-rally-time-recorder/issues/36#issuecomment-674543057) for set-up and usage instructions on Linux.
+## Note to Linux users
+Please refer to [this issue](https://github.com/soong-construction/dirt-rally-time-recorder/issues/36#issuecomment-674543057) for set up and usage instructions on Linux.
 
 ## Resources
 UDP telemetry documentation (cf. DiRT 4 for DiRT Rally 2.0):  
