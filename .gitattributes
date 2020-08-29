@@ -1,4 +1,7 @@
 *.md text
 *.py text
 *.sql text
+*.pfx binary
+*.ps1 text
 *.bat text
+*.sh text eol=lf
