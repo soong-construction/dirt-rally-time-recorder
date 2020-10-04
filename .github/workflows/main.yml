@@ -20,7 +20,7 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v1.2.0
       with:
-        python-version: 3.7
+        python-version: 3.8
 
     - name: Install job dependencies / Pip Installer
       uses: BSFishy/pip-action@v1
@@ -57,7 +57,7 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v1.2.0
       with:
-        python-version: 3.7
+        python-version: 3.8
 
     - name: Install job dependencies / Pip Installer
       uses: BSFishy/pip-action@v1
