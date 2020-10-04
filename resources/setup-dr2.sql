@@ -265,6 +265,7 @@ INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1102, 'Mitsubishi Space Sta
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1103, 'Škoda Fabia R5', 774.92620849609375, 178.02359008789062);
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1104, 'Volkswagen Polo GTI R5', 774.92620849609375, 178.02359008789062);
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1105, 'Citroen C3 R5', 743.51031494140625, 185.87757873535156);
+INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1106, 'Ford Fiesta R5 MKII', 774.9262084960938, 183.2595672607422);
 
 -- Rally GT 
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1200, 'Porsche 911 RGT Rally Spec', 942.477783203125, 188.4955596923828);
@@ -356,6 +357,7 @@ INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (110
 INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1103, 1, 'SEQUENTIAL', 0, 5);
 INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1104, 1, 'SEQUENTIAL', 0, 5);
 INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1105, 1, 'SEQUENTIAL', 0, 5);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1106, 1, 'SEQUENTIAL', 0, 5);
 
 -- Rally GT
 INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (1200, 1, 'SEQUENTIAL', 0, 6);
