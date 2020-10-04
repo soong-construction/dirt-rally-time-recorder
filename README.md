@@ -7,7 +7,7 @@ Time tracking works for stage rallies and the Pikes Peak events of the original 
 
 ## First time set up
 
-You can choose to download *dirt-rally-time-recorder* as a ready-to-use bundle (tested to work on Windows 10 x64, read about signing issues [here](docs/unknown-publisher-warning.md). You can also [set it up from scratch](docs/setup-from-scratch.md). 
+You can choose to download *dirt-rally-time-recorder* as a ready-to-use bundle (tested to work on Windows 10 x64, read about signing issues [here](docs/unknown-publisher-warning.md)). You can also [set it up from scratch](docs/setup-from-scratch.md). 
 
 ### Ready-to-use bundle
 - Download the [latest release](https://github.com/soong-construction/dirt-rally-time-recorder/releases/latest) for either the original DiRT Rally or 2.0
@@ -81,7 +81,7 @@ Contributors cf. to `docs/develop.md`.
 ## Remainder
 Tested with
 - DiRT Rally (v1.22)
-- DiRT Rally 2.0 (v1.15)
+- DiRT Rally 2.0 (v1.16)
 
 UDP data recognition in collaboration with ErlerPhilipp: https://github.com/ErlerPhilipp/dr2_logger 
 
