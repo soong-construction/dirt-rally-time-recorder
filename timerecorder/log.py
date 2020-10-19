@@ -9,6 +9,7 @@ logFormat = '%(asctime)s %(levelname)s [%(name)s] %(message)s'
 
 def init(filename):
     logging.basicConfig(format=logFormat, filename=filename, level=logging.DEBUG)
+    logging.log(VERBOSE, 'VERBOSE logging active if this line seen')
 
 def getLogger(module):
     logger = logging.getLogger(module)
