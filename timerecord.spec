@@ -2,10 +2,17 @@
 
 block_cipher = None
 
-# Get name parameter from arguments
 import sys
+
+# Get name parameter from arguments
 index = sys.argv.index('--name')
 namearg = str(sys.argv[index + 1])
+
+# Avoid Tk/Tcl dependency: https://github.com/pyinstaller/pyinstaller/wiki/Recipe-remove-tkinter-tcl
+sys.modules['FixTk'] = None
+tkExcludes = ['FixTk', 'tcl', 'tk', '_tkinter', 'tkinter', 'Tkinter']
+
+stdlibExcludes = ['_bz2', '_ctypes', '_hashlib', '_lzma', '_ssl', 'pyexpat']
 
 a = Analysis(['timerecorder/timerecord.py'],
              pathex=['.'],
@@ -25,7 +32,7 @@ a = Analysis(['timerecorder/timerecord.py'],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
-             excludes=['_bz2', '_ctypes', '_hashlib', '_lzma', '_ssl', 'pyexpat'],
+             excludes=stdlibExcludes+tkExcludes,
              win_no_prefer_redirects=False,
              win_private_assemblies=False,
              cipher=block_cipher,
