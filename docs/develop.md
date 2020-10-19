@@ -61,7 +61,7 @@ The `THIRD_PARTY_LICENSES` include all works from outside this project, which mu
 - All used libraries like PyYAML: Include necessary texts
 - All used build tools like pytest: same
 - PyInstaller because we built bundles with it that are not bound to its license
-- CPython license including special module licenses for the bundles: https://docs.python.org/3.7/license.html#psf-license-agreement-for-python-release
+- CPython license including special module licenses for the bundles: https://docs.python.org/3.8/license.html#psf-license-agreement-for-python-release
 - All used binaries like sounds
 
 `xref-timerecord.html` from the bundling process can help identify dependencies.
