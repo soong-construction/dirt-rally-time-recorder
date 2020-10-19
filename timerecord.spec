@@ -12,7 +12,7 @@ namearg = str(sys.argv[index + 1])
 sys.modules['FixTk'] = None
 tkExcludes = ['FixTk', 'tcl', 'tk', '_tkinter', 'tkinter', 'Tkinter']
 
-stdlibExcludes = ['_bz2', '_ctypes', '_hashlib', '_lzma', '_ssl', 'pyexpat']
+stdlibExcludes = ['_bz2', '_ctypes', '_hashlib', '_lzma', '_ssl', 'pyexpat', 'lib2to3', 'asyncio']
 
 a = Analysis(['timerecorder/timerecord.py'],
              pathex=['.'],
