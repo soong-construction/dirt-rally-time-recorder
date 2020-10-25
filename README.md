@@ -53,6 +53,8 @@ In order to consolidate the database, the tool prepares update scripts for you, 
 - you will barely notice a window opening and closing, and that's it
 - each time you start *dirt-rally-time-recorder*, it automatically removes update scripts older than a week 
 
+Be aware that this tool cannot know the car or track conditions when recording. In order to beat your best time, choose an undamaged car with proper setup, and ideal track and weather conditions.
+
 ## Troubleshooting
 Starting:
 - to understand MS Defender SmartScreen warnings for *dirt-rally-time-recorder*, read [this](docs/unknown-publisher-warning.md)
