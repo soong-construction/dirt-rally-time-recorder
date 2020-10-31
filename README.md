@@ -72,7 +72,7 @@ Exporting:
 In any case, feel free to [open an issue](https://github.com/soong-construction/dirt-rally-time-recorder/issues/new) and attach the `timerecord.log` from your installation folder. You can also contact the author through [Steam](https://steamcommunity.com/id/soong-construction).
 
 ## Platform notes
-UDP telemetry is availabe [only on PC, not consoles.](https://forums.codemasters.com/topic/34154-analyze-and-enjoy-all-your-dirt-rally-stage-times-recorded-by-this-simple-tool/?do=findComment&comment=521010)  
+UDP telemetry is available [only on PC, not consoles.](https://forums.codemasters.com/topic/34154-analyze-and-enjoy-all-your-dirt-rally-stage-times-recorded-by-this-simple-tool/?do=findComment&comment=521010)  
 Linux users refer to [this issue](https://github.com/soong-construction/dirt-rally-time-recorder/issues/36#issuecomment-674543057) for set up and usage instructions.  
 
 ## Resources
