@@ -202,8 +202,8 @@ INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (12,
 INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (13, 0, 'H-PATTERN', 1, 5);
 
 -- Group A
-INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (14, 1, 'H-PATTERN', 1, 5);
-INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (15, 1, 'H-PATTERN', 0, 6);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (14, 1, 'H-PATTERN', 1, 6);
+INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (15, 1, 'H-PATTERN', 0, 5);
 INSERT INTO controls(id, handbrake, shifting, manualclutch, topgear) VALUES (316, 1, 'H-PATTERN', 0, 7);
 
 -- F2 Kit Car
