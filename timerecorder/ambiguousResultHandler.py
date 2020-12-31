@@ -51,7 +51,6 @@ class AmbiguousResultHandler():
             incompleteUpdate = Database.getCarUpdateStatements(timestamp, ['???'])[0]
 
             self.logFailedRecognition(incompleteUpdate, 'Unmapped car telemetry. Please report at %s' % (getProjectUrl(),))
-            # TODO Do for tracks as well
             return car
 
         if config.get.heuristics_activated:
@@ -69,9 +68,17 @@ class AmbiguousResultHandler():
         return car
 
     def handleAmbiguousTracks(self, timestamp, car, track):
-        if isinstance(track, list):
-            logger.info(instruction, "the correct track")
-            self.databaseAccess.handleTrackUpdates(track, timestamp, car, self.handleUpdate)
+        if isinstance(track, int):
+            return track
+
+        if len(track) == 0:
+            incompleteUpdate = Database.getTrackUpdateStatements(timestamp, ['???'])[0]
+
+            self.logFailedRecognition(incompleteUpdate, 'Unmapped track telemetry. Please report at %s' % (getProjectUrl(),))
+            return track
+
+        logger.info(instruction, "the correct track")
+        self.databaseAccess.handleTrackUpdates(track, timestamp, car, self.handleUpdate)
 
         return track
 

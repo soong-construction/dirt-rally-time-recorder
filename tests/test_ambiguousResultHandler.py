@@ -25,9 +25,9 @@ class TestAmbiguousResultHandler(TestBase):
     def testHandleResultsWithUnambiguousCars(self):
         car = 100
         track = 1000
-        
+
         self.thing.applyHeuristics = MagicMock(return_value = None)
-        
+
         timestamp = time.time()
         result = self.thing.handleAmbiguousCars(timestamp, car, track, self.gearTracker, self.inputTracker)
 
@@ -66,7 +66,7 @@ class TestAmbiguousResultHandler(TestBase):
         self.thing.databaseAccess.handleCarUpdates.assert_not_called()
         self.thing.logFailedRecognition.assert_called_once_with('UPDATE laptimes SET Car=??? WHERE Timestamp="%s";' % (timestamp, ), ANY)
         self.assertEqual(result, [])
-        
+
     def testHandleResultsWithAmbiguousCarsAndLuckyGuess(self):
         config.get.heuristics_activated = 1
         car = [100, 200]
@@ -96,6 +96,16 @@ class TestAmbiguousResultHandler(TestBase):
         self.thing.databaseAccess.handleCarUpdates.assert_called_once_with([100, 200], timestamp, 1000, ANY)
         self.assertEqual(result, car)
 
+    def testHandleResultsWithUnambiguousTracks(self):
+        car = 100
+        track = 1000
+
+        timestamp = time.time()
+        result = self.thing.handleAmbiguousTracks(timestamp, car, track)
+
+        self.thing.databaseAccess.handleTrackUpdates.assert_not_called()
+        self.assertEqual(result, track)
+
     def testHandleAmbiguousTracks(self):
         car = 100
         track = [1000, 1002]
@@ -105,6 +115,19 @@ class TestAmbiguousResultHandler(TestBase):
 
         self.thing.databaseAccess.handleTrackUpdates.assert_called_once_with(track, timestamp, 100, ANY)
         self.assertEqual(result, track)
+
+    def testHandleNoTracks(self):
+        car = 100
+        track = []
+
+        self.thing.logFailedRecognition = MagicMock()
+
+        timestamp = time.time()
+        result = self.thing.handleAmbiguousTracks(timestamp, car, track)
+
+        self.thing.databaseAccess.handleTrackUpdates.assert_not_called()
+        self.thing.logFailedRecognition.assert_called_once_with('UPDATE laptimes SET Track=??? WHERE Timestamp="%s";' % (timestamp, ), ANY)
+        self.assertEqual(result, [])
 
     def testSeedIsRandomized(self):
         instance = lambda _: AmbiguousResultHandler(MagicMock(), 'test-files')
