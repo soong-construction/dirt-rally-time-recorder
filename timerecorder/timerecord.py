@@ -11,8 +11,6 @@ except (ImportError, ModuleNotFoundError):
     from timerecorder.receiver import Receiver  # @Reimport
 
 logfile = 'timerecord.log'
-gitHubOrg = 'https://github.com/soong-construction/'
-name = 'dirt-rally-time-recorder'
 
 def informUser():
     input('Press ENTER to end program.')
@@ -28,7 +26,7 @@ def main(logfile):
             approot = os.path.dirname(approot) # Move to root
         
         log.init(approot + '/' + logfile)
-        logger.info('Starting %s %s', name, config.readVersion(approot))
+        logger.info('Starting %s %s', log.name, config.readVersion(approot))
         
         config.init(approot + '/config.yml')
         
@@ -41,7 +39,7 @@ def main(logfile):
         pass
     except:
         logger.exception('***timerecord crashed***')
-        logger.error('This should not happen. Look for help at %s%s', gitHubOrg, name)
+        logger.error('This should not happen. Look for help at %s', log.getProjectUrl())
         informUser()
 
 if __name__ == '__main__':

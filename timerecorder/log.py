@@ -7,6 +7,12 @@ def __log_level__(value, levelName):
 VERBOSE = __log_level__(5, 'VERBOSE')
 logFormat = '%(asctime)s %(levelname)s [%(name)s] %(message)s'
 
+gitHubOrg = 'https://github.com/soong-construction/'
+name = 'dirt-rally-time-recorder'
+
+def getProjectUrl():
+    return '%s%s' % (gitHubOrg, name)
+
 def init(filename):
     logging.basicConfig(format=logFormat, filename=filename, level=logging.DEBUG)
     logging.log(VERBOSE, 'VERBOSE logging active if this line seen')

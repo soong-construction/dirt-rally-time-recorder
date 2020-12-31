@@ -57,12 +57,14 @@ class TestAmbiguousResultHandler(TestBase):
 
         self.thing.applyHeuristics = MagicMock(return_value = 200)
         self.thing.databaseAccess.handleCarUpdates = MagicMock()
+        self.thing.logFailedRecognition = MagicMock()
 
         timestamp = time.time()
         result = self.thing.handleAmbiguousCars(timestamp, car, track, self.gearTracker, self.inputTracker)
 
         self.thing.applyHeuristics.assert_not_called()
-        self.thing.databaseAccess.handleCarUpdates.assert_called_once_with([], timestamp, 1000, ANY)
+        self.thing.databaseAccess.handleCarUpdates.assert_not_called()
+        self.thing.logFailedRecognition.assert_called_once_with('UPDATE laptimes SET Car=??? WHERE Timestamp="%s";' % (timestamp, ), ANY)
         self.assertEqual(result, [])
         
     def testHandleResultsWithAmbiguousCarsAndLuckyGuess(self):

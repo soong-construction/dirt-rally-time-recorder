@@ -119,11 +119,13 @@ class Database:
         except Exception:
             logger.exception("Error connecting to %s", self.laptimesDbName)
 
-    def getCarUpdateStatements(self, timestamp, cars):
+    @staticmethod
+    def getCarUpdateStatements(timestamp, cars):
         to_update = lambda car: UPDATE_STATEMENT % ('Car', car, timestamp)
         return list(map(to_update, cars))
 
-    def getTrackUpdateStatements(self, timestamp, tracks):
+    @staticmethod
+    def getTrackUpdateStatements(timestamp, tracks):
         to_update = lambda track: UPDATE_STATEMENT % ('Track', track, timestamp)
         return list(map(to_update, tracks))
 

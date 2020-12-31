@@ -131,7 +131,7 @@ class TestDatabaseAccess(unittest.TestCase):
         call2 = call('UNKNOWN', 'Modern Car', 123456789, 'update200')
 
         updateHandler.assert_has_calls([call1, call2])
-
+        
     def testHandleTrackUpdatesInvokesLambda(self):
         self.database.getTrackUpdateStatements = MagicMock(return_value=['update100', 'update200'])
 
