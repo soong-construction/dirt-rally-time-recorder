@@ -131,7 +131,7 @@ INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (209, 'Renault 5 Turbo', 806
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (9, 'MG Metro 6R4', 1099.56, 157.08);
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (10, 'Audi Sport Quattro Rallye', 733.038, 115.192);
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (11, 'Ford RS200', 890.118, 125.664);
-INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (12, 'Peugeot 205 T16 Evo 2 ', 837.758, 209.439);
+INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (12, 'Peugeot 205 T16 Evo 2', 837.758, 209.439);
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (13, 'Lancia Delta S4', 890.118, 104.72);
 
 -- Group A
