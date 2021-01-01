@@ -38,7 +38,6 @@ class AmbiguousResultHandler():
 
         return heuristics.guessCar()
 
-
     def logFailedRecognition(self, incompleteUpdate, logLine):
         logger.error(logLine)
         logger.debug(incompleteUpdate)

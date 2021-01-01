@@ -66,8 +66,11 @@ Configuring the tool:
 - Steam updates of the game sometimes reset *hardware_settings_config.xml*. Then, repeat the [configuration steps](#configuration) to enable UDP telemetry again
 - in case you modified the telemetry host or port in *hardware_settings_config.xml*, adapt `config.yml` [accordingly](docs/configuration.md#telemetry)
 
+Recording:
+- if the game has been updated with new cars or tracks, or if your version of *dirt-rally-time-recorder* is too old, recognition can fail ("Unmapped  telemetry"). You can continue to record further stages, but you're welcome to report this shortcoming (see below)
+
 Exporting:
-- when you export your stage times, be sure to avoid corrupt characters and import the CSV file in a spreadsheet editor with UTF-8 encoding. In MS Excel, use the [query tool.](https://support.office.com/en-us/article/import-data-from-external-data-sources-power-query-be4330b3-5356-486c-a168-b68e9e616f5a)   
+- when you export your stage times, be sure to avoid corrupt characters and import the CSV file in a spreadsheet editor with UTF-8 encoding. In MS Excel, use the [query tool](https://support.office.com/en-us/article/import-data-from-external-data-sources-power-query-be4330b3-5356-486c-a168-b68e9e616f5a)   
 
 In any case, feel free to [open an issue](https://github.com/soong-construction/dirt-rally-time-recorder/issues/new) and attach the `timerecord.log` from your installation folder. You can also contact the author through [Steam](https://steamcommunity.com/id/soong-construction).
 
