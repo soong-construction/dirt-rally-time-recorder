@@ -67,7 +67,8 @@ Configuring the tool:
 - in case you modified the telemetry host or port in *hardware_settings_config.xml*, adapt `config.yml` [accordingly](docs/configuration.md#telemetry)
 
 Recording:
-- if the game has been updated with new cars or tracks, or if your version of *dirt-rally-time-recorder* is too old, recognition can fail ("Unmapped  telemetry"). You can continue to record further stages, but you're welcome to report this shortcoming (see below)
+- if the game has been updated with new cars or tracks, recognition can fail ("Unmapped  telemetry"). You can continue to record further stages, but you're welcome to report this shortcoming (see below)
+- if your installation is too old, recognition can fail as well. Then, check if you can update to a [new version](https://github.com/soong-construction/dirt-rally-time-recorder/releases/) of *dirt-rally-time-recorder*
 
 Exporting:
 - when you export your stage times, be sure to avoid corrupt characters and import the CSV file in a spreadsheet editor with UTF-8 encoding. In MS Excel, use the [query tool](https://support.office.com/en-us/article/import-data-from-external-data-sources-power-query-be4330b3-5356-486c-a168-b68e9e616f5a)   
