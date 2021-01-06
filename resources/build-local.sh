@@ -19,6 +19,7 @@ sed -i '1d;$d' *-laptimes.sh
 
 # Remove the following if you like to keep the executable timerecord
 rm -f *.pyd
+rm -f **/*.pyd
 rm -f *.zip
 rm -f *.dll
 rm -f *.so.*
