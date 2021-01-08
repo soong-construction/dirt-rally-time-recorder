@@ -11,42 +11,37 @@ class DatabaseAccess:
     def __init__(self, database):
         self.database = database
 
-    # TODO Identify methods are copy code
-    def identifyTrack(self, z, tracklength):
-        tracks = self.database.loadTracks(tracklength, z)
-
-        if (len(tracks) == 0):
-            logger.warning("Failed to identify track")
-            logger.debug("Length: %s", str(tracklength))
-            logger.log(VERBOSE, self.database.getTrackInsertStatement(tracklength, z))
+    def tryIdentify(self, it, it_list, debug_log, verbose_log):
+        if (len(it_list) == 0):
+            logger.warning("Failed to identify %s", it)
+            debug_log(logger)
+            verbose_log(logger, self.database)
 
             return []
 
-        elif (len(tracks) == 1):
-            index, _ = tracks[0]
+        elif (len(it_list) == 1):
+            index, _ = it_list[0]
             return index
 
-        logger.warning("Ambiguous track data, %s matches", len(tracks))
-        logger.debug("Length: %s (Z: %s)", str(tracklength), str(z))
-        return list(index for (index, _) in tracks)
+        logger.warning("Ambiguous %s data, %s matches", it, len(it_list))
+        debug_log(logger)
+
+        return list(index for (index, _) in it_list)
+
+    def identifyTrack(self, z, tracklength):
+        debug_log = lambda logger: logger.debug("Length: %s (Z: %s)", str(tracklength), str(z))
+        verbose_log = lambda logger, db: logger.log(VERBOSE, db.getTrackInsertStatement(tracklength, z))
+
+        it_list = self.database.loadTracks(tracklength, z)
+        return self.tryIdentify("track", it_list, debug_log, verbose_log)
 
     def identifyCar(self, max_rpm, idle_rpm, top_gear):
-        cars = self.database.loadCars(idle_rpm, max_rpm, top_gear)
-        if (len(cars) == 0):
-            logger.warning("Failed to identify car")
-            logger.debug("Idle/Max RPM: %s - %s", str(idle_rpm), str(max_rpm))
-            logger.log(VERBOSE, self.database.getCarInsertStatement(max_rpm, idle_rpm))
+        debug_log = lambda logger: logger.debug("Idle/Max RPM: %s - %s", str(idle_rpm), str(max_rpm))
+        verbose_log = lambda logger, db: logger.log(VERBOSE, db.getCarInsertStatement(max_rpm, idle_rpm))
 
-            return []
+        it_list = self.database.loadCars(idle_rpm, max_rpm, top_gear)
 
-        elif (len(cars) == 1):
-            index, _ = cars[0]
-            return index
-
-        else:
-            logger.warning("Ambiguous car data, %s matches", len(cars))
-            logger.debug("Idle/Max RPM: %s - %s", str(idle_rpm), str(max_rpm))
-            return list(index for (index, _) in cars)
+        return self.tryIdentify("car", it_list, debug_log, verbose_log)
 
     def handleCarUpdates(self, car_list, timestamp, track, updateHandler):
         updates = self.database.getCarUpdateStatements(timestamp, car_list)
