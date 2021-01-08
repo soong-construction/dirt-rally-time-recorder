@@ -25,7 +25,7 @@ class DatabaseAccess:
             index, name, startZ = tracks[0]
             return index
 
-        # TODO Can't Z-based recognition be part of the SQL query? Looks much too complicated...
+        # TODO Can't abs(z - startZ) < 50 be part of the SQL query? Looks much too complicated...
         elif (len(tracks) == 2):
             matchingTrack = None
             lastZ = None
