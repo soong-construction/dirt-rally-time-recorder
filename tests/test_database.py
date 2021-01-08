@@ -8,11 +8,44 @@ class TestDatabase(unittest.TestCase):
 
     def setUp(self):
         self.thing = Database('test')
+        self.thing.db = MagicMock()
 
     def tearDown(self):
         pass
 
-    def testResetStage(self):
+    def testLoadCars(self):
+        cars = [(1, 'car1')]
+        self.thing.db.fetchall = MagicMock(return_value = cars)
+
+        loadedCars = self.thing.loadCars(1000, 100, 5)
+
+        self.assertEqual(loadedCars, cars, "Did not return car")
+
+    def testIdentifyCarNoResult(self):
+        cars = []
+        self.thing.db.fetchall = MagicMock(return_value = cars)
+
+        loadedCars = self.thing.loadCars(1000, 100, 5)
+
+        self.assertEqual(loadedCars, cars, "Did not return empty result")
+
+    def testLoadTracksWithResults(self):
+        tracks = [(1, 'track1'), (2, 'track2')]
+        self.thing.db.fetchall = MagicMock(return_value = tracks)
+
+        loadedTracks = self.thing.loadTracks(10000, 10)
+
+        self.assertEqual(loadedTracks, tracks, "Did not return tracks")
+
+    def testLoadTracksWithoutResults(self):
+        tracks = []
+        self.thing.db.fetchall = MagicMock(return_value = tracks)
+
+        loadedTracks = self.thing.loadTracks(10000, 10)
+
+        self.assertEqual(loadedTracks, tracks, "Did not return empty result")
+
+    def testGetSingleCarUpdateStatements(self):
         statements = self.thing.getCarUpdateStatements(123456, [1])
 
         self.assertEqual(statements, ['UPDATE laptimes SET Car=1 WHERE Timestamp="123456";'])

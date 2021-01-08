@@ -14,6 +14,13 @@ class TestDatabaseAccess(unittest.TestCase):
 
     def tearDown(self):
         pass
+    def testIdentifyTrackUnambiguous(self):
+        tracks = [(1, 'track1')]
+        self.database.loadTracks = MagicMock(return_value=tracks)
+
+        loadedTrack = self.thing.identifyTrack(10, 10000)
+
+        self.assertEqual(loadedTrack, 1, "Wrong ID")
 
     def testIdentifyTrackNoResult(self):
         tracks = []
@@ -23,59 +30,11 @@ class TestDatabaseAccess(unittest.TestCase):
 
         self.assertEqual(loadedTrack, [], "Shouldn't identify track")
 
-    def testIdentifyTrackUnambiguous(self):
-        tracks = [(1, 'track1', 10)]
-        self.database.loadTracks = MagicMock(return_value=tracks)
-
-        loadedTrack = self.thing.identifyTrack(10, 10000)
-
-        self.assertEqual(loadedTrack, 1, "Wrong ID")
-
-    def testIdentifyTrackByMatchingZValue(self):
-        tracks = [(1, 'track1', 10), (2, 'track2', 100)]
-        self.database.loadTracks = MagicMock(return_value=tracks)
-
-        loadedTrack = self.thing.identifyTrack(10, 10000)
-
-        self.assertEqual(loadedTrack, 1, "Wrong ID")
-
-    def testIdentifyTrackBySimilarZValue(self):
-        tracks = [(1, 'track1', 10), (2, 'track2', 100)]
-        self.database.loadTracks = MagicMock(return_value=tracks)
-
-        loadedTrack = self.thing.identifyTrack(70, 10000)
-
-        self.assertEqual(loadedTrack, 2, "Wrong ID")
-
-    def testCannotIdentifyTrackWithAllSimilarZValue(self):
-        tracks = [(1, 'track1', 10), (2, 'track2', 100)]
+    def testIdentifyTrackAmbiguous(self):
+        tracks = [(1, 'track1'), (2, 'track2')]
         self.database.loadTracks = MagicMock(return_value=tracks)
 
         loadedTrack = self.thing.identifyTrack(55, 10000)
-
-        self.assertEqual(loadedTrack, [1, 2], "Should return all tracks")
-
-    def testCannotIdentifyTrackWithNoSimilarZValue(self):
-        tracks = [(1, 'track1', 10), (2, 'track2', 100)]
-        self.database.loadTracks = MagicMock(return_value=tracks)
-
-        loadedTrack = self.thing.identifyTrack(-100, 10000)
-
-        self.assertEqual(loadedTrack, [1, 2], "Should return all tracks")
-        
-    def testCannotIdentifyTrackWithAllMatchingZValue(self):
-        tracks = [(1, 'track1', 100), (2, 'track2', 100)]
-        self.database.loadTracks = MagicMock(return_value=tracks)
-
-        loadedTrack = self.thing.identifyTrack(100, 10000)
-
-        self.assertEqual(loadedTrack, [1, 2], "Should return all tracks")
-
-    def testIdentifyTrackAmbiguous(self):
-        tracks = [(1, 'track1', 100), (2, 'track2', 100)]
-        self.database.loadTracks = MagicMock(return_value=tracks)
-
-        loadedTrack = self.thing.identifyTrack(10, 10000)
 
         self.assertEqual(loadedTrack, [1, 2], "Should return all tracks")
 
@@ -155,7 +114,7 @@ class TestDatabaseAccess(unittest.TestCase):
         call2 = call('UNKNOWN', 'Modern Car', 123456789, 'update200')
 
         updateHandler.assert_has_calls([call1, call2])
-        
+
     def testHandleTrackUpdatesInvokesLambda(self):
         self.database.getTrackUpdateStatements = MagicMock(return_value=['update100', 'update200'])
 

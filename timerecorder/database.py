@@ -81,18 +81,20 @@ class Database:
         epoch = int(time.time())
         return str(user) + str(epoch)
 
-    def loadTracks(self, tracklength):
-        self.db.execute('SELECT id, name, startz FROM Tracks WHERE abs(length - ?) < 0.001', (tracklength,))
+    def loadTracks(self, tracklength, startz):
+        select = ('SELECT id, name '
+                    'FROM Tracks '
+                    'WHERE abs(length - ?) < 0.001 AND abs(startz - ?) < 50')
+        self.db.execute(select, (tracklength, startz))
         return self.db.fetchall()
 
     def loadCars(self, idle_rpm, max_rpm, top_gear):
-        carSelectStatement = ('SELECT cars.id, cars.name '
-                              'FROM cars INNER JOIN controls USING(id) '
-                              'WHERE abs(cars.maxrpm - ?) < 1.0 AND abs(cars.idlerpm - ?) < 1.0 AND controls.topgear = ? '
-                              'ORDER BY cars.id ASC')
-        self.db.execute(carSelectStatement, (max_rpm, idle_rpm, top_gear))
-        result = self.db.fetchall()
-        return result
+        select = ('SELECT cars.id, cars.name '
+                    'FROM cars INNER JOIN controls USING(id) '
+                    'WHERE abs(cars.maxrpm - ?) < 1.0 AND abs(cars.idlerpm - ?) < 1.0 AND controls.topgear = ? '
+                    'ORDER BY cars.id ASC')
+        self.db.execute(select, (max_rpm, idle_rpm, top_gear))
+        return self.db.fetchall()
 
     def getLapDbConnection(self):
         return sqlite3.connect(self.approot + self.laptimesDb)
