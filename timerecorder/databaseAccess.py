@@ -11,8 +11,9 @@ class DatabaseAccess:
     def __init__(self, database):
         self.database = database
 
+    # TODO Identify methods are copy code
     def identifyTrack(self, z, tracklength):
-        tracks = self.database.loadTracks(tracklength)
+        tracks = self.database.loadTracks(tracklength, z)
 
         if (len(tracks) == 0):
             logger.warning("Failed to identify track")
@@ -22,27 +23,12 @@ class DatabaseAccess:
             return []
 
         elif (len(tracks) == 1):
-            index, name, startZ = tracks[0]
+            index, _ = tracks[0]
             return index
-
-        # TODO Can't abs(z - startZ) < 50 be part of the SQL query? Looks much too complicated...
-        elif (len(tracks) == 2):
-            matchingTrack = None
-            lastZ = None
-            for index, name, startZ in tracks:
-                # Cannot distinguish Pikes Peak tracks which are identical
-                tracksDiffer = lastZ != startZ
-                matchingZ = tracksDiffer and abs(z - startZ) < 50
-                matchingTrack = (index, name) if matchingZ else matchingTrack
-                lastZ = startZ
-
-            if matchingTrack and tracksDiffer:
-                index, name = matchingTrack
-                return index
 
         logger.warning("Ambiguous track data, %s matches", len(tracks))
         logger.debug("Length: %s (Z: %s)", str(tracklength), str(z))
-        return list(index for (index, _, _) in tracks)
+        return list(index for (index, _) in tracks)
 
     def identifyCar(self, max_rpm, idle_rpm, top_gear):
         cars = self.database.loadCars(idle_rpm, max_rpm, top_gear)
