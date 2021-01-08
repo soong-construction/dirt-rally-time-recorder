@@ -1,4 +1,4 @@
--- The ".<cmd>" instructions are to be executed with sqlite3.exe  
+-- The ".<cmd>" instructions are to be executed with SQLite3
 
 -- Follow step A) if you used dirt-rally-time-recorder PRIOR TO VERSION 1.0.0
 
