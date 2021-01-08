@@ -9,3 +9,4 @@ __pycache__/
 build/
 dist/
 test-files/
+/.pytest_cache/
