@@ -30,7 +30,7 @@ To bundle for DiRT Rally 2.0
 
 *Hint regarding Linux*: Use `sh resources/build-local.sh dr1` to build the installation folder for DiRT Rally
 - ensure that this folder is on the search path
-- ensure that SQlite 3.33.0 or newer is on the search path
+- ensure that SQLite 3.33.0 or newer is on the search path
 - you might need to install an additional library under Debian: `libasound2-dev`
 
 # Releasing
