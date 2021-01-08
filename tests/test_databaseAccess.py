@@ -6,7 +6,6 @@ from timerecorder.databaseAccess import DatabaseAccess
 
 class TestDatabaseAccess(unittest.TestCase):
 
-
     def setUp(self):
         self.database = Database('test')
         self.database.recordResults = MagicMock()
@@ -14,6 +13,7 @@ class TestDatabaseAccess(unittest.TestCase):
 
     def tearDown(self):
         pass
+
     def testIdentifyTrackUnambiguous(self):
         tracks = [(1, 'track1')]
         self.database.loadTracks = MagicMock(return_value=tracks)
