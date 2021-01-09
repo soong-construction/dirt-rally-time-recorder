@@ -11,6 +11,9 @@ scriptTemplate = 'sqlite3 %s "%s"'
 
 logger = getLogger(__name__)
 
+def isUpdateScript(file):
+    return re.match(scriptRegex, file)
+
 class UpdateScriptHandler(object):
 
     def __init__(self, dbName):
@@ -34,7 +37,7 @@ class UpdateScriptHandler(object):
 
     def listUpdateScripts(self, directory):
         file_list = os.listdir(directory)
-        return [directory + '/' + file for file in file_list if re.match(scriptRegex, file)]
+        return [directory + '/' + file for file in file_list if isUpdateScript(file)]
 
     def isBeforeDeadline(self, time, keep_for_days, script):
         matches = re.finditer(scriptRegex, script)
