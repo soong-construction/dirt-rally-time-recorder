@@ -19,7 +19,7 @@ class TestUpdateScriptHandler(TestBase):
     
     def testBuildSqlite3Call(self):
         result = self.thing.buildScript("update table set x=1")
-        self.assertNotIn("{}", result, "Failed to insert all placeholders")
+        self.assertEqual('sqlite3 db "update table set x=1"', result)
 
     def testBuildFileName(self):
         result = self.thing.buildFileName('Flugzeugring Reverse', 'Audi Quattro', self.now.timestamp())
