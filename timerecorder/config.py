@@ -35,11 +35,11 @@ class Config(dict):
     def readFromFile(self, filename):
         try:
             with open(filename, encoding='utf-8', newline='\n') as f:
-                super(Config, self).update(yaml.load(f, yaml.SafeLoader) or {})
+                super().update(yaml.load(f, yaml.SafeLoader) or {})
         except:
             raise IOError(os.path.basename(filename) + ' seems to be corrupt, please check or delete file.')
 
-    def __init__(self, filename):
+    def __init__(self, filename):  #pylint: disable=super-init-not-called
         self.filename = filename
         if os.path.isfile(filename):
             self.readFromFile(filename)
@@ -51,15 +51,15 @@ class Config(dict):
             yaml.dump(self.copy(), f)
 
     def __setitem__(self, key, value):
-        super(Config, self).__setitem__(key, value)
+        super().__setitem__(key, value)
         self.dump()
 
     def __delitem__(self, key):
-        super(Config, self).__delitem__(key)
+        super().__delitem__(key)
         self.dump()
 
     def update(self, kwargs):
-        super(Config, self).update(kwargs)
+        super().update(kwargs)
         self.dump()
     
     def setDefaultHeuristics(self):

@@ -28,7 +28,7 @@ class GearTracker(BaseTracker):
             return
 
         # Handle reverse gear = -1 (DR1: 10.0)
-        if current_gear == -1 or current_gear == 10:
+        if current_gear in (-1, 10):
             current_gear = 0
 
         respawn = self.respawnTracker.isRecover() or self.respawnTracker.isRestart()
