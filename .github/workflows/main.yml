@@ -25,10 +25,7 @@ jobs:
     - name: Install job dependencies / Pip Installer
       uses: BSFishy/pip-action@v1
       with:
-        packages: |
-          pytest
-          PyYAML==5.3.1
-          simpleaudio==1.0.4
+        requirements: requirements.txt
     
     - name: Run tests / pytest
       run: python -m pytest tests
@@ -62,10 +59,7 @@ jobs:
     - name: Install job dependencies / Pip Installer
       uses: BSFishy/pip-action@v1
       with:
-        packages: |
-          PyYAML==5.3.1
-          pyinstaller==4.0
-          simpleaudio==1.0.4
+        requirements: requirements.txt
     
     - name: Bundle DR1 executable / PyInstaller
       run: |
