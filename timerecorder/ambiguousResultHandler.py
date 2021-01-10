@@ -81,12 +81,6 @@ class AmbiguousResultHandler():
 
         return track
 
-    def handleAmbiguities(self, timestamp, car, track):
-        car = self.handleAmbiguousCars(timestamp, car, track)
-        track = self.handleAmbiguousTracks(timestamp, car, track)
-
-        return identify(track), identify(car)
-
     def handleUpdate(self, trackName, carName, timestamp, update):
         scriptName = self.updateScriptHandler.writeScript(trackName, carName, timestamp, update)
         logger.info(" ==> %s", scriptName)
