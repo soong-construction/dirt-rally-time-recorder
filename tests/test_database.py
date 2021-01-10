@@ -1,4 +1,4 @@
-import unittest, pytest
+import unittest
 
 import time
 from unittest.mock import MagicMock
@@ -141,7 +141,7 @@ class TestDatabase(unittest.TestCase):
         conn.commit.assert_called_once()
         conn.close.assert_called_once()
 
-    def testRecordFirstTimeMigrationFails(self):
+    def testInitializeLaptimeDbMigrationFails(self):
         conn = MagicMock()
         conn.commit = MagicMock()
         cursor = MagicMock()
@@ -159,13 +159,13 @@ class TestDatabase(unittest.TestCase):
         conn.commit.assert_called_once()
         conn.close.assert_called_once()
 
-    def testRecordFailsAltogether(self):
+    def testInitializeLaptimeDbFailsAltogether(self):
         conn = MagicMock()
         conn.cursor = MagicMock(side_effect = IOError)
         self.thing.getLapDbConnection = MagicMock(return_value = conn)
         self.thing.setupLaptimesDb = MagicMock()
 
-        # TODO Actually should terminate
+        # TODO Actually should terminate. TODO Same with recordResults
 #         with self.assertRaises(IOError):
         self.thing.initializeLaptimesDb()
 
