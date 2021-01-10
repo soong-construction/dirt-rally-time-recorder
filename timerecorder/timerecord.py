@@ -2,6 +2,7 @@ import asyncore
 import os.path
 import sys
 
+# TODO After merge apply PyDev Source Format for timerecorder/ and tests/
 # Cf. https://stackoverflow.com/a/45488820
 try:
     from . import log, config  # @UnusedImport
