@@ -1,0 +1,4 @@
+PyYAML==5.3.1
+simpleaudio==1.0.4
+pytest
+pyinstaller==4.0
