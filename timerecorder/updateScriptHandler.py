@@ -7,7 +7,7 @@ import os
 from . import config
 
 scriptRegex = r"(\d{9,10})_\S+_\S+\.bat"
-scriptTemplate = 'sqlite3 %s "%s"'
+scriptTemplate = 'sqlite3 {} "{}"'
 
 logger = getLogger(__name__)
 
@@ -23,7 +23,7 @@ class UpdateScriptHandler(object):
         return str(int(timestamp)) + '_' + track.replace(' ', '') + '_' + car.replace(' ', '') + '.bat'
 
     def buildScript(self, statement):
-        return scriptTemplate % (self.dbName, statement)
+        return scriptTemplate.format(self.dbName, statement)
 
     def writeScript(self, track, car, timestamp, updateStatement):
 

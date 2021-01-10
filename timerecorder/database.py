@@ -5,7 +5,7 @@ from .databaseMigration import DatabaseMigration
 from .log import getLogger
 from . import config
 
-UPDATE_STATEMENT = 'UPDATE laptimes SET %s=%s WHERE Timestamp="%s";'
+UPDATE_STATEMENT = 'UPDATE laptimes SET {}={} WHERE Timestamp="{}";'
 
 logger = getLogger(__name__)
 
@@ -125,19 +125,19 @@ class Database:
 
     @staticmethod
     def getCarUpdateStatements(timestamp, cars):
-        to_update = lambda car: UPDATE_STATEMENT % ('Car', car, timestamp)
+        to_update = lambda car: UPDATE_STATEMENT.format('Car', car, timestamp)
         return list(map(to_update, cars))
 
     @staticmethod
     def getTrackUpdateStatements(timestamp, tracks):
-        to_update = lambda track: UPDATE_STATEMENT % ('Track', track, timestamp)
+        to_update = lambda track: UPDATE_STATEMENT.format('Track', track, timestamp)
         return list(map(to_update, tracks))
 
     def getCarInsertStatement(self, max_rpm, idle_rpm):
-        return 'INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (ID, \'CAR_NAME\', %s, %s);' % (max_rpm, idle_rpm)
+        return f'INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (ID, \'CAR_NAME\', {max_rpm}, {idle_rpm});'
 
     def getTrackInsertStatement(self, tracklength, z):
-        return 'INSERT INTO Tracks (id, name, length, startz) VALUES (ID, \'TRACK_NAME\', %s, %s);' % (tracklength, z)
+        return f'INSERT INTO Tracks (id, name, length, startz) VALUES (ID, \'TRACK_NAME\', {tracklength}, {z});'
 
     def getCarName(self, car):
         self.db.execute('SELECT name FROM cars WHERE id = ?', (car,))

@@ -26,7 +26,7 @@ class StatsProcessor():
 
     def __init__(self, approot):
         self.speed_unit = config.get.speed_unit
-        self.speed_modifier = self.speed_unit == 'mph' and 0.6214 or 1
+        self.speed_modifier = 0.6214 if self.speed_unit == 'mph' else 1
         self.approot = approot
 
         self.track = 0
@@ -45,10 +45,10 @@ class StatsProcessor():
 
     def formatTopSpeed(self):
         topSpeed_kmh = self.speedTracker.getTopSpeed() * 3.6
-        return '%.1f' % (topSpeed_kmh * self.speed_modifier,)
+        return '{:.1f}'.format(topSpeed_kmh * self.speed_modifier)
 
     def formatLapTime(self, laptime):
-        return '%.2f' % (laptime,)
+        return '{:.2f}'.format(laptime)
 
     def prettyLapTime(self, laptime_seconds):
         fullDuration = str(timedelta(seconds=laptime_seconds))

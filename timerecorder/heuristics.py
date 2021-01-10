@@ -19,6 +19,8 @@ class Heuristics(ABC):
         if self.fallback:
             return self.fallback.guessCar()
         
+        return None
+        
     @abstractmethod
     def apply(self):
         pass

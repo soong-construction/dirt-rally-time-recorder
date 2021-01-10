@@ -16,6 +16,10 @@ class TestUpdateScriptHandler(TestBase):
 
     def tearDown(self):
         pass
+    
+    def testBuildSqlite3Call(self):
+        result = self.thing.buildScript("update table set x=1")
+        self.assertNotIn("{}", result, "Failed to insert all placeholders")
 
     def testBuildFileName(self):
         result = self.thing.buildFileName('Flugzeugring Reverse', 'Audi Quattro', self.now.timestamp())

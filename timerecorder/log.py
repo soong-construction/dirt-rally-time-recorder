@@ -11,7 +11,7 @@ gitHubOrg = 'https://github.com/soong-construction/'
 name = 'dirt-rally-time-recorder'
 
 def getProjectUrl():
-    return '%s%s' % (gitHubOrg, name)
+    return f'{gitHubOrg}{name}'
 
 def init(filename):
     logging.basicConfig(format=logFormat, filename=filename, level=logging.DEBUG)

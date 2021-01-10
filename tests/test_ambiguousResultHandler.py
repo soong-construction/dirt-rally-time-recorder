@@ -64,7 +64,7 @@ class TestAmbiguousResultHandler(TestBase):
 
         self.thing.applyHeuristics.assert_not_called()
         self.thing.databaseAccess.handleCarUpdates.assert_not_called()
-        self.thing.logFailedRecognition.assert_called_once_with('UPDATE laptimes SET Car=??? WHERE Timestamp="%s";' % (timestamp, ), ANY)
+        self.thing.logFailedRecognition.assert_called_once_with(f'UPDATE laptimes SET Car=??? WHERE Timestamp="{timestamp}";', ANY)
         self.assertEqual(result, [])
 
     def testHandleResultsWithAmbiguousCarsAndLuckyGuess(self):
@@ -126,7 +126,7 @@ class TestAmbiguousResultHandler(TestBase):
         result = self.thing.handleAmbiguousTracks(timestamp, car, track)
 
         self.thing.databaseAccess.handleTrackUpdates.assert_not_called()
-        self.thing.logFailedRecognition.assert_called_once_with('UPDATE laptimes SET Track=??? WHERE Timestamp="%s";' % (timestamp, ), ANY)
+        self.thing.logFailedRecognition.assert_called_once_with(f'UPDATE laptimes SET Track=??? WHERE Timestamp="{timestamp}";', ANY)
         self.assertEqual(result, [])
 
     def testSeedIsRandomized(self):
