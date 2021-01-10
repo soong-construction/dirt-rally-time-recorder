@@ -52,15 +52,17 @@ class Database:
 
         self.setDbVersion(lapdb)
 
+    def migrate(self, lapdb):
+        logger.info("Checking laptimes database")
+        DatabaseMigration(lapdb).migrateDb()
+
     def initializeLaptimesDb(self):
         try:
             lapconn = self.getLapDbConnection()
             lapdb = lapconn.cursor()
 
-            logger.info("Checking laptimes database")
-            DatabaseMigration(lapdb).migrateDb()
+            self.migrate(lapdb)
             lapconn.commit()
-
             return self.fetchUser(lapdb)
 
         except Exception:

@@ -26,3 +26,4 @@ class Heuristics(ABC):
     @abstractmethod
     def isApplicable(self):
         pass
+    

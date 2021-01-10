@@ -1,6 +1,6 @@
-from .log import getLogger
-import yaml
 import os
+import yaml
+from .log import getLogger
 
 logger = getLogger(__name__)
 # Never import as identifier directly, as this has copy-by-value semantics

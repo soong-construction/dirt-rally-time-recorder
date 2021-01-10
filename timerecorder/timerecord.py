@@ -10,7 +10,7 @@ except (ImportError, ModuleNotFoundError):
     from timerecorder import log, config # @Reimport
     from timerecorder.receiver import Receiver  # @Reimport
 
-logfile = 'timerecord.log'
+LOGFILE = 'timerecord.log'
 
 def informUser():
     input('Press ENTER to end program.')
@@ -43,4 +43,4 @@ def main(logfile):
         informUser()
 
 if __name__ == '__main__':
-    main(logfile)
+    main(LOGFILE)

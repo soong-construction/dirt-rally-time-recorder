@@ -28,3 +28,4 @@ class ProgressTracker(BaseTracker):
     
     def getLap(self):
         return self.lap
+    

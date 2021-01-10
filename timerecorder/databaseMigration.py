@@ -12,16 +12,16 @@ class DatabaseMigration:
         
     def expandVersion(self, versionString):
         segments = versionString.split('.')
-        if (len(segments) != 3):
+        if len(segments) != 3:
             raise RuntimeError('VERSION must match pattern X.Y.Z')
-        segments = list(map(lambda s: int(s), segments))
+        segments = list(map(int, segments))
         return segments[0] * 10**6 + segments[1] * 10**3 + segments[2]
     
     def migrateDb(self):
         # Initial migration
         self.migrate_2_2_0()
         
-        self.migrate('2.4.0', lambda lapDb: self.migrate_2_4_0(lapDb))
+        self.migrate('2.4.0', self.migrate_2_4_0)
     
     def migrate_2_2_0(self):
         self.migrate('2.2.0', lambda _: None)
@@ -33,6 +33,6 @@ class DatabaseMigration:
         targetVersion = self.expandVersion(targetVersionString)
         user_version = self.getUserVersion()
         
-        if (user_version < targetVersion):
+        if user_version < targetVersion:
             applicator(self.lapDb)
             self.setUserVersion(targetVersion)

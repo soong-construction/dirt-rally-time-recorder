@@ -1,4 +1,4 @@
-import unittest
+import unittest, pytest
 
 import time
 from unittest.mock import MagicMock
@@ -76,7 +76,7 @@ class TestDatabase(unittest.TestCase):
         self.assertEqual(statement, 'INSERT INTO Tracks (id, name, length, startz) VALUES (ID, \'TRACK_NAME\', 10000, -1220);')
 
     def testGetUserId(self):
-        userId = self.thing.createUserId();
+        userId = self.thing.createUserId()
         self.assertIsNotNone(userId, "userId must exist")
 
     def testUserIdDiffersOverTime(self):
@@ -85,7 +85,7 @@ class TestDatabase(unittest.TestCase):
         userId2 = self.thing.createUserId()
         self.assertNotEqual(userId1, userId2, "userId must differ over time")
 
-    def testRecordResultsFirstTime(self):
+    def testRecordResultsWithoutTimeRecorded(self):
         conn = MagicMock()
         cursor = MagicMock()
         conn.cursor = MagicMock(return_value = cursor)
@@ -93,11 +93,11 @@ class TestDatabase(unittest.TestCase):
         cursor.fetchone = MagicMock(return_value = None)
         self.thing.getLapDbConnection = MagicMock(return_value = conn)
 
-
-        result = self.thing.recordResults(100, 200, 1586278198.59, 220.4, 144)
+        arguments = (100, 200, 1586278198.59, 220.4, 144)
+        result = self.thing.recordResults(*arguments)
         self.assertIsNone(result)
 
-        cursor.execute.assert_called_with('INSERT INTO laptimes (Track, Car, Timestamp, Time, Topspeed) VALUES (?, ?, ?, ?, ?)', (100, 200, 1586278198.59, 220.4, 144));
+        cursor.execute.assert_called_with('INSERT INTO laptimes (Track, Car, Timestamp, Time, Topspeed) VALUES (?, ?, ?, ?, ?)', arguments)
         conn.commit.assert_called_once()
         conn.close.assert_called_once()
 
@@ -111,10 +111,11 @@ class TestDatabase(unittest.TestCase):
         previous_best = (1546275814.11, 230.4)
         cursor.fetchone = MagicMock(return_value = previous_best)
 
-        result = self.thing.recordResults(100, 200, 1586278198.59, 220.4, 144)
+        arguments = (100, 200, 1586278198.59, 220.4, 144)
+        result = self.thing.recordResults(*arguments)
         self.assertEqual(result, previous_best)
 
-        cursor.execute.assert_called_with('INSERT INTO laptimes (Track, Car, Timestamp, Time, Topspeed) VALUES (?, ?, ?, ?, ?)', (100, 200, 1586278198.59, 220.4, 144));
+        cursor.execute.assert_called_with('INSERT INTO laptimes (Track, Car, Timestamp, Time, Topspeed) VALUES (?, ?, ?, ?, ?)', arguments)
         self.assertEqual(cursor.execute.call_count, 2)
 
         conn.commit.assert_called_once()
@@ -130,13 +131,46 @@ class TestDatabase(unittest.TestCase):
         previous_best = (1546275814.11, 210.4)
         cursor.fetchone = MagicMock(return_value = previous_best)
 
-        result = self.thing.recordResults(100, 200, 1586278198.59, 220.4, 144)
+        arguments = (100, 200, 1586278198.59, 220.4, 144)
+        result = self.thing.recordResults(*arguments)
         self.assertIsNone(result)
 
-        cursor.execute.assert_called_with('INSERT INTO laptimes (Track, Car, Timestamp, Time, Topspeed) VALUES (?, ?, ?, ?, ?)', (100, 200, 1586278198.59, 220.4, 144));
+        cursor.execute.assert_called_with('INSERT INTO laptimes (Track, Car, Timestamp, Time, Topspeed) VALUES (?, ?, ?, ?, ?)', arguments)
         self.assertEqual(cursor.execute.call_count, 2)
 
         conn.commit.assert_called_once()
+        conn.close.assert_called_once()
+
+    def testRecordFirstTimeMigrationFails(self):
+        conn = MagicMock()
+        conn.commit = MagicMock()
+        cursor = MagicMock()
+        conn.cursor = MagicMock(return_value = cursor)
+        cursor.execute = MagicMock()
+        self.thing.migrate = MagicMock(side_effect = IOError)
+        self.thing.getLapDbConnection = MagicMock(return_value = conn)
+
+        self.thing.setupLaptimesDb = MagicMock()
+        self.thing.fetchUser = MagicMock()
+
+        self.thing.initializeLaptimesDb()
+
+        self.thing.setupLaptimesDb.assert_called_once()
+        conn.commit.assert_called_once()
+        conn.close.assert_called_once()
+
+    def testRecordFailsAltogether(self):
+        conn = MagicMock()
+        conn.cursor = MagicMock(side_effect = IOError)
+        self.thing.getLapDbConnection = MagicMock(return_value = conn)
+        self.thing.setupLaptimesDb = MagicMock()
+
+        # TODO Actually should terminate
+#         with self.assertRaises(IOError):
+        self.thing.initializeLaptimesDb()
+
+        self.thing.setupLaptimesDb.assert_not_called()
+        conn.commit.assert_not_called()
         conn.close.assert_called_once()
 
 if __name__ == "__main__":

@@ -18,7 +18,6 @@ class UpdateScriptHandler(object):
 
     def __init__(self, dbName):
         self.dbName = dbName
-        pass
 
     def buildFileName(self, track, car, timestamp):
         return str(int(timestamp)) + '_' + track.replace(' ', '') + '_' + car.replace(' ', '') + '.bat'
@@ -39,11 +38,11 @@ class UpdateScriptHandler(object):
         file_list = os.listdir(directory)
         return [directory + '/' + file for file in file_list if isUpdateScript(file)]
 
-    def isBeforeDeadline(self, time, keep_for_days, script):
+    def isBeforeDeadline(self, datetime, keep_for_days, script):
         matches = re.finditer(scriptRegex, script)
         match = next(matches)
         
-        deadline = time - timedelta(days = keep_for_days)
+        deadline = datetime - timedelta(days = keep_for_days)
 
         creation_timestamp = int(match.group(1))
         creation_time = datetime.fromtimestamp(creation_timestamp, timezone.utc)

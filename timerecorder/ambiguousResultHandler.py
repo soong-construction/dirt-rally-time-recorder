@@ -5,7 +5,6 @@ from .gearShiftHeuristics import GearShiftHeuristics
 from .luckyGuessHeuristics import LuckyGuessHeuristics
 from .userSignalsHeuristics import UserSignalsHeuristics
 from .log import getLogger, getProjectUrl
-from .databaseAccess import identify
 from .updateScriptHandler import UpdateScriptHandler
 from .database import Database
 

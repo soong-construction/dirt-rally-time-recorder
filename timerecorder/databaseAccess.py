@@ -12,14 +12,14 @@ class DatabaseAccess:
         self.database = database
 
     def tryIdentify(self, it, it_list, debug_log, verbose_log):
-        if (len(it_list) == 0):
+        if len(it_list) == 0:
             logger.warning("Failed to identify %s", it)
             debug_log(logger)
             verbose_log(logger, self.database)
 
             return []
 
-        elif (len(it_list) == 1):
+        if len(it_list) == 1:
             index, _ = it_list[0]
             return index
 
@@ -70,7 +70,7 @@ class DatabaseAccess:
 
     def describeHandbrake(self, car):
         hasHandbrake = self.database.loadHandbrakeData(car)
-        if (hasHandbrake):
+        if hasHandbrake:
             return "with HANDBRAKE" + ", "
         return ""
 
@@ -84,7 +84,7 @@ class DatabaseAccess:
 
     def describeClutch(self, car):
         hasClutchPedal = self.database.loadClutchData(car)
-        if (hasClutchPedal):
+        if hasClutchPedal:
             return "with manual CLUTCH" + ", "
         return ""
 
@@ -95,7 +95,7 @@ class DatabaseAccess:
         line += self.describeClutch(car)
         line += self.describeHandbrake(car)
 
-        if (line == ""):
+        if line == "":
             line = "NO CONTROL DATA"
         else:
             line = line[:-2]

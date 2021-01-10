@@ -44,3 +44,4 @@ class GearTracker(BaseTracker):
 
     def getGearSkipCount(self):
         return self.skipCount
+    

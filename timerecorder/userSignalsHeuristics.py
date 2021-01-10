@@ -23,3 +23,4 @@ class UserSignalsHeuristics(Heuristics):
             raise Exception('Unknown signal ' + self.userSignal)
         
         return guess
+    

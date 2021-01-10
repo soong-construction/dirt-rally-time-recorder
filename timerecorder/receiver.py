@@ -7,9 +7,9 @@ from .log import getLogger
 from . import config
 
 logger = getLogger(__name__)
-    
+
 class Receiver(asyncore.dispatcher):
-    
+
     def __init__(self, approot):
         asyncore.dispatcher.__init__(self)
         self.address = config.get.server
@@ -32,8 +32,8 @@ class Receiver(asyncore.dispatcher):
 
     def handle_error(self):
         self.handle_close()
-        raise 
-    
+        raise  #pylint: disable=misplaced-bare-raise
+
     def handle_close(self):
         self.close()
 
