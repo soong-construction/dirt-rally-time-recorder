@@ -19,7 +19,7 @@ class TestConfig(TestBase):
         pass
 
     def testFreshConfigIsCreated(self):
-        configPath = testroot + '/' + 'newconfig.yml'
+        configPath = testroot + '/newconfig.yml'
 
         if os.path.exists(configPath):
             os.remove(configPath)
@@ -103,7 +103,7 @@ class TestConfig(TestBase):
             f.write(content)
     
     def testValuesCanBeReadAsBool(self):
-        configPath = testroot + '/' + 'valuetest.yml'
+        configPath = testroot + '/valuetest.yml'
 
         if os.path.exists(configPath):
             os.remove(configPath)

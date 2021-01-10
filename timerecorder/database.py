@@ -12,7 +12,7 @@ logger = getLogger(__name__)
 class Database:
 
     laptimesDbName = 'dirtrally-laptimes.db'
-    laptimesDb = '/' + laptimesDbName
+    laptimesDb = f'/{laptimesDbName}'
     baseDb = '/dirtrally-lb.db'
 
     def __init__(self, approot):

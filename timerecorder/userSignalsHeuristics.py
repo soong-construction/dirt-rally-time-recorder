@@ -20,7 +20,7 @@ class UserSignalsHeuristics(Heuristics):
         elif self.userSignal is Signal.THROTTLE_RIGHT:
             guess = self.car_candidates[1]
         else:
-            raise Exception('Unknown signal ' + self.userSignal)
+            raise Exception(f'Unknown signal {self.userSignal}')
         
         return guess
     

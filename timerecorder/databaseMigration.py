@@ -8,7 +8,7 @@ class DatabaseMigration:
         return userVersion
     
     def setUserVersion(self, newVersion):
-        self.lapDb.execute('PRAGMA user_version = '+ str(newVersion))
+        self.lapDb.execute(f'PRAGMA user_version = {newVersion}')
         
     def expandVersion(self, versionString):
         segments = versionString.split('.')

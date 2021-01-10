@@ -20,7 +20,7 @@ class UpdateScriptHandler(object):
         self.dbName = dbName
 
     def buildFileName(self, track, car, timestamp):
-        return str(int(timestamp)) + '_' + track.replace(' ', '') + '_' + car.replace(' ', '') + '.bat'
+        return '{}_{}_{}.bat'.format(int(timestamp), track.replace(' ', ''), car.replace(' ', ''))
 
     def buildScript(self, statement):
         return scriptTemplate.format(self.dbName, statement)

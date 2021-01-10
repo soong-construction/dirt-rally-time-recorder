@@ -37,7 +37,7 @@ class Config(dict):
             with open(filename, encoding='utf-8', newline='\n') as f:
                 super().update(yaml.load(f, yaml.SafeLoader) or {})
         except:
-            raise IOError(os.path.basename(filename) + ' seems to be corrupt, please check or delete file.')
+            raise IOError(f'{os.path.basename(filename)} seems to be corrupt, please check or delete file.')
 
     def __init__(self, filename):  #pylint: disable=super-init-not-called
         self.filename = filename
@@ -108,4 +108,4 @@ class Config(dict):
             
         except Exception as e:
             logger.debug('Failed to load config file %s: %s', file, e)
-            raise IOError(file + ' seems to be corrupt, please check or delete file.') from None
+            raise IOError(f'{file} seems to be corrupt, please check or delete file.') from None

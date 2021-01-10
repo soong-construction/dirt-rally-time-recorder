@@ -54,7 +54,7 @@ class StatsProcessor():
         fullDuration = str(timedelta(seconds=laptime_seconds))
         hours, minuteDuration = fullDuration.split(':', 1)
         thousandthsDuration = minuteDuration[:-3]
-        return thousandthsDuration if hours == '0' else hours + ':' + thousandthsDuration
+        return thousandthsDuration if hours == '0' else f'{hours}:{thousandthsDuration}'
 
     def logResults(self, laptime, track, car, previousBestTime = None):
         logger.debug("%s.%s.%s.time:%s|s", self.userArray[0], track, car, self.formatLapTime(laptime))
