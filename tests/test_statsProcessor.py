@@ -118,14 +118,14 @@ class TestStatsProcessor(TestBase):
         self.assertFalse(self.thing.finishStage.called, 'Actually called unexpected receiver method')
 
     def testTopSpeedConversion(self):
-        config.get.speed_unit = 'kph'
+        config.GET.speed_unit = 'kph'
         self.thing = StatsProcessor('testroot')
         self.thing.speedTracker.topSpeed = 33.28
 
         format_top_speed = self.thing.formatTopSpeed()
         self.assertEqual(format_top_speed, '119.8')
 
-        config.get.speed_unit = 'mph'
+        config.GET.speed_unit = 'mph'
         self.thing = StatsProcessor('testroot')
         self.thing.speedTracker.topSpeed = 33.28
 
@@ -242,11 +242,11 @@ class TestStatsProcessor(TestBase):
         self.thing.showCarControlInformation = MagicMock()
         stats = [1] * fieldCount
 
-        config.get.show_car_controls = 0
+        config.GET.show_car_controls = 0
         self.thing.startStage(stats)
         self.thing.showCarControlInformation.assert_not_called()
 
-        config.get.show_car_controls = 1
+        config.GET.show_car_controls = 1
         self.thing.startStage(stats)
         self.thing.showCarControlInformation.assert_called_once()
 

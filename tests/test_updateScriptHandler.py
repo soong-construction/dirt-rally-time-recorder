@@ -43,7 +43,7 @@ class TestUpdateScriptHandler(TestBase):
 
     def testFindsOldUpdateScriptsForUserConfiguredRetentionTime(self):
         scripts = ['1570011200_ElRodeo_AudiQuattro.bat', '1571511200_ElRodeo_PoloGTIR5.bat']
-        config.get.keep_update_scripts_days = 0
+        config.GET.keep_update_scripts_days = 0
         self.thing.listUpdateScripts = MagicMock(return_value = scripts)
         self.thing.warnShortRetentionTime = MagicMock()
 

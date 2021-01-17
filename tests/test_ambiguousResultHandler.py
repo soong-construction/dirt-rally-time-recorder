@@ -36,7 +36,7 @@ class TestAmbiguousResultHandler(TestBase):
         self.assertEqual(result, car)
 
     def testHandleResultsWithAmbiguousCarsAndNoHeuristics(self):
-        config.get.heuristics_activated = 1
+        config.GET.heuristics_activated = 1
         car = [100, 200]
         track = 1000
 
@@ -51,7 +51,7 @@ class TestAmbiguousResultHandler(TestBase):
         self.assertEqual(result, car)
 
     def testHandleResultsWithNoCarCandidatesShouldSkipHeuristics(self):
-        config.get.heuristics_activated = 1
+        config.GET.heuristics_activated = 1
         car = []
         track = 1000
 
@@ -68,7 +68,7 @@ class TestAmbiguousResultHandler(TestBase):
         self.assertEqual(result, [])
 
     def testHandleResultsWithAmbiguousCarsAndLuckyGuess(self):
-        config.get.heuristics_activated = 1
+        config.GET.heuristics_activated = 1
         car = [100, 200]
         track = 1000
 
@@ -83,7 +83,7 @@ class TestAmbiguousResultHandler(TestBase):
         self.assertEqual(result, 200)
 
     def testHeuristicsAreOnlyAppliedIfConfigured(self):
-        config.get.heuristics_activated = 0
+        config.GET.heuristics_activated = 0
         car = [100, 200]
         track = 1000
 

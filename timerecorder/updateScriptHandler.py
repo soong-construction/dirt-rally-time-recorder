@@ -53,11 +53,11 @@ class UpdateScriptHandler():
     def warnShortRetentionTime(self):
         return logger.warning(
             ('CAUTION: Keeping update scripts for less than %s days. '
-                'Follow possible hints to update scripts directly after your session.'), config.keep_update_scripts_days_default)
+                'Follow possible hints to update scripts directly after your session.'), config.KEEP_UPDATE_SCRIPTS_DAYS_DEFAULT)
 
     def listOldUpdateScripts(self, time, directory):
-        keep_for_days = config.get.keep_update_scripts_days
-        if keep_for_days < config.keep_update_scripts_days_default:
+        keep_for_days = config.GET.keep_update_scripts_days
+        if keep_for_days < config.KEEP_UPDATE_SCRIPTS_DAYS_DEFAULT:
             self.warnShortRetentionTime()
 
         scripts = self.listUpdateScripts(directory)

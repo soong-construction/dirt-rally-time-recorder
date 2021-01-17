@@ -25,7 +25,7 @@ logger = getLogger(__name__)
 class StatsProcessor():
 
     def __init__(self, approot):
-        self.speed_unit = config.get.speed_unit
+        self.speed_unit = config.GET.speed_unit
         self.speed_modifier = 0.6214 if self.speed_unit == 'mph' else 1
         self.approot = approot
 
@@ -119,7 +119,7 @@ class StatsProcessor():
         self.gearTracker = GearTracker(self.respawnTracker)
         self.progressTracker = ProgressTracker()
         self.speedTracker = SpeedTracker()
-        self.inputTracker = InputTracker(self.speedTracker, self.playNotificationSound) if config.get.user_signals else BaseTracker()
+        self.inputTracker = InputTracker(self.speedTracker, self.playNotificationSound) if config.GET.user_signals else BaseTracker()
 
     def startStage(self, stats):
         dbAccess = self.databaseAccess
@@ -139,7 +139,7 @@ class StatsProcessor():
 
         logger.debug("%s.%s.%s.started", self.userArray[0], trackId, carId)
 
-        if config.get.show_car_controls:
+        if config.GET.show_car_controls:
             self.showCarControlInformation()
 
     def finishStage(self, stats):

@@ -24,13 +24,13 @@ class AmbiguousResultHandler():
     def applyHeuristics(self, car_candidates, gearTracker, inputTracker):
         heuristics = LuckyGuessHeuristics(car_candidates, random.seed(self.seed))
 
-        if config.get.authentic_shifting:
+        if config.GET.authentic_shifting:
             car_shift_map = self.databaseAccess.mapCarsToShifting(car_candidates)
             gearShiftHeuristics = GearShiftHeuristics(list(car_shift_map), gearTracker)
             gearShiftHeuristics.withFallback(heuristics)
             heuristics = gearShiftHeuristics
 
-        if config.get.user_signals:
+        if config.GET.user_signals:
             userSignalHeuristics = UserSignalsHeuristics(car_candidates, inputTracker)
             userSignalHeuristics.withFallback(heuristics)
             heuristics = userSignalHeuristics
@@ -51,7 +51,7 @@ class AmbiguousResultHandler():
             self.logFailedRecognition(incompleteUpdate, f'Unmapped car telemetry. Please report at {getProjectUrl()}')
             return car
 
-        if config.get.heuristics_activated:
+        if config.GET.heuristics_activated:
             guessed_car = self.applyHeuristics(car, gearTracker, inputTracker)
 
             if guessed_car is not None:

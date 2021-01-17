@@ -12,7 +12,7 @@ class Receiver(asyncore.dispatcher):
 
     def __init__(self, approot):
         asyncore.dispatcher.__init__(self)
-        self.address = config.get.server
+        self.address = config.GET.server
         self.fieldCount = 66
         self.statsProcessor = StatsProcessor(approot)
 
