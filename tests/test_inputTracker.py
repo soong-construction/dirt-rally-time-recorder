@@ -11,10 +11,10 @@ class TestInputTracker(unittest.TestCase):
         unittest.TestCase.__init__(self, methodName)
 
     def setUp(self):
-        self.speedTracker = MagicMock()
-        self.speedTracker.getTopSpeed = MagicMock(return_value = 0)
+        self.speed_tracker = MagicMock()
+        self.speed_tracker.getTopSpeed = MagicMock(return_value = 0)
         self.notify = MagicMock()
-        self.thing = InputTracker(self.speedTracker, self.notify)
+        self.thing = InputTracker(self.speed_tracker, self.notify)
 
     def tearDown(self):
         pass
@@ -57,16 +57,16 @@ class TestInputTracker(unittest.TestCase):
         stats = [0] * fieldCount
 
         self.thing.track(stats)
-        self.speedTracker.getTopSpeed.assert_called_once()
-        self.speedTracker.getTopSpeed.reset_mock()
+        self.speed_tracker.getTopSpeed.assert_called_once()
+        self.speed_tracker.getTopSpeed.reset_mock()
 
         self.thing.enabled = False
         self.thing.track(stats)
-        self.speedTracker.getTopSpeed.assert_not_called()
+        self.speed_tracker.getTopSpeed.assert_not_called()
 
     def testSignalLeftOnlyAfterInputGone(self):
         self.notify.assert_not_called()
-        self.speedTracker.getTopSpeed = MagicMock(return_value = 0)
+        self.speed_tracker.getTopSpeed = MagicMock(return_value = 0)
         stats = [0] * fieldCount
         stats[29] = 0.6
         stats[30] = -0.6
@@ -84,7 +84,7 @@ class TestInputTracker(unittest.TestCase):
 
     def testSignalRightOnlyAfterInputGone(self):
         self.notify.assert_not_called()
-        self.speedTracker.getTopSpeed = MagicMock(return_value = 0)
+        self.speed_tracker.getTopSpeed = MagicMock(return_value = 0)
         stats = [0] * fieldCount
         stats[29] = 0.6
         stats[30] = 0.6

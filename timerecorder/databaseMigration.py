@@ -1,14 +1,14 @@
 class DatabaseMigration:
 
     def __init__(self, lapDb):
-        self.lapDb = lapDb
+        self.lap_db = lapDb
 
     def getUserVersion(self):
-        userVersion = self.lapDb.execute('PRAGMA user_version;').fetchall()[0][0]
+        userVersion = self.lap_db.execute('PRAGMA user_version;').fetchall()[0][0]
         return userVersion
 
     def setUserVersion(self, newVersion):
-        self.lapDb.execute(f'PRAGMA user_version = {newVersion}')
+        self.lap_db.execute(f'PRAGMA user_version = {newVersion}')
 
     def expandVersion(self, versionString):
         segments = versionString.split('.')
@@ -31,8 +31,8 @@ class DatabaseMigration:
 
     def _migrate(self, targetVersionString, applicator):
         targetVersion = self.expandVersion(targetVersionString)
-        user_version = self.getUserVersion()
+        userVersion = self.getUserVersion()
 
-        if user_version < targetVersion:
-            applicator(self.lapDb)
+        if userVersion < targetVersion:
+            applicator(self.lap_db)
             self.setUserVersion(targetVersion)

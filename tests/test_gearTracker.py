@@ -11,10 +11,10 @@ class TestGearTracker(unittest.TestCase):
         unittest.TestCase.__init__(self, methodName)
 
     def setUp(self):
-        self.respawnTracker = RespawnTracker()
-        self.respawnTracker.isRecover = MagicMock(return_value=False)
-        self.respawnTracker.isRestart = MagicMock(return_value=False)
-        self.thing = GearTracker(self.respawnTracker)
+        self.respawn_tracker = RespawnTracker()
+        self.respawn_tracker.isRecover = MagicMock(return_value=False)
+        self.respawn_tracker.isRestart = MagicMock(return_value=False)
+        self.thing = GearTracker(self.respawn_tracker)
 
     def tearDown(self):
         pass
@@ -101,14 +101,14 @@ class TestGearTracker(unittest.TestCase):
         self.assertEqual(self.thing.getGearChangeCount(), 0)
         self.assertEqual(self.thing.getGearSkipCount(), 0)
 
-        self.respawnTracker.isRecover = MagicMock(return_value = True)
+        self.respawn_tracker.isRecover = MagicMock(return_value = True)
         stats[33] = 3
         self.thing.track(stats)
         self.assertEqual(self.thing.getGearChangeCount(), 0)
         self.assertEqual(self.thing.getGearSkipCount(), 0)
 
-        self.respawnTracker.isRecover = MagicMock(return_value = False)
-        self.respawnTracker.isRestart = MagicMock(return_value = True)
+        self.respawn_tracker.isRecover = MagicMock(return_value = False)
+        self.respawn_tracker.isRestart = MagicMock(return_value = True)
         stats[33] = -1
         self.thing.track(stats)
         self.assertEqual(self.thing.getGearChangeCount(), 0)

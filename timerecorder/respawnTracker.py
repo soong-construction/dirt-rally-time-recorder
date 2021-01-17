@@ -1,9 +1,6 @@
 from .baseTracker import BaseTracker
 from .log import getLogger
 
-recoverDelta = 2
-restartDelta = 30
-restartDistance = 10
 
 logger = getLogger(__name__)
 
@@ -16,35 +13,39 @@ class RespawnTracker(BaseTracker):
         self.recover = False
         self.restart = False
 
-    def updatePos(self, pos_x, pos_y):
-        self.last_x = pos_x
-        self.last_y = pos_y
+    def updatePos(self, posX, posY):
+        self.last_x = posX
+        self.last_y = posY
 
-    def positionDeltaExceeds(self, pos_x, pos_y, delta):
-        exceeds_x = abs(pos_x - self.last_x) >= delta
-        exceeds_y = abs(pos_y - self.last_y) >= delta
+    def positionDeltaExceeds(self, posX, posY, delta):
+        exceedsX = abs(posX - self.last_x) >= delta
+        exceedsY = abs(posY - self.last_y) >= delta
 
-        return exceeds_x or exceeds_y
+        return exceedsX or exceedsY
 
     def track(self, stats):
         self.recover = False
         self.restart = False
-        pos_x = stats[4]
-        pos_y = stats[5]
+        recoverDelta = 2
+        restartDelta = 30
+        restartDistance = 10
+
+        posX = stats[4]
+        posY = stats[5]
         distance = stats[2]
 
         if self.last_x is None:
             pass
 
-        elif self.positionDeltaExceeds(pos_x, pos_y, restartDelta) and distance <= restartDistance:
+        elif self.positionDeltaExceeds(posX, posY, restartDelta) and distance <= restartDistance:
             self.restart = True
             logger.debug('RESTART')
 
-        elif self.positionDeltaExceeds(pos_x, pos_y, recoverDelta):
+        elif self.positionDeltaExceeds(posX, posY, recoverDelta):
             self.recover = True
             logger.debug('RECOVER')
 
-        self.updatePos(pos_x, pos_y)
+        self.updatePos(posX, posY)
 
     def isRecover(self):
         return self.recover

@@ -27,7 +27,7 @@ def main(logfile):
             approot = os.path.dirname(approot) # Move to root
 
         log.init(approot + '/' + logfile)
-        logger.info('Starting %s %s', log.name, config.readVersion(approot))
+        logger.info('Starting %s %s', log.NAME, config.readVersion(approot))
 
         config.init(approot + '/config.yml')
 

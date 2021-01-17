@@ -21,11 +21,11 @@ class Database:
     def setUp(self):
         try:
             conn = sqlite3.connect(self.approot + self.baseDb)
-            db = conn.cursor()
-            trackCount = db.execute('SELECT count(*) FROM Tracks').fetchall()[0]
-            carCount = db.execute('SELECT count(*) FROM cars').fetchall()[0]
+            database = conn.cursor()
+            trackCount = database.execute('SELECT count(*) FROM Tracks').fetchall()[0]
+            carCount = database.execute('SELECT count(*) FROM cars').fetchall()[0]
             logger.info('Found %s tracks and %s cars', trackCount[0], carCount[0])
-            self.db = db
+            self.database = database
             return self
         except Exception as exc:
             logger.exception("Error when reading from %s, please check set-up instructions in the README", self.baseDb)
@@ -83,20 +83,20 @@ class Database:
         epoch = int(time.time())
         return str(user) + str(epoch)
 
-    def loadTracks(self, tracklength, startz):
+    def loadTracks(self, tracklength, startZ):
         select = ('SELECT id, name '
                     'FROM Tracks '
                     'WHERE abs(length - ?) < 0.001 AND (startz is null OR abs(startz - ?) < 50)')
-        self.db.execute(select, (tracklength, startz))
-        return self.db.fetchall()
+        self.database.execute(select, (tracklength, startZ))
+        return self.database.fetchall()
 
-    def loadCars(self, idle_rpm, max_rpm, top_gear):
+    def loadCars(self, idleRpm, maxRpm, topGear):
         select = ('SELECT cars.id, cars.name '
                     'FROM cars INNER JOIN controls USING(id) '
                     'WHERE abs(cars.maxrpm - ?) < 1.0 AND abs(cars.idlerpm - ?) < 1.0 AND controls.topgear = ? '
                     'ORDER BY cars.id ASC')
-        self.db.execute(select, (max_rpm, idle_rpm, top_gear))
-        return self.db.fetchall()
+        self.database.execute(select, (maxRpm, idleRpm, topGear))
+        return self.database.fetchall()
 
     def _getLapDbConnection(self):
         return sqlite3.connect(self.approot + self.laptimesDb)
@@ -113,56 +113,56 @@ class Database:
                           'WHERE Track = ? AND Car = ? '
                           'ORDER BY Time ASC, Timestamp ASC', (track, car))
             fetch = lapdb.fetchone()
-            previous_best = self._compareTime(fetch, laptime) if fetch else None
+            previousBest = self._compareTime(fetch, laptime) if fetch else None
 
             lapdb.execute('INSERT INTO laptimes (Track, Car, Timestamp, Time, Topspeed) VALUES (?, ?, ?, ?, ?)', (track, car, timestamp, laptime, topspeed))
             lapconn.commit()
             lapconn.close()
 
-            return previous_best
+            return previousBest
         except Exception:
             logger.exception("Error connecting to %s", self.laptimesDbName)
 
     @staticmethod
     def getCarUpdateStatements(timestamp, cars):
-        to_update = lambda car: UPDATE_STATEMENT.format('Car', car, timestamp)
-        return list(map(to_update, cars))
+        toUpdate = lambda car: UPDATE_STATEMENT.format('Car', car, timestamp)
+        return list(map(toUpdate, cars))
 
     @staticmethod
     def getTrackUpdateStatements(timestamp, tracks):
-        to_update = lambda track: UPDATE_STATEMENT.format('Track', track, timestamp)
-        return list(map(to_update, tracks))
+        toUpdate = lambda track: UPDATE_STATEMENT.format('Track', track, timestamp)
+        return list(map(toUpdate, tracks))
 
-    def getCarInsertStatement(self, max_rpm, idle_rpm):
-        return f'INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (ID, \'CAR_NAME\', {max_rpm}, {idle_rpm});'
+    def getCarInsertStatement(self, maxRpm, idleRpm):
+        return f'INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (ID, \'CAR_NAME\', {maxRpm}, {idleRpm});'
 
-    def getTrackInsertStatement(self, tracklength, z):
-        return f'INSERT INTO Tracks (id, name, length, startz) VALUES (ID, \'TRACK_NAME\', {tracklength}, {z});'
+    def getTrackInsertStatement(self, tracklength, startZ):
+        return f'INSERT INTO Tracks (id, name, length, startz) VALUES (ID, \'TRACK_NAME\', {tracklength}, {startZ});'
 
     def getCarName(self, car):
-        self.db.execute('SELECT name FROM cars WHERE id = ?', (car,))
-        return self.db.fetchone()[0]
+        self.database.execute('SELECT name FROM cars WHERE id = ?', (car,))
+        return self.database.fetchone()[0]
 
     def getTrackName(self, track):
-        self.db.execute('SELECT name FROM Tracks WHERE id = ?', (track,))
-        return self.db.fetchone()[0]
+        self.database.execute('SELECT name FROM Tracks WHERE id = ?', (track,))
+        return self.database.fetchone()[0]
 
     def loadHandbrakeData(self, car):
-        self.db.execute('SELECT handbrake FROM controls WHERE id = ?', (car,))
-        fetch = self.db.fetchone()
+        self.database.execute('SELECT handbrake FROM controls WHERE id = ?', (car,))
+        fetch = self.database.fetchone()
         return bool(fetch[0]) if fetch else None
 
     def loadShiftingData(self, car):
-        self.db.execute('SELECT shifting FROM controls WHERE id = ?', (car,))
-        fetch = self.db.fetchone()
+        self.database.execute('SELECT shifting FROM controls WHERE id = ?', (car,))
+        fetch = self.database.fetchone()
         return fetch[0] if fetch else None
 
     def loadClutchData(self, car):
-        self.db.execute('SELECT manualclutch FROM controls WHERE id = ?', (car,))
-        fetch = self.db.fetchone()
+        self.database.execute('SELECT manualclutch FROM controls WHERE id = ?', (car,))
+        fetch = self.database.fetchone()
         return bool(fetch[0]) if fetch else None
 
     def loadGearsData(self, car):
-        self.db.execute('SELECT topgear FROM controls WHERE id = ?', (car,))
-        fetch = self.db.fetchone()
+        self.database.execute('SELECT topgear FROM controls WHERE id = ?', (car,))
+        fetch = self.database.fetchone()
         return fetch[0] if fetch else None

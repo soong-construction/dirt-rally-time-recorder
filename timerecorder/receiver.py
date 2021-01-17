@@ -13,12 +13,11 @@ class Receiver(asyncore.dispatcher):
     def __init__(self, approot):
         asyncore.dispatcher.__init__(self)
         self.address = config.GET.server
-        self.fieldCount = 66
-        self.statsProcessor = StatsProcessor(approot)
-
-    def reconnect(self):
+        self.field_count = 66
+        self.stats_processor = StatsProcessor(approot)
         self.received_data = False
 
+    def reconnect(self):
         self.create_socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.bind(self.address)
         logger.info("Waiting for data on %s:%s", *self.address)
@@ -41,7 +40,7 @@ class Receiver(asyncore.dispatcher):
         return True
 
     def handle_read(self):
-        data = self.recv(self.fieldCount * 8)
+        data = self.recv(self.field_count * 8)
 
         if not data:
             return
@@ -53,6 +52,6 @@ class Receiver(asyncore.dispatcher):
         self.parse(data)
 
     def parse(self, data):
-        stats = struct.unpack(str(self.fieldCount) + 'f', data[0:self.fieldCount * 4])
+        stats = struct.unpack(str(self.field_count) + 'f', data[0:self.field_count * 4])
 
-        self.statsProcessor.handleStats(stats)
+        self.stats_processor.handleStats(stats)

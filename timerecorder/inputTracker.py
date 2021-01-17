@@ -4,8 +4,8 @@ from .baseTracker import BaseTracker
 
 logger = getLogger(__name__)
 
-steering_offset = 0.2
-throttle_offset = 0.5
+STEERING_OFFSET = 0.2
+THROTTLE_OFFSET = 0.5
 
 class Signal(Enum):
     THROTTLE_LEFT = 1
@@ -16,7 +16,7 @@ class Signal(Enum):
 class InputTracker(BaseTracker):
 
     def __init__(self, speedTracker, notify):
-        self.speedTracker = speedTracker
+        self.speed_tracker = speedTracker
         self.notify = notify
         self.input = None
         self.signal = None
@@ -24,16 +24,16 @@ class InputTracker(BaseTracker):
 
     # Is reported when approaching start line in DR1, and no straight forward solution like handbrake pulled check
     def hasLaunched(self):
-        return self.speedTracker.getTopSpeed() > 1.0
+        return self.speed_tracker.getTopSpeed() > 1.0
 
     def getSignal(self):
         return self.signal
 
     def isSignalLeft(self, throttle, steer):
-        return steer < -steering_offset and throttle > throttle_offset
+        return steer < -STEERING_OFFSET and throttle > THROTTLE_OFFSET
 
     def isSignalRight(self, throttle, steer):
-        return steer > steering_offset and throttle > throttle_offset
+        return steer > STEERING_OFFSET and throttle > THROTTLE_OFFSET
 
     def track(self, stats):
         throttle, steer = (stats[29:31])

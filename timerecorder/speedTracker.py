@@ -5,16 +5,16 @@ class SpeedTracker(BaseTracker):
 
     def __init__(self):
         self.speed = None
-        self.topSpeed = 0
+        self.top_speed = 0
 
     def track(self, stats):
         speed = int(stats[7])
-        if self.topSpeed < speed:
-            self.topSpeed = speed
+        if self.top_speed < speed:
+            self.top_speed = speed
         self.speed = speed
 
     def getSpeed(self):
         return self.speed
 
     def getTopSpeed(self):
-        return self.topSpeed
+        return self.top_speed

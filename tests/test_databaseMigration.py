@@ -6,11 +6,11 @@ from timerecorder.databaseMigration import DatabaseMigration
 class TestDatabase(unittest.TestCase):
 
     def setUp(self):
-        self.lapDb = MagicMock()
-        self.thing = DatabaseMigration(self.lapDb)
+        self.lap_db = MagicMock()
+        self.thing = DatabaseMigration(self.lap_db)
 
         self.cursor = MagicMock()
-        self.lapDb.execute = MagicMock(return_value=self.cursor)
+        self.lap_db.execute = MagicMock(return_value=self.cursor)
 
         self.cursor.fetchall = MagicMock(return_value=[[0]])
 
@@ -26,8 +26,8 @@ class TestDatabase(unittest.TestCase):
 
         self.thing.setUserVersion(initialVersion)
 
-        self.assertEqual(self.lapDb.execute.call_count, 1)
-        self.lapDb.execute.assert_called_with('PRAGMA user_version = 1000000')
+        self.assertEqual(self.lap_db.execute.call_count, 1)
+        self.lap_db.execute.assert_called_with('PRAGMA user_version = 1000000')
 
     def testVersionExpansion(self):
         expand_version = self.thing.expandVersion('1.0.0')
@@ -50,8 +50,8 @@ class TestDatabase(unittest.TestCase):
 
         self.thing._migrate_2_2_0()
 
-        self.assertEqual(self.lapDb.execute.call_count, 2)
-        self.lapDb.execute.assert_called_with('PRAGMA user_version = 2002000')
+        self.assertEqual(self.lap_db.execute.call_count, 2)
+        self.lap_db.execute.assert_called_with('PRAGMA user_version = 2002000')
 
     def testInitialMigrationSkipped(self):
         initialVersion = 2_002_000
@@ -59,7 +59,7 @@ class TestDatabase(unittest.TestCase):
 
         self.thing._migrate_2_2_0()
 
-        self.lapDb.execute.assert_called_once_with('PRAGMA user_version;')
+        self.lap_db.execute.assert_called_once_with('PRAGMA user_version;')
 
     def testAutoMigration(self):
         initialVersion = 0
@@ -67,7 +67,7 @@ class TestDatabase(unittest.TestCase):
 
         self.thing.migrateDb()
 
-        self.assertGreater(self.lapDb.execute.call_count, 0)
+        self.assertGreater(self.lap_db.execute.call_count, 0)
 
 if __name__ == "__main__":
     unittest.main()

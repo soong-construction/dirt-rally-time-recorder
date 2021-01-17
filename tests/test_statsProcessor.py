@@ -40,16 +40,16 @@ class TestStatsProcessor(TestBase):
 
     # Scenario for timeDelta<0 and !restart: 1) cancel DR1 event near the start  2) enter the same event again (similar x/y pos)
     def testStageRestartOrTimeResetLeadToStageAborted(self):
-        self.thing.timeTracker.getTimeDelta = MagicMock(return_value=-1)
-        self.thing.respawnTracker.isRestart = MagicMock(return_value=False)
+        self.thing.time_tracker.getTimeDelta = MagicMock(return_value=-1)
+        self.thing.respawn_tracker.isRestart = MagicMock(return_value=False)
         self.assertTrue(self.thing._stageAborted())
 
-        self.thing.timeTracker.getTimeDelta = MagicMock(return_value=1)
-        self.thing.respawnTracker.isRestart = MagicMock(return_value=True)
+        self.thing.time_tracker.getTimeDelta = MagicMock(return_value=1)
+        self.thing.respawn_tracker.isRestart = MagicMock(return_value=True)
         self.assertTrue(self.thing._stageAborted())
 
-        self.thing.timeTracker.getTimeDelta = MagicMock(return_value=1)
-        self.thing.respawnTracker.isRestart = MagicMock(return_value=False)
+        self.thing.time_tracker.getTimeDelta = MagicMock(return_value=1)
+        self.thing.respawn_tracker.isRestart = MagicMock(return_value=False)
         self.assertFalse(self.thing._stageAborted())
 
     def testStartStage(self):
@@ -120,14 +120,14 @@ class TestStatsProcessor(TestBase):
     def testTopSpeedConversion(self):
         config.GET.speed_unit = 'kph'
         self.thing = StatsProcessor('testroot')
-        self.thing.speedTracker.topSpeed = 33.28
+        self.thing.speed_tracker.top_speed = 33.28
 
         format_top_speed = self.thing._formatTopSpeed()
         self.assertEqual(format_top_speed, '119.8')
 
         config.GET.speed_unit = 'mph'
         self.thing = StatsProcessor('testroot')
-        self.thing.speedTracker.topSpeed = 33.28
+        self.thing.speed_tracker.top_speed = 33.28
 
         format_top_speed = self.thing._formatTopSpeed()
         self.assertEqual(format_top_speed, '74.4')
@@ -158,46 +158,46 @@ class TestStatsProcessor(TestBase):
     def testFinishStageRecordAndLogResultsWithNewPersonalBest(self):
         stats = [1] * fieldCount
         stats[62] = 100.2
-        self.thing.databaseAccess = MagicMock()
+        self.thing.database_access = MagicMock()
         self.thing.car = 10
         self.thing.track = 11
         self.thing._handleAmbiguities = MagicMock(return_value=(10, 11))
-        self.thing.databaseAccess.recordResults = MagicMock(return_value=(123456789, 111.2))
+        self.thing.database_access.recordResults = MagicMock(return_value=(123456789, 111.2))
 
         self.thing._finishStage(stats)
 
         self.thing._handleAmbiguities.assert_called_once()
-        self.thing.databaseAccess.recordResults.assert_called_once_with(10, 11, ANY, ANY, ANY)
+        self.thing.database_access.recordResults.assert_called_once_with(10, 11, ANY, ANY, ANY)
         self.thing._logResults.assert_called_once_with(100.2, 10, 11, 111.2)
 
     def testFinishStageRecordAndLogResultsWithNoNewPersonalBest(self):
         stats = [1] * fieldCount
         stats[62] = 100.2
-        self.thing.databaseAccess = MagicMock()
+        self.thing.database_access = MagicMock()
         self.thing.car = 10
         self.thing.track = 11
         self.thing._handleAmbiguities = MagicMock(return_value=(10, 11))
-        self.thing.databaseAccess.recordResults = MagicMock(return_value=None)
+        self.thing.database_access.recordResults = MagicMock(return_value=None)
 
         self.thing._finishStage(stats)
 
         self.thing._handleAmbiguities.assert_called_once()
-        self.thing.databaseAccess.recordResults.assert_called_once_with(10, 11, ANY, ANY, ANY)
+        self.thing.database_access.recordResults.assert_called_once_with(10, 11, ANY, ANY, ANY)
         self.thing._logResults.assert_called_once_with(100.2, 10, 11)
 
     def testFinishStageRecordAndLogResultsWithAmbiguity(self):
         stats = [1] * fieldCount
         stats[62] = 100.2
-        self.thing.databaseAccess = MagicMock()
+        self.thing.database_access = MagicMock()
         self.thing.car = 10
         self.thing.track = (11, 110)
         self.thing._handleAmbiguities = MagicMock(return_value=(10, 11))
-        self.thing.databaseAccess.recordResults = MagicMock(return_value=(123456789, 111.2))
+        self.thing.database_access.recordResults = MagicMock(return_value=(123456789, 111.2))
 
         self.thing._finishStage(stats)
 
         self.thing._handleAmbiguities.assert_called_once()
-        self.thing.databaseAccess.recordResults.assert_called_once_with(10, 11, ANY, ANY, ANY)
+        self.thing.database_access.recordResults.assert_called_once_with(10, 11, ANY, ANY, ANY)
         self.thing._logResults.assert_called_once_with(100.2, 10, 11)
 
     def testHandleStartStageAndDatabaseCalled(self):
@@ -205,39 +205,39 @@ class TestStatsProcessor(TestBase):
         stats[2] = 0
 
         self.thing._inStage = MagicMock(return_value=False)
-        self.thing.databaseAccess = MagicMock()
-        self.thing.databaseAccess.identifyCar = MagicMock(return_value=10)
-        self.thing.databaseAccess.identifyTrack = MagicMock(return_value=11)
+        self.thing.database_access = MagicMock()
+        self.thing.database_access.identifyCar = MagicMock(return_value=10)
+        self.thing.database_access.identifyTrack = MagicMock(return_value=11)
 
         self.thing.handleStats(stats)
 
-        self.thing.databaseAccess.identifyCar.assert_called_once()
-        self.thing.databaseAccess.identifyTrack.assert_called_once()
-        self.thing.databaseAccess.recordResults.assert_not_called()
+        self.thing.database_access.identifyCar.assert_called_once()
+        self.thing.database_access.identifyTrack.assert_called_once()
+        self.thing.database_access.recordResults.assert_not_called()
 
     def testTrackersAreCalledWithStats(self):
-        self.thing.timeTracker = MagicMock()
+        self.thing.time_tracker = MagicMock()
         self.thing._stageAborted = MagicMock(return_value=False)
 
         stats = [1] * fieldCount
         self.thing.handleStats(stats)
 
-        self.thing.timeTracker.track.assert_called()
+        self.thing.time_tracker.track.assert_called()
 
     def testTrackersAreNotCalledWithEmptyStats(self):
-        self.thing.timeTracker = MagicMock()
+        self.thing.time_tracker = MagicMock()
         self.thing._stageAborted = MagicMock(return_value=False)
 
         stats = [0] * fieldCount
         self.thing.handleStats(stats)
 
-        self.thing.timeTracker.track.assert_not_called()
+        self.thing.time_tracker.track.assert_not_called()
 
     def testCarControlsAreShownIfConfigured(self):
         self.thing._inStage = MagicMock(return_value=False)
-        self.thing.databaseAccess = MagicMock()
-        self.thing.databaseAccess.identifyCar = MagicMock(return_value=10)
-        self.thing.databaseAccess.identifyTrack = MagicMock(return_value=11)
+        self.thing.database_access = MagicMock()
+        self.thing.database_access.identifyCar = MagicMock(return_value=10)
+        self.thing.database_access.identifyTrack = MagicMock(return_value=11)
 
         self.thing._showCarControlInformation = MagicMock()
         stats = [1] * fieldCount
@@ -263,16 +263,16 @@ class TestStatsProcessor(TestBase):
         self.thing.database.getCarName.assert_called_once()
 
     def testHandleAmbiguities(self):
-        self.thing.ambiguousResultHandler = MagicMock()
+        self.thing.ambiguous_result_handler = MagicMock()
         self.thing.car = [100, 200]
         self.thing._logCar = MagicMock()
-        self.thing.ambiguousResultHandler.handleAmbiguousCars = MagicMock(return_value=100)
-        self.thing.ambiguousResultHandler.handleAmbiguousTracks = MagicMock(return_value=1000)
+        self.thing.ambiguous_result_handler.handleAmbiguousCars = MagicMock(return_value=100)
+        self.thing.ambiguous_result_handler.handleAmbiguousTracks = MagicMock(return_value=1000)
 
         result = self.thing._handleAmbiguities(123456789)
 
-        self.thing.ambiguousResultHandler.handleAmbiguousCars.assert_called_once()
-        self.thing.ambiguousResultHandler.handleAmbiguousTracks.assert_called_once()
+        self.thing.ambiguous_result_handler.handleAmbiguousCars.assert_called_once()
+        self.thing.ambiguous_result_handler.handleAmbiguousTracks.assert_called_once()
         self.thing._logCar.assert_called_once_with(100)
 
         self.assertEqual(result, (1000, 100))

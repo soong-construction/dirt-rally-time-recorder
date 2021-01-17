@@ -8,14 +8,14 @@ class TestDatabase(unittest.TestCase):
 
     def setUp(self):
         self.thing = Database('test')
-        self.thing.db = MagicMock()
+        self.thing.database = MagicMock()
 
     def tearDown(self):
         pass
 
     def testLoadCars(self):
         cars = [(1, 'car1')]
-        self.thing.db.fetchall = MagicMock(return_value = cars)
+        self.thing.database.fetchall = MagicMock(return_value = cars)
 
         loadedCars = self.thing.loadCars(1000, 100, 5)
 
@@ -23,7 +23,7 @@ class TestDatabase(unittest.TestCase):
 
     def testIdentifyCarNoResult(self):
         cars = []
-        self.thing.db.fetchall = MagicMock(return_value = cars)
+        self.thing.database.fetchall = MagicMock(return_value = cars)
 
         loadedCars = self.thing.loadCars(1000, 100, 5)
 
@@ -31,7 +31,7 @@ class TestDatabase(unittest.TestCase):
 
     def testLoadTracksWithResults(self):
         tracks = [(1, 'track1'), (2, 'track2')]
-        self.thing.db.fetchall = MagicMock(return_value = tracks)
+        self.thing.database.fetchall = MagicMock(return_value = tracks)
 
         loadedTracks = self.thing.loadTracks(10000, 10)
 
@@ -39,7 +39,7 @@ class TestDatabase(unittest.TestCase):
 
     def testLoadTracksWithoutResults(self):
         tracks = []
-        self.thing.db.fetchall = MagicMock(return_value = tracks)
+        self.thing.database.fetchall = MagicMock(return_value = tracks)
 
         loadedTracks = self.thing.loadTracks(10000, 10)
 
