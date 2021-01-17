@@ -11,14 +11,14 @@ class TestReceiver(TestBase):
 
     def __init__(self, methodName):
         TestBase.__init__(self, methodName, 'test-files')
-        self.UpdateResourcesFunction = StatsProcessor.updateResources
+        self.UpdateResourcesFunction = StatsProcessor._updateResources
 
     def setUp(self):
-        StatsProcessor.updateResources = MagicMock()
+        StatsProcessor._updateResources = MagicMock()
         self.thing = Receiver('test-files')
 
     def tearDown(self):
-        StatsProcessor.updateResources = self.UpdateResourcesFunction
+        StatsProcessor._updateResources = self.UpdateResourcesFunction
         try:
             self.thing.close()
         except:

@@ -63,6 +63,8 @@ confidence=
 disable=relative-beyond-top-level,
 	missing-class-docstring,
 	missing-function-docstring,
+	protected-access,
+	import-error,
 	#generated-from-here
 	print-statement,
         parameter-unpacking,
@@ -324,7 +326,7 @@ indent-string='    '
 max-line-length=160
 
 # Maximum number of lines in a module.
-max-module-lines=500
+max-module-lines=200
 
 # Allow the body of a class to be on the same line as the declaration if body
 # contains single statement.

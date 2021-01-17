@@ -76,13 +76,13 @@ class TestDatabase(unittest.TestCase):
         self.assertEqual(statement, 'INSERT INTO Tracks (id, name, length, startz) VALUES (ID, \'TRACK_NAME\', 10000, -1220);')
 
     def testGetUserId(self):
-        userId = self.thing.createUserId()
+        userId = self.thing._createUserId()
         self.assertIsNotNone(userId, "userId must exist")
 
     def testUserIdDiffersOverTime(self):
-        userId1 = self.thing.createUserId()
+        userId1 = self.thing._createUserId()
         time.sleep(1)
-        userId2 = self.thing.createUserId()
+        userId2 = self.thing._createUserId()
         self.assertNotEqual(userId1, userId2, "userId must differ over time")
 
     def testRecordResultsWithoutTimeRecorded(self):
@@ -91,7 +91,7 @@ class TestDatabase(unittest.TestCase):
         conn.cursor = MagicMock(return_value = cursor)
         cursor.execute = MagicMock()
         cursor.fetchone = MagicMock(return_value = None)
-        self.thing.getLapDbConnection = MagicMock(return_value = conn)
+        self.thing._getLapDbConnection = MagicMock(return_value = conn)
 
         arguments = (100, 200, 1586278198.59, 220.4, 144)
         result = self.thing.recordResults(*arguments)
@@ -106,7 +106,7 @@ class TestDatabase(unittest.TestCase):
         cursor = MagicMock()
         conn.cursor = MagicMock(return_value = cursor)
         cursor.execute = MagicMock()
-        self.thing.getLapDbConnection = MagicMock(return_value = conn)
+        self.thing._getLapDbConnection = MagicMock(return_value = conn)
 
         previous_best = (1546275814.11, 230.4)
         cursor.fetchone = MagicMock(return_value = previous_best)
@@ -126,7 +126,7 @@ class TestDatabase(unittest.TestCase):
         cursor = MagicMock()
         conn.cursor = MagicMock(return_value = cursor)
         cursor.execute = MagicMock()
-        self.thing.getLapDbConnection = MagicMock(return_value = conn)
+        self.thing._getLapDbConnection = MagicMock(return_value = conn)
 
         previous_best = (1546275814.11, 210.4)
         cursor.fetchone = MagicMock(return_value = previous_best)
@@ -147,11 +147,11 @@ class TestDatabase(unittest.TestCase):
         cursor = MagicMock()
         conn.cursor = MagicMock(return_value = cursor)
         cursor.execute = MagicMock()
-        self.thing.migrate = MagicMock(side_effect = IOError)
-        self.thing.getLapDbConnection = MagicMock(return_value = conn)
+        self.thing._migrate = MagicMock(side_effect = IOError)
+        self.thing._getLapDbConnection = MagicMock(return_value = conn)
 
         self.thing.setUpLaptimesDb = MagicMock()
-        self.thing.fetchUser = MagicMock()
+        self.thing._fetchUser = MagicMock()
 
         self.thing.initializeLaptimesDb()
 
@@ -162,7 +162,7 @@ class TestDatabase(unittest.TestCase):
     def testInitializeLaptimeDbFailsAltogether(self):
         conn = MagicMock()
         conn.cursor = MagicMock(side_effect = IOError)
-        self.thing.getLapDbConnection = MagicMock(return_value = conn)
+        self.thing._getLapDbConnection = MagicMock(return_value = conn)
         self.thing.setUpLaptimesDb = MagicMock()
 
         # TODO Actually should terminate. TODO Same with recordResults

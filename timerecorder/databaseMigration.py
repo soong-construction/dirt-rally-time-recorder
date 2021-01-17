@@ -19,17 +19,17 @@ class DatabaseMigration:
 
     def migrateDb(self):
         # Initial migration
-        self.migrate_2_2_0()
+        self._migrate_2_2_0()
 
-        self.migrate('2.4.0', self.migrate_2_4_0)
+        self._migrate('2.4.0', self._migrate_2_4_0)
 
-    def migrate_2_2_0(self):  #pylint: disable=invalid-name
-        self.migrate('2.2.0', lambda _: None)
+    def _migrate_2_2_0(self):  #pylint: disable=invalid-name
+        self._migrate('2.2.0', lambda _: None)
 
-    def migrate_2_4_0(self, lapDb):  #pylint: disable=invalid-name
+    def _migrate_2_4_0(self, lapDb):  #pylint: disable=invalid-name
         lapDb.execute('ALTER TABLE laptimes ADD COLUMN topspeed REAL DEFAULT NULL;')
 
-    def migrate(self, targetVersionString, applicator):
+    def _migrate(self, targetVersionString, applicator):
         targetVersion = self.expandVersion(targetVersionString)
         user_version = self.getUserVersion()
 

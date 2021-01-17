@@ -11,7 +11,7 @@ class DatabaseAccess:
     def __init__(self, database):
         self.database = database
 
-    def tryIdentify(self, it, it_list, debug_log, verbose_log):
+    def _tryIdentify(self, it, it_list, debug_log, verbose_log):
         if len(it_list) == 0:
             logger.warning("Failed to identify %s", it)
             debug_log(logger)
@@ -33,7 +33,7 @@ class DatabaseAccess:
         verbose_log = lambda logger, db: logger.log(VERBOSE, db.getTrackInsertStatement(tracklength, z))
 
         it_list = self.database.loadTracks(tracklength, z)
-        return self.tryIdentify("track", it_list, debug_log, verbose_log)
+        return self._tryIdentify("track", it_list, debug_log, verbose_log)
 
     def identifyCar(self, max_rpm, idle_rpm, top_gear):
         debug_log = lambda logger: logger.debug("Idle/Max RPM: %s - %s", str(idle_rpm), str(max_rpm))
@@ -41,7 +41,7 @@ class DatabaseAccess:
 
         it_list = self.database.loadCars(idle_rpm, max_rpm, top_gear)
 
-        return self.tryIdentify("car", it_list, debug_log, verbose_log)
+        return self._tryIdentify("car", it_list, debug_log, verbose_log)
 
     def handleCarUpdates(self, car_list, timestamp, track, updateHandler):
         updates = self.database.getCarUpdateStatements(timestamp, car_list)
@@ -68,21 +68,21 @@ class DatabaseAccess:
     def recordResults(self, track, car, timestamp, laptime, topspeed):
         return self.database.recordResults(track, car, timestamp, laptime, topspeed)
 
-    def describeHandbrake(self, car):
+    def _describeHandbrake(self, car):
         hasHandbrake = self.database.loadHandbrakeData(car)
         if hasHandbrake:
             return "with HANDBRAKE" + ", "
         return ""
 
-    def describeShifting(self, car):
+    def _describeShifting(self, car):
         shiftingData = self.database.loadShiftingData(car)
         return shiftingData + " shifting, " if shiftingData else ""
 
-    def describeGears(self, car):
+    def _describeGears(self, car):
         gearData = self.database.loadGearsData(car)
         return str(gearData) + " speed, " if gearData else ""
 
-    def describeClutch(self, car):
+    def _describeClutch(self, car):
         hasClutchPedal = self.database.loadClutchData(car)
         if hasClutchPedal:
             return "with manual CLUTCH" + ", "
@@ -90,10 +90,10 @@ class DatabaseAccess:
 
     def describeCarInterfaces(self, car):
         line = ""
-        line += self.describeShifting(car)
-        line += self.describeGears(car)
-        line += self.describeClutch(car)
-        line += self.describeHandbrake(car)
+        line += self._describeShifting(car)
+        line += self._describeGears(car)
+        line += self._describeClutch(car)
+        line += self._describeHandbrake(car)
 
         if line == "":
             line = "NO CONTROL DATA"

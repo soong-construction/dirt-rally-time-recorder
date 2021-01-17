@@ -48,7 +48,7 @@ class TestDatabase(unittest.TestCase):
         initialVersion = 1_000_000
         self.cursor.fetchall = MagicMock(return_value=[[initialVersion]])
 
-        self.thing.migrate_2_2_0()
+        self.thing._migrate_2_2_0()
 
         self.assertEqual(self.lapDb.execute.call_count, 2)
         self.lapDb.execute.assert_called_with('PRAGMA user_version = 2002000')
@@ -57,7 +57,7 @@ class TestDatabase(unittest.TestCase):
         initialVersion = 2_002_000
         self.cursor.fetchall = MagicMock(return_value=[[initialVersion]])
 
-        self.thing.migrate_2_2_0()
+        self.thing._migrate_2_2_0()
 
         self.lapDb.execute.assert_called_once_with('PRAGMA user_version;')
 

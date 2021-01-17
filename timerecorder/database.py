@@ -31,13 +31,13 @@ class Database:
             logger.exception("Error when reading from %s, please check set-up instructions in the README", self.baseDb)
             raise exc
 
-    def fetchUser(self, lapdb):
+    def _fetchUser(self, lapdb):
         lapdb.execute('SELECT user FROM user;')
         res = lapdb.fetchall()
         userArray = res[0]
         return userArray
 
-    def setDbVersion(self, lapdb):
+    def _setDbVersion(self, lapdb):
         migration = DatabaseMigration(lapdb)
         versionString = config.readVersion(self.approot)
         version = migration.expandVersion(versionString)
@@ -47,29 +47,29 @@ class Database:
         logger.debug("First run, setting up recording tables")
         lapdb.execute('CREATE TABLE laptimes (Track INTEGER, Car INTEGER, Timestamp INTEGER, Time REAL, Topspeed REAL);')
         lapdb.execute('CREATE TABLE user (user TEXT);')
-        userId = self.createUserId()
+        userId = self._createUserId()
         lapdb.execute('INSERT INTO user VALUES (?)', (userId, ))
 
-        self.setDbVersion(lapdb)
+        self._setDbVersion(lapdb)
 
-    def migrate(self, lapdb):
+    def _migrate(self, lapdb):
         logger.info("Checking laptimes database")
         DatabaseMigration(lapdb).migrateDb()
 
     def initializeLaptimesDb(self):
         try:
-            lapconn = self.getLapDbConnection()
+            lapconn = self._getLapDbConnection()
             lapdb = lapconn.cursor()
 
-            self.migrate(lapdb)
+            self._migrate(lapdb)
             lapconn.commit()
-            return self.fetchUser(lapdb)
+            return self._fetchUser(lapdb)
 
         except Exception:
             try:
                 self.setUpLaptimesDb(lapdb)
                 lapconn.commit()
-                return self.fetchUser(lapdb)
+                return self._fetchUser(lapdb)
 
             except Exception:
                 logger.exception("Error initializing %s", self.laptimesDbName)
@@ -77,7 +77,7 @@ class Database:
         finally:
             lapconn.close()
 
-    def createUserId(self):
+    def _createUserId(self):
         user = getpass.getuser()
         user = 'defaultuser' if user is None else user
         epoch = int(time.time())
@@ -98,22 +98,22 @@ class Database:
         self.db.execute(select, (max_rpm, idle_rpm, top_gear))
         return self.db.fetchall()
 
-    def getLapDbConnection(self):
+    def _getLapDbConnection(self):
         return sqlite3.connect(self.approot + self.laptimesDb)
 
-    def compareTime(self, previousBest, laptime):
+    def _compareTime(self, previousBest, laptime):
         return previousBest if laptime < previousBest[1] else None
 
     def recordResults(self, track, car, timestamp, laptime, topspeed):
         try:
-            lapconn = self.getLapDbConnection()
+            lapconn = self._getLapDbConnection()
             lapdb = lapconn.cursor()
             lapdb.execute('SELECT Timestamp, Time '
                           'FROM laptimes '
                           'WHERE Track = ? AND Car = ? '
                           'ORDER BY Time ASC, Timestamp ASC', (track, car))
             fetch = lapdb.fetchone()
-            previous_best = self.compareTime(fetch, laptime) if fetch else None
+            previous_best = self._compareTime(fetch, laptime) if fetch else None
 
             lapdb.execute('INSERT INTO laptimes (Track, Car, Timestamp, Time, Topspeed) VALUES (?, ?, ?, ?, ?)', (track, car, timestamp, laptime, topspeed))
             lapconn.commit()

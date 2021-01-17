@@ -54,7 +54,7 @@ class Config(dict):  #pylint: disable=too-many-instance-attributes
         self.authentic_shifting = None
         self.user_signals = None
 
-        self.migrate()
+        self._migrate()
 
     def dump(self):
         with open(file=self.filename, mode='w', encoding='utf-8', newline='\n') as file:
@@ -72,14 +72,14 @@ class Config(dict):  #pylint: disable=too-many-instance-attributes
         super().update(kwargs)
         self.dump()
 
-    def setDefaultHeuristics(self):
+    def _setDefaultHeuristics(self):
         defaultHeuristics = {HEURISTICS_ACTIVATE: 0, AUTHENTIC_SHIFTING: 0, USER_SIGNALS: 0}
         self.setdefault(HEURISTICS_SETTINGS, defaultHeuristics)
         self[HEURISTICS_SETTINGS].setdefault(HEURISTICS_ACTIVATE, defaultHeuristics[HEURISTICS_ACTIVATE])
         self[HEURISTICS_SETTINGS].setdefault(AUTHENTIC_SHIFTING, defaultHeuristics[AUTHENTIC_SHIFTING])
         self[HEURISTICS_SETTINGS].setdefault(USER_SIGNALS, defaultHeuristics[USER_SIGNALS])
 
-    def migrate(self):
+    def _migrate(self):
         defaultServer = {HOST:'127.0.0.1', PORT:20777}
         self.setdefault(TELEMETRY_SERVER, defaultServer)
         self[TELEMETRY_SERVER].setdefault(HOST, defaultServer[HOST])
@@ -89,17 +89,17 @@ class Config(dict):  #pylint: disable=too-many-instance-attributes
         self.setdefault(SHOW_CAR_CONTROLS, 1)
         self.setdefault(KEEP_UPDATE_SCRIPTS_DAYS, KEEP_UPDATE_SCRIPTS_DAYS_DEFAULT)
 
-        self.setDefaultHeuristics()
+        self._setDefaultHeuristics()
         self.dump()
 
-    def loadBasicSettings(self):
+    def _loadBasicSettings(self):
         telemetry = self[TELEMETRY_SERVER]
         self.server = telemetry[HOST], int(telemetry[PORT])
         self.speed_unit = self[SPEED_UNIT]
         self.show_car_controls = int(self[SHOW_CAR_CONTROLS])
         self.keep_update_scripts_days = int(self[KEEP_UPDATE_SCRIPTS_DAYS])
 
-    def loadHeuristics(self):
+    def _loadHeuristics(self):
         heuristics = self[HEURISTICS_SETTINGS]
         self.heuristics_activated = int(heuristics[HEURISTICS_ACTIVATE])
         self.authentic_shifting = int(heuristics[AUTHENTIC_SHIFTING])
@@ -113,8 +113,8 @@ class Config(dict):  #pylint: disable=too-many-instance-attributes
         file = os.path.basename(self.filename)
 
         try:
-            self.loadBasicSettings()
-            self.loadHeuristics()
+            self._loadBasicSettings()
+            self._loadHeuristics()
 
         except Exception as ex:
             logger.debug('Failed to load config file %s: %s', file, ex)

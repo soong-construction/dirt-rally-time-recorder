@@ -26,12 +26,12 @@ class TestAmbiguousResultHandler(TestBase):
         car = 100
         track = 1000
 
-        self.thing.applyHeuristics = MagicMock(return_value = None)
+        self.thing._applyHeuristics = MagicMock(return_value = None)
 
         timestamp = time.time()
         result = self.thing.handleAmbiguousCars(timestamp, car, track, self.gearTracker, self.inputTracker)
 
-        self.thing.applyHeuristics.assert_not_called()
+        self.thing._applyHeuristics.assert_not_called()
         self.thing.databaseAccess.handleCarUpdates.assert_not_called()
         self.assertEqual(result, car)
 
@@ -40,13 +40,13 @@ class TestAmbiguousResultHandler(TestBase):
         car = [100, 200]
         track = 1000
 
-        self.thing.applyHeuristics = MagicMock(return_value = None)
+        self.thing._applyHeuristics = MagicMock(return_value = None)
         self.thing.databaseAccess.handleCarUpdates = MagicMock()
 
         timestamp = time.time()
         result = self.thing.handleAmbiguousCars(timestamp, car, track, self.gearTracker, self.inputTracker)
 
-        self.thing.applyHeuristics.assert_called_once_with(car, self.gearTracker, self.inputTracker)
+        self.thing._applyHeuristics.assert_called_once_with(car, self.gearTracker, self.inputTracker)
         self.thing.databaseAccess.handleCarUpdates.assert_called_once_with(car, timestamp, 1000, ANY)
         self.assertEqual(result, car)
 
@@ -55,16 +55,16 @@ class TestAmbiguousResultHandler(TestBase):
         car = []
         track = 1000
 
-        self.thing.applyHeuristics = MagicMock(return_value = 200)
+        self.thing._applyHeuristics = MagicMock(return_value = 200)
         self.thing.databaseAccess.handleCarUpdates = MagicMock()
-        self.thing.logFailedRecognition = MagicMock()
+        self.thing._logFailedRecognition = MagicMock()
 
         timestamp = time.time()
         result = self.thing.handleAmbiguousCars(timestamp, car, track, self.gearTracker, self.inputTracker)
 
-        self.thing.applyHeuristics.assert_not_called()
+        self.thing._applyHeuristics.assert_not_called()
         self.thing.databaseAccess.handleCarUpdates.assert_not_called()
-        self.thing.logFailedRecognition.assert_called_once_with(f'UPDATE laptimes SET Car=??? WHERE Timestamp="{timestamp}";', ANY)
+        self.thing._logFailedRecognition.assert_called_once_with(f'UPDATE laptimes SET Car=??? WHERE Timestamp="{timestamp}";', ANY)
         self.assertEqual(result, [])
 
     def testHandleResultsWithAmbiguousCarsAndLuckyGuess(self):
@@ -72,13 +72,13 @@ class TestAmbiguousResultHandler(TestBase):
         car = [100, 200]
         track = 1000
 
-        self.thing.applyHeuristics = MagicMock(return_value = 200)
+        self.thing._applyHeuristics = MagicMock(return_value = 200)
         self.thing.databaseAccess.handleCarUpdates = MagicMock()
 
         timestamp = time.time()
         result = self.thing.handleAmbiguousCars(timestamp, car, track, self.gearTracker, self.inputTracker)
 
-        self.thing.applyHeuristics.assert_called_once_with(car, self.gearTracker, self.inputTracker)
+        self.thing._applyHeuristics.assert_called_once_with(car, self.gearTracker, self.inputTracker)
         self.thing.databaseAccess.handleCarUpdates.assert_called_once_with([100], timestamp, 1000, ANY)
         self.assertEqual(result, 200)
 
@@ -87,12 +87,12 @@ class TestAmbiguousResultHandler(TestBase):
         car = [100, 200]
         track = 1000
 
-        self.thing.applyHeuristics = MagicMock(return_value = None)
+        self.thing._applyHeuristics = MagicMock(return_value = None)
 
         timestamp = time.time()
         result = self.thing.handleAmbiguousCars(timestamp, car, track, self.gearTracker, self.inputTracker)
 
-        self.thing.applyHeuristics.assert_not_called()
+        self.thing._applyHeuristics.assert_not_called()
         self.thing.databaseAccess.handleCarUpdates.assert_called_once_with([100, 200], timestamp, 1000, ANY)
         self.assertEqual(result, car)
 
@@ -120,13 +120,13 @@ class TestAmbiguousResultHandler(TestBase):
         car = 100
         track = []
 
-        self.thing.logFailedRecognition = MagicMock()
+        self.thing._logFailedRecognition = MagicMock()
 
         timestamp = time.time()
         result = self.thing.handleAmbiguousTracks(timestamp, car, track)
 
         self.thing.databaseAccess.handleTrackUpdates.assert_not_called()
-        self.thing.logFailedRecognition.assert_called_once_with(f'UPDATE laptimes SET Track=??? WHERE Timestamp="{timestamp}";', ANY)
+        self.thing._logFailedRecognition.assert_called_once_with(f'UPDATE laptimes SET Track=??? WHERE Timestamp="{timestamp}";', ANY)
         self.assertEqual(result, [])
 
     def testSeedIsRandomized(self):
