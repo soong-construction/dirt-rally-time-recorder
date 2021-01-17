@@ -54,6 +54,6 @@ class TestReceiver(TestBase):
             self.thing.handle_expt()
 
         self.thing.handle_close.assert_called_once()
-        
+
 if __name__ == "__main__":
     unittest.main()

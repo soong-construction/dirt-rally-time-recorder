@@ -150,12 +150,12 @@ class TestDatabase(unittest.TestCase):
         self.thing.migrate = MagicMock(side_effect = IOError)
         self.thing.getLapDbConnection = MagicMock(return_value = conn)
 
-        self.thing.setupLaptimesDb = MagicMock()
+        self.thing.setUpLaptimesDb = MagicMock()
         self.thing.fetchUser = MagicMock()
 
         self.thing.initializeLaptimesDb()
 
-        self.thing.setupLaptimesDb.assert_called_once()
+        self.thing.setUpLaptimesDb.assert_called_once()
         conn.commit.assert_called_once()
         conn.close.assert_called_once()
 
@@ -163,13 +163,13 @@ class TestDatabase(unittest.TestCase):
         conn = MagicMock()
         conn.cursor = MagicMock(side_effect = IOError)
         self.thing.getLapDbConnection = MagicMock(return_value = conn)
-        self.thing.setupLaptimesDb = MagicMock()
+        self.thing.setUpLaptimesDb = MagicMock()
 
         # TODO Actually should terminate. TODO Same with recordResults
 #         with self.assertRaises(IOError):
         self.thing.initializeLaptimesDb()
 
-        self.thing.setupLaptimesDb.assert_not_called()
+        self.thing.setUpLaptimesDb.assert_not_called()
         conn.commit.assert_not_called()
         conn.close.assert_called_once()
 

@@ -14,7 +14,7 @@ logger = getLogger(__name__)
 def isUpdateScript(file):
     return re.match(scriptRegex, file)
 
-class UpdateScriptHandler(object):
+class UpdateScriptHandler():
 
     def __init__(self, dbName):
         self.dbName = dbName
@@ -41,7 +41,7 @@ class UpdateScriptHandler(object):
     def isBeforeDeadline(self, datetime, keep_for_days, script):
         matches = re.finditer(scriptRegex, script)
         match = next(matches)
-        
+
         deadline = datetime - timedelta(days = keep_for_days)
 
         creation_timestamp = int(match.group(1))

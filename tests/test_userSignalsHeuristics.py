@@ -1,7 +1,7 @@
 import unittest
-
-from timerecorder.userSignalsHeuristics import UserSignalsHeuristics
 from unittest.mock import MagicMock
+from timerecorder.userSignalsHeuristics import UserSignalsHeuristics
+
 from timerecorder.inputTracker import InputTracker, Signal
 
 class TestUserSignalsHeuristics(unittest.TestCase):

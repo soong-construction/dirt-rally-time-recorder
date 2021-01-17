@@ -1,6 +1,7 @@
 import unittest
-from timerecorder.inputTracker import InputTracker, Signal
 from unittest.mock import MagicMock
+from timerecorder.inputTracker import InputTracker, Signal
+
 
 fieldCount = 66
 

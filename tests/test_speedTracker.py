@@ -13,18 +13,18 @@ class TestSpeedTracker(unittest.TestCase):
 
     def tearDown(self):
         pass
-    
+
     def testSpeedTracked(self):
         stats = [0] * fieldCount
         self.thing.track(stats)
         self.assertEqual(self.thing.getSpeed(), 0)
         self.assertEqual(self.thing.getTopSpeed(), 0)
-        
+
         stats[7] = 10.2
         self.thing.track(stats)
         self.assertEqual(self.thing.getSpeed(), 10)
         self.assertEqual(self.thing.getTopSpeed(), 10)
-        
+
         stats[7] = 13
         self.thing.track(stats)
         self.assertEqual(self.thing.getSpeed(), 13)
@@ -34,6 +34,6 @@ class TestSpeedTracker(unittest.TestCase):
         self.thing.track(stats)
         self.assertEqual(self.thing.getSpeed(), 9)
         self.assertEqual(self.thing.getTopSpeed(), 13)
-        
+
 if __name__ == '__main__':
     unittest.main()

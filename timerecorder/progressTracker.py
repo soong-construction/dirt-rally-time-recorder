@@ -1,7 +1,7 @@
 from .baseTracker import BaseTracker
 
 class ProgressTracker(BaseTracker):
-    
+
     def __init__(self):
         self.distance = None
         self.track_length = None
@@ -10,10 +10,10 @@ class ProgressTracker(BaseTracker):
     def track(self, stats):
         self.distance = stats[2]
         self.lap = stats[59]
-        
+
         if self.track_length is None:
             self.track_length = stats[61]
-            
+
     def getTrackLength(self):
         return self.track_length
 
@@ -23,9 +23,8 @@ class ProgressTracker(BaseTracker):
     def getProgress(self):
         if self.hasData():
             return self.distance / self.track_length
-        
+
         return None
-    
+
     def getLap(self):
         return self.lap
-    

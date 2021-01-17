@@ -19,9 +19,9 @@ class TestLuckyGuessHeuristics(unittest.TestCase):
 
     def testReturnsSameCandidateForSeededRandom(self):
         car_candidates = [100, 200, 300]
-        
+
         self.thing = LuckyGuessHeuristics(car_candidates, random.seed(0))
-        self.thing2 = LuckyGuessHeuristics(car_candidates, random.seed(0)) 
+        self.thing2 = LuckyGuessHeuristics(car_candidates, random.seed(0))
         self.assertEqual(self.thing.guessCar(), self.thing2.guessCar())
 
 if __name__ == '__main__':

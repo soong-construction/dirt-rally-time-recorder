@@ -40,7 +40,7 @@ class StatsProcessor():
         self.initTrackers()
 
     def updateResources(self, approot):
-        database = Database(approot).setup()
+        database = Database(approot).setUp()
         return database
 
     def formatTopSpeed(self):

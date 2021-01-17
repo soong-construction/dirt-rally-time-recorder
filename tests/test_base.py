@@ -15,7 +15,7 @@ class TestBase(unittest.TestCase):
 
         testLog = testroot + '/tests.log'
         log.init(testLog)
-        
+
         config.init(testroot + '/config.yml')
-        
+
         self.mockAwaySideEffects()

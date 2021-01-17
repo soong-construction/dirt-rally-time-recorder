@@ -16,7 +16,7 @@ class TestUpdateScriptHandler(TestBase):
 
     def tearDown(self):
         pass
-    
+
     def testBuildSqlite3Call(self):
         result = self.thing.buildScript("update table set x=1")
         self.assertEqual('sqlite3 db "update table set x=1"', result)

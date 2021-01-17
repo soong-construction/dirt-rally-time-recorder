@@ -19,10 +19,10 @@ def init(filename):
 
 def getLogger(module):
     logger = logging.getLogger(module)
-    
+
     consoleHandler = logging.StreamHandler()
     consoleHandler.setLevel(logging.INFO)
     consoleHandler.setFormatter(logging.Formatter('%(message)s'))
     logger.addHandler(consoleHandler)
-    
+
     return logger

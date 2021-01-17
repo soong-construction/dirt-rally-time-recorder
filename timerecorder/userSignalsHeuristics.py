@@ -5,7 +5,7 @@ from .heuristics import Heuristics
 logger = getLogger(__name__)
 
 class UserSignalsHeuristics(Heuristics):
-    
+
     def __init__(self, car_candidates, inputTracker):
         Heuristics.__init__(self)
         self.car_candidates = car_candidates
@@ -21,6 +21,5 @@ class UserSignalsHeuristics(Heuristics):
             guess = self.car_candidates[1]
         else:
             raise Exception(f'Unknown signal {self.userSignal}')
-        
+
         return guess
-    

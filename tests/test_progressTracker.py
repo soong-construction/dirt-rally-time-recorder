@@ -14,11 +14,11 @@ class TestProgressTracker(unittest.TestCase):
 
     def tearDown(self):
         pass
-    
+
     def testProgressBeforeData(self):
         self.assertEqual(self.thing.getTrackLength(), None)
         self.assertEqual(self.thing.getProgress(), None)
-        
+
     def testTrackLengthTrackedOnce(self):
         self.assertEqual(self.thing.getTrackLength(), None)
         stats = [0] * fieldCount
@@ -26,11 +26,11 @@ class TestProgressTracker(unittest.TestCase):
 
         self.thing.track(stats)
         self.assertEqual(self.thing.getTrackLength(), 10000)
-        
+
         stats[61] = 0
         self.thing.track(stats)
         self.assertEqual(self.thing.getTrackLength(), 10000)
-       
+
     def testProgressTracked(self):
         stats = [0] * fieldCount
         stats[2] = 1000
@@ -38,7 +38,7 @@ class TestProgressTracker(unittest.TestCase):
         self.thing.track(stats)
         self.assertEqual(self.thing.getTrackLength(), 10000)
         self.assertEqual(self.thing.getProgress(), 0.1)
-        
+
         stats[2] = 10000
         self.thing.track(stats)
         self.assertEqual(self.thing.getTrackLength(), 10000)
@@ -52,10 +52,10 @@ class TestProgressTracker(unittest.TestCase):
         self.thing.track(stats)
         self.assertEqual(self.thing.getTrackLength(), 10000)
         self.assertEqual(self.thing.getProgress(), -0.0005)
-        
+
     def testLapTracked(self):
         self.assertIsNone(self.thing.getLap())
-        
+
         stats = [0] * fieldCount
         stats[59] = 1
         self.thing.track(stats)

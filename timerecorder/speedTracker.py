@@ -2,7 +2,7 @@ from .baseTracker import BaseTracker
 
 class SpeedTracker(BaseTracker):
     # unit: m/s
-    
+
     def __init__(self):
         self.speed = None
         self.topSpeed = 0
@@ -12,9 +12,9 @@ class SpeedTracker(BaseTracker):
         if self.topSpeed < speed:
             self.topSpeed = speed
         self.speed = speed
-            
+
     def getSpeed(self):
         return self.speed
-            
+
     def getTopSpeed(self):
         return self.topSpeed

@@ -25,17 +25,17 @@ def main(logfile):
         else:
             approot = os.path.dirname(os.path.realpath(__file__))
             approot = os.path.dirname(approot) # Move to root
-        
+
         log.init(approot + '/' + logfile)
         logger.info('Starting %s %s', log.name, config.readVersion(approot))
-        
+
         config.init(approot + '/config.yml')
-        
+
         receiver = Receiver(approot)
         receiver.reconnect()
-        
+
         asyncore.loop()
-        
+
     except KeyboardInterrupt:
         pass
     except:

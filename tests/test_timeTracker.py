@@ -14,18 +14,18 @@ class TestTimeTracker(unittest.TestCase):
 
     def tearDown(self):
         pass
-    
+
     def testTimeChangeTracked(self):
         self.assertEqual(self.thing.getTimeDelta(), 0)
-        
+
         stats = [0] * fieldCount
         stats[0] = 100
         self.thing.track(stats)
         self.assertEqual(self.thing.getTimeDelta(), 100)
-        
+
         stats[0] = 150
         self.thing.track(stats)
         self.assertEqual(self.thing.getTimeDelta(), 50)
-        
+
 if __name__ == '__main__':
     unittest.main()

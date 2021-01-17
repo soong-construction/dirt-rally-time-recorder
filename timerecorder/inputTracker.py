@@ -22,7 +22,7 @@ class InputTracker(BaseTracker):
         self.signal = None
         self.enabled = True
 
-    # Is reported when approaching start line in DR1, and no straight forward solution like handbrake pulled check  
+    # Is reported when approaching start line in DR1, and no straight forward solution like handbrake pulled check
     def hasLaunched(self):
         return self.speedTracker.getTopSpeed() > 1.0
 

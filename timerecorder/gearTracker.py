@@ -32,7 +32,7 @@ class GearTracker(BaseTracker):
             current_gear = 0
 
         respawn = self.respawnTracker.isRecover() or self.respawnTracker.isRestart()
-        
+
         if not (respawn or self.lastGear is None):
             self.checkGearChanged(current_gear)
             self.checkGearSkipped(current_gear)
@@ -44,4 +44,3 @@ class GearTracker(BaseTracker):
 
     def getGearSkipCount(self):
         return self.skipCount
-    

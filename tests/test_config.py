@@ -1,8 +1,9 @@
 import unittest
+import os
 
 from tests.test_base import TestBase
 from timerecorder.config import Config, readVersion
-import os
+
 
 testroot = 'test-files'
 default_config_count = 5
@@ -69,7 +70,7 @@ class TestConfig(TestBase):
 
     def testCorruptValueIsReported(self):
         configPath = testroot + '/existingconfig.yml'
-        self.writeFile(configPath, 
+        self.writeFile(configPath,
                        ('heuristics:\n'
                         '  activate: bla\n'))
 
@@ -79,14 +80,14 @@ class TestConfig(TestBase):
 
     def testMapsStringsToBool(self):
         configPath = testroot + '/existingconfig.yml'
-        self.writeFile(configPath, 
+        self.writeFile(configPath,
                        ('heuristics:\n'
                         '  activate: ON\n'
                         '  authentic_shifting: False\n'))
 
         config = Config(configPath)
         config.load()
-        
+
         self.assertTrue(config.heuristics_activated)
         self.assertFalse(config.authentic_shifting)
 
@@ -101,7 +102,7 @@ class TestConfig(TestBase):
             os.remove(configPath)
         with open(file=configPath, mode='w', encoding='utf-8', newline='\n') as f:
             f.write(content)
-    
+
     def testValuesCanBeReadAsBool(self):
         configPath = testroot + '/valuetest.yml'
 
@@ -116,7 +117,7 @@ class TestConfig(TestBase):
         config['valFalse'] = False
         config['val1'] = 1
         config['valTrue'] = True
-        
+
         self.assertFalse(config['val0'])
         self.assertFalse(config['valFalse'])
         self.assertTrue(config['val1'])

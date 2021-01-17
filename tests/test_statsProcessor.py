@@ -1,12 +1,12 @@
+from builtins import range
 import unittest
 from unittest.mock import MagicMock, ANY
+import simpleaudio
 
 from timerecorder.statsProcessor import StatsProcessor
-from tests.test_base import TestBase
 from timerecorder import config
-from builtins import range
 from timerecorder.updateScriptHandler import UpdateScriptHandler
-import simpleaudio
+from tests.test_base import TestBase
 
 fieldCount = 66
 

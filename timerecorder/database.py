@@ -18,7 +18,7 @@ class Database:
     def __init__(self, approot):
         self.approot = approot
 
-    def setup(self):
+    def setUp(self):
         try:
             conn = sqlite3.connect(self.approot + self.baseDb)
             db = conn.cursor()
@@ -43,7 +43,7 @@ class Database:
         version = migration.expandVersion(versionString)
         migration.setUserVersion(version)
 
-    def setupLaptimesDb(self, lapdb):
+    def setUpLaptimesDb(self, lapdb):
         logger.debug("First run, setting up recording tables")
         lapdb.execute('CREATE TABLE laptimes (Track INTEGER, Car INTEGER, Timestamp INTEGER, Time REAL, Topspeed REAL);')
         lapdb.execute('CREATE TABLE user (user TEXT);')
@@ -67,7 +67,7 @@ class Database:
 
         except Exception:
             try:
-                self.setupLaptimesDb(lapdb)
+                self.setUpLaptimesDb(lapdb)
                 lapconn.commit()
                 return self.fetchUser(lapdb)
 

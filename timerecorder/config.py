@@ -22,7 +22,7 @@ user_signals = 'user_signals'
 def readVersion(approot):
     with open(approot + '/VERSION', encoding='utf-8', newline='\n') as file:
         return file.readline().strip()
-    
+
 def init(filename):
     global get
     config = Config(filename)
@@ -43,7 +43,7 @@ class Config(dict):
         self.filename = filename
         if os.path.isfile(filename):
             self.readFromFile(filename)
-        
+
         self.migrate()
 
     def dump(self):
@@ -61,7 +61,7 @@ class Config(dict):
     def update(self, kwargs):
         super().update(kwargs)
         self.dump()
-    
+
     def setDefaultHeuristics(self):
         default_heuristics = {heuristics_activate: 0, authentic_shifting: 0, user_signals: 0}
         self.setdefault(heuristics_settings, default_heuristics)
@@ -74,11 +74,11 @@ class Config(dict):
         self.setdefault(telemetry_server, default_server)
         self[telemetry_server].setdefault(host, default_server[host])
         self[telemetry_server].setdefault(port, default_server[port])
-        
+
         self.setdefault(speed_unit, 'kph')
         self.setdefault(show_car_controls, 1)
         self.setdefault(keep_update_scripts_days, keep_update_scripts_days_default)
-        
+
         self.setDefaultHeuristics()
         self.dump()
 
@@ -94,7 +94,7 @@ class Config(dict):
         self.heuristics_activated = int(heuristics[heuristics_activate])
         self.authentic_shifting = int(heuristics[authentic_shifting])
         self.user_signals = int(heuristics[user_signals])
-        
+
         if self.heuristics_activated:
             logger.info('HEURISTICS activated')
 
@@ -105,7 +105,7 @@ class Config(dict):
         try:
             self.loadBasicSettings()
             self.loadHeuristics()
-            
+
         except Exception as e:
             logger.debug('Failed to load config file %s: %s', file, e)
             raise IOError(f'{file} seems to be corrupt, please check or delete file.') from None
