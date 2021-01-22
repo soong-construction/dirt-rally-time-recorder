@@ -84,7 +84,7 @@ class Database:
     def loadTracks(self, tracklength, startz):
         select = ('SELECT id, name '
                     'FROM Tracks '
-                    'WHERE abs(length - ?) < 0.001 AND abs(startz - ?) < 50')
+                    'WHERE abs(length - ?) < 0.001 AND (startz is null OR abs(startz - ?) < 50)')
         self.db.execute(select, (tracklength, startz))
         return self.db.fetchall()
 
