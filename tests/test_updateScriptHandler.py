@@ -35,7 +35,7 @@ class TestUpdateScriptHandler(TestBase):
 
     def testFindsOldUpdateScripts(self):
         scripts = ['1570011200_ElRodeo_AudiQuattro.bat', '1571511200_ElRodeo_PoloGTIR5.bat']
-        self.thing._listUpdateScripts = MagicMock(return_value = scripts)
+        self.thing._listUpdateScripts = MagicMock(return_value=scripts)
 
         result = self.thing._listOldUpdateScripts(self.now, 'test')
 
@@ -44,7 +44,7 @@ class TestUpdateScriptHandler(TestBase):
     def testFindsOldUpdateScriptsForUserConfiguredRetentionTime(self):
         scripts = ['1570011200_ElRodeo_AudiQuattro.bat', '1571511200_ElRodeo_PoloGTIR5.bat']
         config.GET.keep_update_scripts_days = 0
-        self.thing._listUpdateScripts = MagicMock(return_value = scripts)
+        self.thing._listUpdateScripts = MagicMock(return_value=scripts)
         self.thing._warnShortRetentionTime = MagicMock()
 
         result = self.thing._listOldUpdateScripts(self.now, 'test')
@@ -54,14 +54,14 @@ class TestUpdateScriptHandler(TestBase):
 
     def testNoMatchForNewUpdateScripts(self):
         scripts = ['1586335179_ElRodeo_AudiQuattro.bat', '1586335180_ElRodeo_PoloGTIR5.bat']
-        self.thing._listUpdateScripts = MagicMock(return_value = scripts)
+        self.thing._listUpdateScripts = MagicMock(return_value=scripts)
 
         result = self.thing._listOldUpdateScripts(self.now, 'test')
         self.assertEqual(result, [])
 
     def testNoMatchForEmptyUpdateScripts(self):
         scripts = []
-        self.thing._listUpdateScripts = MagicMock(return_value = scripts)
+        self.thing._listUpdateScripts = MagicMock(return_value=scripts)
 
         result = self.thing._listOldUpdateScripts(self.now, 'test')
         self.assertEqual(result, [])
@@ -71,7 +71,7 @@ class TestUpdateScriptHandler(TestBase):
 
         self.thing._delete = MagicMock()
 
-        self.thing._listOldUpdateScripts = MagicMock(return_value = ['dir/file'])
+        self.thing._listOldUpdateScripts = MagicMock(return_value=['dir/file'])
 
         self.thing.cleanUp(directory)
 

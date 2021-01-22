@@ -2,7 +2,6 @@ import unittest
 from unittest.mock import MagicMock
 from timerecorder.inputTracker import InputTracker, Signal
 
-
 FIELD_COUNT = 66
 
 class TestInputTracker(unittest.TestCase):
@@ -12,7 +11,7 @@ class TestInputTracker(unittest.TestCase):
 
     def setUp(self):
         self.speed_tracker = MagicMock()
-        self.speed_tracker.getTopSpeed = MagicMock(return_value = 0)
+        self.speed_tracker.getTopSpeed = MagicMock(return_value=0)
         self.notify = MagicMock()
         self.thing = InputTracker(self.speed_tracker, self.notify)
 
@@ -38,7 +37,7 @@ class TestInputTracker(unittest.TestCase):
         self.assertFalse(thing.isSignalRight(throttle, steer))
 
         throttle = 0.6
-        steer= 0.2
+        steer = 0.2
         self.assertFalse(thing.isSignalLeft(throttle, steer))
         self.assertFalse(thing.isSignalRight(throttle, steer))
 
@@ -66,7 +65,7 @@ class TestInputTracker(unittest.TestCase):
 
     def testSignalLeftOnlyAfterInputGone(self):
         self.notify.assert_not_called()
-        self.speed_tracker.getTopSpeed = MagicMock(return_value = 0)
+        self.speed_tracker.getTopSpeed = MagicMock(return_value=0)
         stats = [0] * FIELD_COUNT
         stats[29] = 0.6
         stats[30] = -0.6
@@ -84,7 +83,7 @@ class TestInputTracker(unittest.TestCase):
 
     def testSignalRightOnlyAfterInputGone(self):
         self.notify.assert_not_called()
-        self.speed_tracker.getTopSpeed = MagicMock(return_value = 0)
+        self.speed_tracker.getTopSpeed = MagicMock(return_value=0)
         stats = [0] * FIELD_COUNT
         stats[29] = 0.6
         stats[30] = 0.6
@@ -99,5 +98,6 @@ class TestInputTracker(unittest.TestCase):
         self.assertIsNone(self.thing.input)
         self.notify.assert_called_once()
         self.assertEqual(self.thing.signal, Signal.THROTTLE_RIGHT)
+
 if __name__ == '__main__':
     unittest.main()

@@ -251,13 +251,13 @@ class TestStatsProcessor(TestBase):
         self.thing._showCarControlInformation.assert_called_once()
 
     def testLogTrack(self):
-        self.thing.database.getTrackName = MagicMock(return_value = 'Mugello')
+        self.thing.database.getTrackName = MagicMock(return_value='Mugello')
         self.thing._logTrack(1001)
 
         self.thing.database.getTrackName.assert_called_once()
 
     def testLogCar(self):
-        self.thing.database.getCarName = MagicMock(return_value = 'Porsche 911')
+        self.thing.database.getCarName = MagicMock(return_value='Porsche 911')
         self.thing._logCar(911)
 
         self.thing.database.getCarName.assert_called_once()

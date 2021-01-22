@@ -2,13 +2,12 @@ import asyncore
 import os.path
 import sys
 
-# TODO After merge apply PyDev Source Format for timerecorder/ and tests/
 # Cf. https://stackoverflow.com/a/45488820
 try:
     from . import log, config  # @UnusedImport
     from .receiver import Receiver  # @UnusedImport
 except (ImportError, ModuleNotFoundError):
-    from timerecorder import log, config # @Reimport
+    from timerecorder import log, config  # @Reimport
     from timerecorder.receiver import Receiver  # @Reimport
 
 LOGFILE = 'timerecord.log'
@@ -24,7 +23,7 @@ def main(logfile):
             approot = os.path.dirname(sys.executable)
         else:
             approot = os.path.dirname(os.path.realpath(__file__))
-            approot = os.path.dirname(approot) # Move to root
+            approot = os.path.dirname(approot)  # Move to root
 
         log.init(approot + '/' + logfile)
         logger.info('Starting %s %s', log.NAME, config.readVersion(approot))

@@ -45,11 +45,10 @@ class UpdateScriptHandler():
         matches = re.finditer(SCRIPT_REGEX, script)
         match = next(matches)
 
-        deadline = _datetime - timedelta(days = keepForDays)
+        deadline = _datetime - timedelta(days=keepForDays)
 
         creationTimestamp = int(match.group(1))
         creationTime = _datetime.fromtimestamp(creationTimestamp, timezone.utc)
-
 
         return creationTime < deadline
 

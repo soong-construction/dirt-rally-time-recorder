@@ -26,7 +26,7 @@ class TestAmbiguousResultHandler(TestBase):
         car = 100
         track = 1000
 
-        self.thing._applyHeuristics = MagicMock(return_value = None)
+        self.thing._applyHeuristics = MagicMock(return_value=None)
 
         timestamp = time.time()
         result = self.thing.handleAmbiguousCars(timestamp, car, track, self.gear_tracker, self.input_tracker)
@@ -40,7 +40,7 @@ class TestAmbiguousResultHandler(TestBase):
         car = [100, 200]
         track = 1000
 
-        self.thing._applyHeuristics = MagicMock(return_value = None)
+        self.thing._applyHeuristics = MagicMock(return_value=None)
         self.thing.database_access.handleCarUpdates = MagicMock()
 
         timestamp = time.time()
@@ -55,7 +55,7 @@ class TestAmbiguousResultHandler(TestBase):
         car = []
         track = 1000
 
-        self.thing._applyHeuristics = MagicMock(return_value = 200)
+        self.thing._applyHeuristics = MagicMock(return_value=200)
         self.thing.database_access.handleCarUpdates = MagicMock()
         self.thing._logFailedRecognition = MagicMock()
 
@@ -72,7 +72,7 @@ class TestAmbiguousResultHandler(TestBase):
         car = [100, 200]
         track = 1000
 
-        self.thing._applyHeuristics = MagicMock(return_value = 200)
+        self.thing._applyHeuristics = MagicMock(return_value=200)
         self.thing.database_access.handleCarUpdates = MagicMock()
 
         timestamp = time.time()
@@ -87,7 +87,7 @@ class TestAmbiguousResultHandler(TestBase):
         car = [100, 200]
         track = 1000
 
-        self.thing._applyHeuristics = MagicMock(return_value = None)
+        self.thing._applyHeuristics = MagicMock(return_value=None)
 
         timestamp = time.time()
         result = self.thing.handleAmbiguousCars(timestamp, car, track, self.gear_tracker, self.input_tracker)
@@ -138,7 +138,6 @@ class TestAmbiguousResultHandler(TestBase):
         anySeed = seeds[0]
 
         self.assertNotEqual(seeds.count(anySeed), len(seeds), 'Seeds should be random')
-
 
 if __name__ == "__main__":
     unittest.main()

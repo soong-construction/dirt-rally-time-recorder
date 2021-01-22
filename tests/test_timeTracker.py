@@ -1,7 +1,6 @@
 import unittest
 from timerecorder.timeTracker import TimeTracker
 
-
 FIELD_COUNT = 66
 
 class TestTimeTracker(unittest.TestCase):

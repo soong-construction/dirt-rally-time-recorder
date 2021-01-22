@@ -18,7 +18,7 @@ class TestUserSignalsHeuristics(unittest.TestCase):
     def testReturnsMatchingCandidateIfSignalLeftReceived(self):
         carCandidates = [100, 200]
         inputTracker = InputTracker(MagicMock(), MagicMock())
-        inputTracker.getSignal = MagicMock(return_value = Signal.THROTTLE_LEFT)
+        inputTracker.getSignal = MagicMock(return_value=Signal.THROTTLE_LEFT)
 
         self.thing = UserSignalsHeuristics(carCandidates, inputTracker)
         self.thing.withFallback(MagicMock())
@@ -29,7 +29,7 @@ class TestUserSignalsHeuristics(unittest.TestCase):
     def testReturnsMatchingCandidateIfSignalRightReceived(self):
         carCandidates = [100, 200]
         inputTracker = InputTracker(MagicMock(), MagicMock())
-        inputTracker.getSignal = MagicMock(return_value = Signal.THROTTLE_RIGHT)
+        inputTracker.getSignal = MagicMock(return_value=Signal.THROTTLE_RIGHT)
 
         self.thing = UserSignalsHeuristics(carCandidates, inputTracker)
         self.thing.withFallback(MagicMock())
@@ -40,11 +40,11 @@ class TestUserSignalsHeuristics(unittest.TestCase):
     def testCallsFallbackWithoutSignalReceived(self):
         carCandidates = [100, 200]
         inputTracker = InputTracker(MagicMock(), MagicMock())
-        inputTracker.getSignal = MagicMock(return_value = None)
+        inputTracker.getSignal = MagicMock(return_value=None)
 
         self.thing = UserSignalsHeuristics(carCandidates, inputTracker)
         fallback = MagicMock()
-        fallback.guessCar = MagicMock(return_value = 100)
+        fallback.guessCar = MagicMock(return_value=100)
         self.thing.withFallback(fallback)
 
         car = self.thing.guessCar()

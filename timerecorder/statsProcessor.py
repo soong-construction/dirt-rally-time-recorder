@@ -19,7 +19,6 @@ from .speedTracker import SpeedTracker
 from .timeTracker import TimeTracker
 from .baseTracker import BaseTracker
 
-
 GO_LINE_PROGRESS = 0.0
 COMPLETION_PROGRESS = 0.999
 
@@ -59,7 +58,7 @@ class StatsProcessor():
         thousandthsDuration = minuteDuration[:-3]
         return thousandthsDuration if hours == '0' else f'{hours}:{thousandthsDuration}'
 
-    def _logResults(self, laptime, track, car, previousBestTime = None):
+    def _logResults(self, laptime, track, car, previousBestTime=None):
         logger.debug("%s.%s.%s.time:%s|s", self.user_array[0], track, car, self._formatLapTime(laptime))
         logger.debug("%s.%s.%s.topspeed:%s|%s", self.user_array[0], track, car, self._formatTopSpeed(), self.speed_unit)
         logger.info("Completed stage in %s.", self._prettyLapTime(laptime))

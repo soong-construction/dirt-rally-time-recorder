@@ -1,7 +1,6 @@
 import unittest
 from timerecorder.progressTracker import ProgressTracker
 
-
 FIELD_COUNT = 66
 
 class TestProgressTracker(unittest.TestCase):

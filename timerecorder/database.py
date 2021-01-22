@@ -51,7 +51,7 @@ class Database:
         lapdb.execute('CREATE TABLE laptimes (Track INTEGER, Car INTEGER, Timestamp INTEGER, Time REAL, Topspeed REAL);')
         lapdb.execute('CREATE TABLE user (user TEXT);')
         userId = self._createUserId()
-        lapdb.execute('INSERT INTO user VALUES (?)', (userId, ))
+        lapdb.execute('INSERT INTO user VALUES (?)', (userId,))
 
         self._setDbVersion(lapdb)
 

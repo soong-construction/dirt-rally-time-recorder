@@ -4,7 +4,6 @@ import os
 from tests.test_base import TestBase
 from timerecorder.config import Config, readVersion
 
-
 TESTROOT = 'test-files'
 DEFAULT_CONFIG_COUNT = 5
 
@@ -122,7 +121,6 @@ class TestConfig(TestBase):
         self.assertFalse(config['valFalse'])
         self.assertTrue(config['val1'])
         self.assertTrue(config['valTrue'])
-
 
 if __name__ == "__main__":
     unittest.main()

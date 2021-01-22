@@ -99,7 +99,7 @@ class TestDatabaseAccess(unittest.TestCase):
         carCandidates = [100, 200]
         result = self.thing.mapCarsToShifting(carCandidates)
 
-        self.assertEqual(list(result), [(100, 'H-PATTERN'), (200,'SEQUENTIAL')])
+        self.assertEqual(list(result), [(100, 'H-PATTERN'), (200, 'SEQUENTIAL')])
 
     def testHandleCarUpdatesInvokesLambda(self):
         self.database.getCarUpdateStatements = MagicMock(return_value=['update100', 'update200'])

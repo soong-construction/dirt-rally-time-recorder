@@ -1,6 +1,7 @@
 '''
 Provides version-specific migration logic for existing databases
 '''
+
 class DatabaseMigration:
 
     def __init__(self, lapDb):
@@ -18,7 +19,7 @@ class DatabaseMigration:
         if len(segments) != 3:
             raise RuntimeError('VERSION must match pattern X.Y.Z')
         segments = list(map(int, segments))
-        return segments[0] * 10**6 + segments[1] * 10**3 + segments[2]
+        return segments[0] * 10 ** 6 + segments[1] * 10 ** 3 + segments[2]
 
     def migrateDb(self):
         # Initial migration

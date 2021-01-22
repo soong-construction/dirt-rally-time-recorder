@@ -4,7 +4,6 @@ Tries to detect sudden changes in car position, e.g. when spawning at the stage 
 from .baseTracker import BaseTracker
 from .log import getLogger
 
-
 logger = getLogger(__name__)
 
 # Should handle most respawns, except successive recovers in one place (only DR1)

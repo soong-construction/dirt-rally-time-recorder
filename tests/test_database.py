@@ -15,7 +15,7 @@ class TestDatabase(unittest.TestCase):
 
     def testLoadCars(self):
         cars = [(1, 'car1')]
-        self.thing.database.fetchall = MagicMock(return_value = cars)
+        self.thing.database.fetchall = MagicMock(return_value=cars)
 
         loadedCars = self.thing.loadCars(1000, 100, 5)
 
@@ -23,7 +23,7 @@ class TestDatabase(unittest.TestCase):
 
     def testIdentifyCarNoResult(self):
         cars = []
-        self.thing.database.fetchall = MagicMock(return_value = cars)
+        self.thing.database.fetchall = MagicMock(return_value=cars)
 
         loadedCars = self.thing.loadCars(1000, 100, 5)
 
@@ -31,7 +31,7 @@ class TestDatabase(unittest.TestCase):
 
     def testLoadTracksWithResults(self):
         tracks = [(1, 'track1'), (2, 'track2')]
-        self.thing.database.fetchall = MagicMock(return_value = tracks)
+        self.thing.database.fetchall = MagicMock(return_value=tracks)
 
         loadedTracks = self.thing.loadTracks(10000, 10)
 
@@ -39,7 +39,7 @@ class TestDatabase(unittest.TestCase):
 
     def testLoadTracksWithoutResults(self):
         tracks = []
-        self.thing.database.fetchall = MagicMock(return_value = tracks)
+        self.thing.database.fetchall = MagicMock(return_value=tracks)
 
         loadedTracks = self.thing.loadTracks(10000, 10)
 
@@ -88,10 +88,10 @@ class TestDatabase(unittest.TestCase):
     def testRecordResultsWithoutTimeRecorded(self):
         conn = MagicMock()
         cursor = MagicMock()
-        conn.cursor = MagicMock(return_value = cursor)
+        conn.cursor = MagicMock(return_value=cursor)
         cursor.execute = MagicMock()
-        cursor.fetchone = MagicMock(return_value = None)
-        self.thing._getLapDbConnection = MagicMock(return_value = conn)
+        cursor.fetchone = MagicMock(return_value=None)
+        self.thing._getLapDbConnection = MagicMock(return_value=conn)
 
         arguments = (100, 200, 1586278198.59, 220.4, 144)
         result = self.thing.recordResults(*arguments)
@@ -104,12 +104,12 @@ class TestDatabase(unittest.TestCase):
     def testRecordResultsWithNewBestTime(self):
         conn = MagicMock()
         cursor = MagicMock()
-        conn.cursor = MagicMock(return_value = cursor)
+        conn.cursor = MagicMock(return_value=cursor)
         cursor.execute = MagicMock()
-        self.thing._getLapDbConnection = MagicMock(return_value = conn)
+        self.thing._getLapDbConnection = MagicMock(return_value=conn)
 
         previousBest = (1546275814.11, 230.4)
-        cursor.fetchone = MagicMock(return_value = previousBest)
+        cursor.fetchone = MagicMock(return_value=previousBest)
 
         arguments = (100, 200, 1586278198.59, 220.4, 144)
         result = self.thing.recordResults(*arguments)
@@ -124,12 +124,12 @@ class TestDatabase(unittest.TestCase):
     def testRecordResultsWithStandingBestTime(self):
         conn = MagicMock()
         cursor = MagicMock()
-        conn.cursor = MagicMock(return_value = cursor)
+        conn.cursor = MagicMock(return_value=cursor)
         cursor.execute = MagicMock()
-        self.thing._getLapDbConnection = MagicMock(return_value = conn)
+        self.thing._getLapDbConnection = MagicMock(return_value=conn)
 
         previousBest = (1546275814.11, 210.4)
-        cursor.fetchone = MagicMock(return_value = previousBest)
+        cursor.fetchone = MagicMock(return_value=previousBest)
 
         arguments = (100, 200, 1586278198.59, 220.4, 144)
         result = self.thing.recordResults(*arguments)
@@ -145,10 +145,10 @@ class TestDatabase(unittest.TestCase):
         conn = MagicMock()
         conn.commit = MagicMock()
         cursor = MagicMock()
-        conn.cursor = MagicMock(return_value = cursor)
+        conn.cursor = MagicMock(return_value=cursor)
         cursor.execute = MagicMock()
-        self.thing._migrate = MagicMock(side_effect = IOError)
-        self.thing._getLapDbConnection = MagicMock(return_value = conn)
+        self.thing._migrate = MagicMock(side_effect=IOError)
+        self.thing._getLapDbConnection = MagicMock(return_value=conn)
 
         self.thing.setUpLaptimesDb = MagicMock()
         self.thing._fetchUser = MagicMock()
@@ -161,8 +161,8 @@ class TestDatabase(unittest.TestCase):
 
     def testInitializeLaptimeDbFailsAltogether(self):
         conn = MagicMock()
-        conn.cursor = MagicMock(side_effect = IOError)
-        self.thing._getLapDbConnection = MagicMock(return_value = conn)
+        conn.cursor = MagicMock(side_effect=IOError)
+        self.thing._getLapDbConnection = MagicMock(return_value=conn)
         self.thing.setUpLaptimesDb = MagicMock()
 
         # TODO Actually should terminate. TODO Same with recordResults
