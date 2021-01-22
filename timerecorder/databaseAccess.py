@@ -1,3 +1,6 @@
+'''
+Abstraction for the database, allowing for tests
+'''
 from .log import getLogger, VERBOSE
 
 logger = getLogger(__name__)

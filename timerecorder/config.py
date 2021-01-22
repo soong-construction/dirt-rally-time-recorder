@@ -1,3 +1,6 @@
+'''
+Generates and parses config.yml and provides dict-like access to it
+'''
 import os
 import yaml
 from .log import getLogger

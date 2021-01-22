@@ -1,3 +1,8 @@
+'''
+This tracker reads user input and interprets it as follows:
+Steer (left-neutral-right): -1.0..1.0
+Throttle (no-full): 0.0..1.0
+'''
 from enum import Enum
 from .log import getLogger, VERBOSE
 from .baseTracker import BaseTracker
@@ -11,8 +16,6 @@ class Signal(Enum):
     THROTTLE_LEFT = 1
     THROTTLE_RIGHT = 2
 
-# Steer (left-neutral-right): -1.0..1.0
-# Throttle (no-full): 0.0..1.0
 class InputTracker(BaseTracker):
 
     def __init__(self, speedTracker, notify):

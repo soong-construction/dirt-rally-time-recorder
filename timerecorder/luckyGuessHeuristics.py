@@ -1,3 +1,6 @@
+'''
+A simple heuristics, cf. docs
+'''
 import random as r
 from .log import getLogger
 from .heuristics import Heuristics

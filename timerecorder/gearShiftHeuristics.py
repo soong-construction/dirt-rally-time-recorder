@@ -1,3 +1,6 @@
+'''
+Heuristics based on shifting, cf. docs
+'''
 from .log import getLogger
 from .heuristics import Heuristics
 

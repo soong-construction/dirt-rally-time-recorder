@@ -1,3 +1,6 @@
+'''
+The basic UDP logic, should rarely change and is difficult to test
+'''
 import asyncore
 import socket
 import struct

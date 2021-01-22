@@ -1,3 +1,6 @@
+'''
+Contains everything related to the underlying SQLite databases
+'''
 import sqlite3
 import getpass
 import time

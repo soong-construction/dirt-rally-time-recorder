@@ -1,3 +1,6 @@
+'''
+Tracks progress through a stage
+'''
 from .baseTracker import BaseTracker
 
 class ProgressTracker(BaseTracker):

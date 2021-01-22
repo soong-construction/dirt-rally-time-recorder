@@ -1,3 +1,6 @@
+'''
+This will handle ambiguities in observed telemetry, e.g. by applying heuristics
+'''
 import random
 
 from . import config

@@ -1,3 +1,6 @@
+'''
+Manages update scripts necessary for resolution of ambiguous recordings
+'''
 import os
 import time
 import re

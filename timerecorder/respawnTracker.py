@@ -1,3 +1,6 @@
+'''
+Tries to detect sudden changes in car position, e.g. when spawning at the stage start
+'''
 from .baseTracker import BaseTracker
 from .log import getLogger
 

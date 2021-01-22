@@ -1,3 +1,6 @@
+'''
+Special heuristics, cf. docs
+'''
 from .log import getLogger
 from .inputTracker import Signal
 from .heuristics import Heuristics

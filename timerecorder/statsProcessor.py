@@ -1,3 +1,6 @@
+'''
+More or less a state machine for the game, and really the heart of this tool
+'''
 from datetime import timedelta
 import time
 import simpleaudio as sa
@@ -183,5 +186,5 @@ class StatsProcessor():
         try:
             waveObj = sa.WaveObject.from_wave_file('notify.wav')
             waveObj.play()
-        except:
+        except:  #pylint: disable=bare-except
             logger.debug('Failed to play notification')

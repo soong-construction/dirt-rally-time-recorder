@@ -1,3 +1,6 @@
+'''
+Provides version-specific migration logic for existing databases
+'''
 class DatabaseMigration:
 
     def __init__(self, lapDb):

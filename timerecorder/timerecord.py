@@ -38,7 +38,7 @@ def main(logfile):
 
     except KeyboardInterrupt:
         pass
-    except:
+    except:  #pylint: disable=bare-except
         logger.exception('***timerecord crashed***')
         logger.error('This should not happen. Look for help at %s', log.getProjectUrl())
         informUser()
