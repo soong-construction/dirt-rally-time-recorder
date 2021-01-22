@@ -30,21 +30,21 @@ class TestDatabase(unittest.TestCase):
         self.lap_db.execute.assert_called_with('PRAGMA user_version = 1000000')
 
     def testVersionExpansion(self):
-        expand_version = self.thing.expandVersion('1.0.0')
-        self.assertEqual(expand_version, 1_000_000)
+        expandVersion = self.thing.expandVersion('1.0.0')
+        self.assertEqual(expandVersion, 1_000_000)
 
-        expand_version = self.thing.expandVersion('12.1.21')
-        self.assertEqual(expand_version, 12_001_021)
+        expandVersion = self.thing.expandVersion('12.1.21')
+        self.assertEqual(expandVersion, 12_001_021)
 
     def testVersionExpansionWithWhitespace(self):
-        expand_version = self.thing.expandVersion(' 1.2.3\r\n')
-        self.assertEqual(expand_version, 1_002_003)
+        expandVersion = self.thing.expandVersion(' 1.2.3\r\n')
+        self.assertEqual(expandVersion, 1_002_003)
 
     def testVersionExpansionWithIllegalVersion(self):
         with self.assertRaises(RuntimeError):
             self.thing.expandVersion('1.1')
 
-    def testInitialMigrationFromVersion1_0_0(self):
+    def testInitialMigrationFromVersion1_0_0(self):  #pylint: disable=invalid-name
         initialVersion = 1_000_000
         self.cursor.fetchall = MagicMock(return_value=[[initialVersion]])
 

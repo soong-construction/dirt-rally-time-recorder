@@ -96,8 +96,8 @@ class TestDatabaseAccess(unittest.TestCase):
         shiftingData = [('H-PATTERN'), ('SEQUENTIAL')]
         self.database.loadShiftingData = MagicMock(side_effect=shiftingData)
 
-        car_candidates = [100, 200]
-        result = self.thing.mapCarsToShifting(car_candidates)
+        carCandidates = [100, 200]
+        result = self.thing.mapCarsToShifting(carCandidates)
 
         self.assertEqual(list(result), [(100, 'H-PATTERN'), (200,'SEQUENTIAL')])
 

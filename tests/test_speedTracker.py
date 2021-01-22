@@ -1,7 +1,7 @@
 import unittest
 from timerecorder.speedTracker import SpeedTracker
 
-fieldCount = 66
+FIELD_COUNT = 66
 
 class TestSpeedTracker(unittest.TestCase):
 
@@ -15,7 +15,7 @@ class TestSpeedTracker(unittest.TestCase):
         pass
 
     def testSpeedTracked(self):
-        stats = [0] * fieldCount
+        stats = [0] * FIELD_COUNT
         self.thing.track(stats)
         self.assertEqual(self.thing.getSpeed(), 0)
         self.assertEqual(self.thing.getTopSpeed(), 0)

@@ -66,6 +66,7 @@ disable=relative-beyond-top-level,
 	missing-module-docstring,
 	protected-access,
 	import-error,
+	attribute-defined-outside-init,
 	#generated-from-here
 	print-statement,
         parameter-unpacking,
@@ -285,7 +286,7 @@ module-naming-style=camelCase
 
 # Regular expression matching correct module names. Overrides module-naming-
 # style.
-#module-rgx=
+module-rgx=test_[^_]+
 
 # Colon-delimited sets of names that determine each other's naming style when
 # the name regexes allow several styles.
@@ -535,7 +536,7 @@ max-locals=15
 max-parents=7
 
 # Maximum number of public methods for a class (see R0904).
-max-public-methods=20
+max-public-methods=100
 
 # Maximum number of return / yield for function / method body.
 max-returns=6

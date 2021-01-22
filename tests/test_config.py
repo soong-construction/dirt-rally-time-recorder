@@ -5,13 +5,13 @@ from tests.test_base import TestBase
 from timerecorder.config import Config, readVersion
 
 
-testroot = 'test-files'
-default_config_count = 5
+TESTROOT = 'test-files'
+DEFAULT_CONFIG_COUNT = 5
 
 class TestConfig(TestBase):
 
     def __init__(self, methodName):
-        TestBase.__init__(self, methodName, testroot)
+        TestBase.__init__(self, methodName, TESTROOT)
 
     def setUp(self):
         pass
@@ -20,7 +20,7 @@ class TestConfig(TestBase):
         pass
 
     def testFreshConfigIsCreated(self):
-        configPath = testroot + '/newconfig.yml'
+        configPath = TESTROOT + '/newconfig.yml'
 
         if os.path.exists(configPath):
             os.remove(configPath)
@@ -28,12 +28,12 @@ class TestConfig(TestBase):
         config = Config(configPath)
         config.load()
 
-        self.assertEqual(default_config_count, len(config.keys()))
-        self.assertEqual(default_config_count, len(config.values()))
+        self.assertEqual(DEFAULT_CONFIG_COUNT, len(config.keys()))
+        self.assertEqual(DEFAULT_CONFIG_COUNT, len(config.values()))
         self.assertEqual(config['speed_unit'], 'kph')
 
     def testExistingValuesAreKeptOrExtended(self):
-        configPath = testroot + '/existingconfig.yml'
+        configPath = TESTROOT + '/existingconfig.yml'
         self.writeFile(configPath,
                     ('speed_unit: kph\n'
                      'telemetry_server:\n'
@@ -42,26 +42,26 @@ class TestConfig(TestBase):
         config = Config(configPath)
         config.load()
 
-        self.assertEqual(default_config_count, len(config.keys()))
-        self.assertEqual(default_config_count, len(config.values()))
+        self.assertEqual(DEFAULT_CONFIG_COUNT, len(config.keys()))
+        self.assertEqual(DEFAULT_CONFIG_COUNT, len(config.values()))
         self.assertEqual(config['speed_unit'], 'kph')
         self.assertEqual(config['telemetry_server']['port'], 12345)
         self.assertEqual(config['telemetry_server']['host'], '127.0.0.1')
         self.assertEqual(config['heuristics']['activate'], 0)
 
     def testExistingConfigIsMigrated(self):
-        configPath = testroot + '/existingconfig.yml'
+        configPath = TESTROOT + '/existingconfig.yml'
         self.writeFile(configPath, 'ignored_user_entry: 123')
 
         config = Config(configPath)
         config.load()
 
-        self.assertEqual(default_config_count + 1, len(config.keys()))
-        self.assertEqual(default_config_count + 1, len(config.values()))
+        self.assertEqual(DEFAULT_CONFIG_COUNT + 1, len(config.keys()))
+        self.assertEqual(DEFAULT_CONFIG_COUNT + 1, len(config.values()))
         self.assertEqual(config['speed_unit'], 'kph')
 
     def testCorruptConfigIsReported(self):
-        configPath = testroot + '/existingconfig.yml'
+        configPath = TESTROOT + '/existingconfig.yml'
         self.writeFile(configPath, 'br0ken')
 
         with self.assertRaisesRegex(IOError, r'\S+ seems to be corrupt, please check or delete file\.'):
@@ -69,7 +69,7 @@ class TestConfig(TestBase):
             config.load()
 
     def testCorruptValueIsReported(self):
-        configPath = testroot + '/existingconfig.yml'
+        configPath = TESTROOT + '/existingconfig.yml'
         self.writeFile(configPath,
                        ('heuristics:\n'
                         '  activate: bla\n'))
@@ -79,7 +79,7 @@ class TestConfig(TestBase):
             config.load()
 
     def testMapsStringsToBool(self):
-        configPath = testroot + '/existingconfig.yml'
+        configPath = TESTROOT + '/existingconfig.yml'
         self.writeFile(configPath,
                        ('heuristics:\n'
                         '  activate: ON\n'
@@ -92,19 +92,19 @@ class TestConfig(TestBase):
         self.assertFalse(config.authentic_shifting)
 
     def testReadsVersionFile(self):
-        self.writeFile(testroot + '/VERSION', '1.2.34')
+        self.writeFile(TESTROOT + '/VERSION', '1.2.34')
 
-        version = readVersion(testroot)
+        version = readVersion(TESTROOT)
         self.assertEqual(version, '1.2.34')
 
     def writeFile(self, configPath, content):
         if os.path.exists(configPath):
             os.remove(configPath)
-        with open(file=configPath, mode='w', encoding='utf-8', newline='\n') as f:
-            f.write(content)
+        with open(file=configPath, mode='w', encoding='utf-8', newline='\n') as file:
+            file.write(content)
 
     def testValuesCanBeReadAsBool(self):
-        configPath = testroot + '/valuetest.yml'
+        configPath = TESTROOT + '/valuetest.yml'
 
         if os.path.exists(configPath):
             os.remove(configPath)

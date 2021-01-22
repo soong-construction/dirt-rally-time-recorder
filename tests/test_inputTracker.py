@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 from timerecorder.inputTracker import InputTracker, Signal
 
 
-fieldCount = 66
+FIELD_COUNT = 66
 
 class TestInputTracker(unittest.TestCase):
 
@@ -54,7 +54,7 @@ class TestInputTracker(unittest.TestCase):
 
     def testNoTrackingIfNotEnabled(self):
         self.thing.enabled = True
-        stats = [0] * fieldCount
+        stats = [0] * FIELD_COUNT
 
         self.thing.track(stats)
         self.speed_tracker.getTopSpeed.assert_called_once()
@@ -67,7 +67,7 @@ class TestInputTracker(unittest.TestCase):
     def testSignalLeftOnlyAfterInputGone(self):
         self.notify.assert_not_called()
         self.speed_tracker.getTopSpeed = MagicMock(return_value = 0)
-        stats = [0] * fieldCount
+        stats = [0] * FIELD_COUNT
         stats[29] = 0.6
         stats[30] = -0.6
 
@@ -85,7 +85,7 @@ class TestInputTracker(unittest.TestCase):
     def testSignalRightOnlyAfterInputGone(self):
         self.notify.assert_not_called()
         self.speed_tracker.getTopSpeed = MagicMock(return_value = 0)
-        stats = [0] * fieldCount
+        stats = [0] * FIELD_COUNT
         stats[29] = 0.6
         stats[30] = 0.6
 

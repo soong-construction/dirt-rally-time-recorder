@@ -16,10 +16,10 @@ class TestLuckyGuessHeuristics(unittest.TestCase):
         pass
 
     def testReturnsMatchingCandidateWithGearsSkipped(self):
-        car_candidates = [(100, 'H-PATTERN'), (200, 'SEQUENTIAL')]
+        carCandidates = [(100, 'H-PATTERN'), (200, 'SEQUENTIAL')]
         self.gear_tracker.getGearSkipCount = MagicMock(return_value = 2)
 
-        self.thing = GearShiftHeuristics(car_candidates, self.gear_tracker)
+        self.thing = GearShiftHeuristics(carCandidates, self.gear_tracker)
         self.thing.withFallback(MagicMock())
 
         car = self.thing.guessCar()
@@ -27,10 +27,10 @@ class TestLuckyGuessHeuristics(unittest.TestCase):
         self.assertEqual(car, 100, 'Did not return matching candidate')
 
     def testReturnsMatchingCandidateWithoutGearsSkipped(self):
-        car_candidates = [(100, 'H-PATTERN'), (200, 'SEQUENTIAL')]
+        carCandidates = [(100, 'H-PATTERN'), (200, 'SEQUENTIAL')]
         self.gear_tracker.getGearSkipCount = MagicMock(return_value = 0)
 
-        self.thing = GearShiftHeuristics(car_candidates, self.gear_tracker)
+        self.thing = GearShiftHeuristics(carCandidates, self.gear_tracker)
         self.thing.withFallback(MagicMock())
 
         car = self.thing.guessCar()
@@ -38,10 +38,10 @@ class TestLuckyGuessHeuristics(unittest.TestCase):
         self.assertEqual(car, 200, 'Did not return matching candidate')
 
     def testCallsFallbackWithoutDifferingShifting(self):
-        car_candidates = [(100, 'H-PATTERN'), (200, 'H-PATTERN')]
+        carCandidates = [(100, 'H-PATTERN'), (200, 'H-PATTERN')]
         self.gear_tracker.getGearSkipCount = MagicMock(return_value = 2)
 
-        self.thing = GearShiftHeuristics(car_candidates, self.gear_tracker)
+        self.thing = GearShiftHeuristics(carCandidates, self.gear_tracker)
         fallback = MagicMock()
         fallback.guessCar = MagicMock(return_value = 100)
         self.thing.withFallback(fallback)
@@ -52,11 +52,11 @@ class TestLuckyGuessHeuristics(unittest.TestCase):
         self.assertEqual(car, 100, 'Did not return fallback guess')
 
     def testCallsFallbackWithoutSufficientShifts(self):
-        car_candidates = [(100, 'H-PATTERN'), (200, 'SEQUENTIAL')]
+        carCandidates = [(100, 'H-PATTERN'), (200, 'SEQUENTIAL')]
         self.gear_tracker.getGearSkipCount = MagicMock(return_value = 2)
         self.gear_tracker.getGearChangeCount = MagicMock(return_value = 3)
 
-        self.thing = GearShiftHeuristics(car_candidates, self.gear_tracker)
+        self.thing = GearShiftHeuristics(carCandidates, self.gear_tracker)
         fallback = MagicMock()
         fallback.guessCar = MagicMock(return_value = 100)
         self.thing.withFallback(fallback)
@@ -67,8 +67,8 @@ class TestLuckyGuessHeuristics(unittest.TestCase):
         self.assertEqual(car, 100, 'Did not return fallback guess')
 
     def testCallsFallbackForManyCandidates(self):
-        car_candidates = [(100, 'H-PATTERN'), (200, 'H-PATTERN'), (300, 'H-PATTERN')]
-        self.thing = GearShiftHeuristics(car_candidates, self.gear_tracker)
+        carCandidates = [(100, 'H-PATTERN'), (200, 'H-PATTERN'), (300, 'H-PATTERN')]
+        self.thing = GearShiftHeuristics(carCandidates, self.gear_tracker)
         fallback = MagicMock()
         fallback.guessCar = MagicMock(return_value = 100)
         self.thing.withFallback(fallback)

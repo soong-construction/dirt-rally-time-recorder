@@ -8,7 +8,7 @@ from timerecorder import config
 from timerecorder.updateScriptHandler import UpdateScriptHandler
 from tests.test_base import TestBase
 
-fieldCount = 66
+FIELD_COUNT = 66
 
 class TestStatsProcessor(TestBase):
 
@@ -17,8 +17,8 @@ class TestStatsProcessor(TestBase):
 
     def __init__(self, methodName):
         TestBase.__init__(self, methodName, 'test-files')
-        self.CleanUpFunction = UpdateScriptHandler.cleanUp
-        self.UpdateResourcesFunction = StatsProcessor._updateResources
+        self.clean_up_function = UpdateScriptHandler.cleanUp
+        self.update_resources_function = StatsProcessor._updateResources
 
     def setUp(self):
         UpdateScriptHandler.cleanUp = MagicMock()
@@ -27,11 +27,11 @@ class TestStatsProcessor(TestBase):
         self.thing._logResults = MagicMock()
 
         self.stats = range(0, 256)
-        self._allZeroStats = [0.0] * 256
+        self._all_zero_stats = [0.0] * 256
 
     def tearDown(self):
-        UpdateScriptHandler.cleanUp = self.CleanUpFunction
-        StatsProcessor._updateResources = self.UpdateResourcesFunction
+        UpdateScriptHandler.cleanUp = self.clean_up_function
+        StatsProcessor._updateResources = self.update_resources_function
 
     def mockVisitorMethods(self):
         self.thing.resetRecognition = MagicMock()
@@ -71,7 +71,7 @@ class TestStatsProcessor(TestBase):
 
     def testStatsAfterAStageLeadToResetButNotStartStage(self):
         self.mockVisitorMethods()
-        self.thing._handleGameState(True, True, 0, 0.9, self._allZeroStats)
+        self.thing._handleGameState(True, True, 0, 0.9, self._all_zero_stats)
 
         self.assertTrue(self.thing.resetRecognition.called, 'Never called expected receiver method')
         self.assertFalse(self.thing._startStage.called, 'Actually called unexpected receiver method')
@@ -103,7 +103,7 @@ class TestStatsProcessor(TestBase):
 
     def testFinishStageInDR2TimeTrial(self):
         self.mockVisitorMethods()
-        self.thing._handleGameState(False, True, 0, 0.999, self._allZeroStats)
+        self.thing._handleGameState(False, True, 0, 0.999, self._all_zero_stats)
 
         self.assertTrue(self.thing.resetRecognition.called, 'Actually called unexpected receiver method')
         self.assertFalse(self.thing._startStage.called, 'Actually called unexpected receiver method')
@@ -111,7 +111,7 @@ class TestStatsProcessor(TestBase):
 
     def testDontFinishStageInDR2TimeTrialIfNotAtEndOfStage(self):
         self.mockVisitorMethods()
-        self.thing._handleGameState(False, True, 0, 0.822, self._allZeroStats)
+        self.thing._handleGameState(False, True, 0, 0.822, self._all_zero_stats)
 
         self.assertFalse(self.thing.resetRecognition.called, 'Actually called unexpected receiver method')
         self.assertFalse(self.thing._startStage.called, 'Actually called unexpected receiver method')
@@ -122,19 +122,19 @@ class TestStatsProcessor(TestBase):
         self.thing = StatsProcessor('testroot')
         self.thing.speed_tracker.top_speed = 33.28
 
-        format_top_speed = self.thing._formatTopSpeed()
-        self.assertEqual(format_top_speed, '119.8')
+        formatTopSpeed = self.thing._formatTopSpeed()
+        self.assertEqual(formatTopSpeed, '119.8')
 
         config.GET.speed_unit = 'mph'
         self.thing = StatsProcessor('testroot')
         self.thing.speed_tracker.top_speed = 33.28
 
-        format_top_speed = self.thing._formatTopSpeed()
-        self.assertEqual(format_top_speed, '74.4')
+        formatTopSpeed = self.thing._formatTopSpeed()
+        self.assertEqual(formatTopSpeed, '74.4')
 
     def testLapTimeConversion(self):
-        format_lap_time = self.thing._formatLapTime(180.249)
-        self.assertEqual(format_lap_time, '180.25')
+        formatLapTime = self.thing._formatLapTime(180.249)
+        self.assertEqual(formatLapTime, '180.25')
 
     def testNiceLapTimeConversion(self):
         laptime = self.thing._prettyLapTime(180.240)
@@ -144,7 +144,7 @@ class TestStatsProcessor(TestBase):
         self.assertEqual(str(laptime), '1:00:12.240')
 
     def testHandleFinishStage(self):
-        stats = [1] * fieldCount
+        stats = [1] * FIELD_COUNT
 
         self.thing._inStage = MagicMock(return_value=True)
         self.thing._finishStage = MagicMock()
@@ -156,7 +156,7 @@ class TestStatsProcessor(TestBase):
         self.thing._finishStage.assert_called_once()
 
     def testFinishStageRecordAndLogResultsWithNewPersonalBest(self):
-        stats = [1] * fieldCount
+        stats = [1] * FIELD_COUNT
         stats[62] = 100.2
         self.thing.database_access = MagicMock()
         self.thing.car = 10
@@ -171,7 +171,7 @@ class TestStatsProcessor(TestBase):
         self.thing._logResults.assert_called_once_with(100.2, 10, 11, 111.2)
 
     def testFinishStageRecordAndLogResultsWithNoNewPersonalBest(self):
-        stats = [1] * fieldCount
+        stats = [1] * FIELD_COUNT
         stats[62] = 100.2
         self.thing.database_access = MagicMock()
         self.thing.car = 10
@@ -186,7 +186,7 @@ class TestStatsProcessor(TestBase):
         self.thing._logResults.assert_called_once_with(100.2, 10, 11)
 
     def testFinishStageRecordAndLogResultsWithAmbiguity(self):
-        stats = [1] * fieldCount
+        stats = [1] * FIELD_COUNT
         stats[62] = 100.2
         self.thing.database_access = MagicMock()
         self.thing.car = 10
@@ -201,7 +201,7 @@ class TestStatsProcessor(TestBase):
         self.thing._logResults.assert_called_once_with(100.2, 10, 11)
 
     def testHandleStartStageAndDatabaseCalled(self):
-        stats = [1] * fieldCount
+        stats = [1] * FIELD_COUNT
         stats[2] = 0
 
         self.thing._inStage = MagicMock(return_value=False)
@@ -219,7 +219,7 @@ class TestStatsProcessor(TestBase):
         self.thing.time_tracker = MagicMock()
         self.thing._stageAborted = MagicMock(return_value=False)
 
-        stats = [1] * fieldCount
+        stats = [1] * FIELD_COUNT
         self.thing.handleStats(stats)
 
         self.thing.time_tracker.track.assert_called()
@@ -228,7 +228,7 @@ class TestStatsProcessor(TestBase):
         self.thing.time_tracker = MagicMock()
         self.thing._stageAborted = MagicMock(return_value=False)
 
-        stats = [0] * fieldCount
+        stats = [0] * FIELD_COUNT
         self.thing.handleStats(stats)
 
         self.thing.time_tracker.track.assert_not_called()
@@ -240,7 +240,7 @@ class TestStatsProcessor(TestBase):
         self.thing.database_access.identifyTrack = MagicMock(return_value=11)
 
         self.thing._showCarControlInformation = MagicMock()
-        stats = [1] * fieldCount
+        stats = [1] * FIELD_COUNT
 
         config.GET.show_car_controls = 0
         self.thing._startStage(stats)

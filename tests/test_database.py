@@ -108,12 +108,12 @@ class TestDatabase(unittest.TestCase):
         cursor.execute = MagicMock()
         self.thing._getLapDbConnection = MagicMock(return_value = conn)
 
-        previous_best = (1546275814.11, 230.4)
-        cursor.fetchone = MagicMock(return_value = previous_best)
+        previousBest = (1546275814.11, 230.4)
+        cursor.fetchone = MagicMock(return_value = previousBest)
 
         arguments = (100, 200, 1586278198.59, 220.4, 144)
         result = self.thing.recordResults(*arguments)
-        self.assertEqual(result, previous_best)
+        self.assertEqual(result, previousBest)
 
         cursor.execute.assert_called_with('INSERT INTO laptimes (Track, Car, Timestamp, Time, Topspeed) VALUES (?, ?, ?, ?, ?)', arguments)
         self.assertEqual(cursor.execute.call_count, 2)
@@ -128,8 +128,8 @@ class TestDatabase(unittest.TestCase):
         cursor.execute = MagicMock()
         self.thing._getLapDbConnection = MagicMock(return_value = conn)
 
-        previous_best = (1546275814.11, 210.4)
-        cursor.fetchone = MagicMock(return_value = previous_best)
+        previousBest = (1546275814.11, 210.4)
+        cursor.fetchone = MagicMock(return_value = previousBest)
 
         arguments = (100, 200, 1586278198.59, 220.4, 144)
         result = self.thing.recordResults(*arguments)

@@ -2,7 +2,7 @@ import unittest
 from timerecorder.timeTracker import TimeTracker
 
 
-fieldCount = 66
+FIELD_COUNT = 66
 
 class TestTimeTracker(unittest.TestCase):
 
@@ -18,7 +18,7 @@ class TestTimeTracker(unittest.TestCase):
     def testTimeChangeTracked(self):
         self.assertEqual(self.thing.getTimeDelta(), 0)
 
-        stats = [0] * fieldCount
+        stats = [0] * FIELD_COUNT
         stats[0] = 100
         self.thing.track(stats)
         self.assertEqual(self.thing.getTimeDelta(), 100)
