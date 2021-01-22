@@ -250,7 +250,7 @@ INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (901, 'Mitsubishi Lancer Evo
 
 -- 4WD/2000cc
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1000, 'Citroen C4 Rally', 774.92620849609375, 188.49555969238281);
-INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1001, 'Škoda Fabia Rally', 774.92620849609375, 178.02359008789062);
+INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1001, 'ζkoda Fabia Rally', 774.92620849609375, 178.02359008789062);
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1002, 'Ford Focus RS Rally', 769.69024658203125, 186.92477416992188);
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1003, 'Subaru Impreza 2008', 785.398193359375, 219.91148376464844);
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1004, 'Ford Focus RS Rally 2001', 785.398193359375, 178.02359008789062);
@@ -262,7 +262,7 @@ INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1007, 'Subaru Impreza S4 Ra
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1100, 'Ford Fiesta R5', 774.92620849609375, 188.49555969238281);
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1101, 'Peugeot 208 T16 R5', 785.398193359375, 178.02359008789062);
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1102, 'Mitsubishi Space Star R5', 837.758056640625, 219.91148376464844);
-INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1103, 'Škoda Fabia R5', 774.92620849609375, 178.02359008789062);
+INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1103, 'ζkoda Fabia R5', 774.92620849609375, 178.02359008789062);
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1104, 'Volkswagen Polo GTI R5', 774.92620849609375, 178.02359008789062);
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1105, 'Citroen C3 R5', 743.51031494140625, 185.87757873535156);
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (1106, 'Ford Fiesta R5 MKII', 774.9262084960938, 183.2595672607422);

@@ -140,7 +140,7 @@ INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (15, 'Subaru Impreza 1995', 
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (316, 'Ford Escort RS Cosworth', 785.398193359375, 178.0236053466797);
 
 -- F2 Kit Car
-INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (17, 'Seat Ibiza Kitcar', 942.478, 136.136);
+INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (17, 'ζeat Ibiza Kitcar', 942.478, 136.136);
 INSERT INTO cars (id, name, maxrpm, idlerpm) VALUES (18, 'Peugeot 306 Maxi', 1151.92, 146.607);
 
 -- R4
