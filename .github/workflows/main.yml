@@ -33,7 +33,7 @@ jobs:
     - name: Lint code / pylint
       run: |
         pylint timerecorder --rcfile=timerecorder/.pylintrc
-        pylint tests/*.py --rcfile=tests/.pylintrc
+        pylint tests --rcfile=tests/.pylintrc
 
   check:
     runs-on: ubuntu-latest
