@@ -25,7 +25,7 @@ class AmbiguousResultHandler():
         self.seed = random.randrange(1000)
 
     def _applyHeuristics(self, carCandidates, gearTracker, inputTracker):
-        heuristics = LuckyGuessHeuristics(carCandidates, random.seed(self.seed))
+        heuristics = LuckyGuessHeuristics(carCandidates, self.seed)
 
         if config.GET.authentic_shifting:
             carShiftMap = self.database_access.mapCarsToShifting(carCandidates)
