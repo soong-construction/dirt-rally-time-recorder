@@ -29,7 +29,12 @@ jobs:
     
     - name: Run tests / pytest
       run: python -m pytest tests
-  
+    
+    - name: Lint code / pylint
+      run: |
+        pylint timerecorder --rcfile=timerecorder/.pylintrc
+        pylint tests --rcfile=tests/.pylintrc
+
   check:
     runs-on: ubuntu-latest
 

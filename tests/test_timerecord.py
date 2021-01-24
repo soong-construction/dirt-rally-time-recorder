@@ -9,14 +9,14 @@ class TestTimeRecord(TestBase):
 
     def __init__(self, methodName):
         TestBase.__init__(self, methodName, 'test-files')
-        self.UpdateResourcesFunction = StatsProcessor.updateResources
+        self.update_resources_function = StatsProcessor._updateResources
 
     def setUp(self):
-        StatsProcessor.updateResources = MagicMock()
+        StatsProcessor._updateResources = MagicMock()
         self.thing = Receiver('test-files')
 
     def tearDown(self):
-        StatsProcessor.updateResources = self.UpdateResourcesFunction
+        StatsProcessor._updateResources = self.update_resources_function
 
     def testCloseGracefullyOnError(self):
         Receiver.reconnect = MagicMock(side_effect=IOError)

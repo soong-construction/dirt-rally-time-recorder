@@ -3,13 +3,15 @@
 Using an IDE is recommended, the author has been content with using [PyDev](https://www.pydev.org/). 
 
 ## Requirements
-Cf. job `build` in `.github/workflows/main.yml`
-Install coverage
+- to set up a Python enviroment with the necessary dependencies, cf. to the job `build` in `.github/workflows/main.yml`
+- optionally, install coverage
 
 ## Tasks
 - `python -m timerecorder.timerecord` to run *dirt-rally-time-recorder* from a command line
 - `python -m pytest tests` to run all tests
 - `coverage run -m pytest tests` and `coverage report -m` to keep statement coverage at around 90 %
+- `pylint timerecorder --rcfile=timerecorder/.pylintrc` to lint code
+- `pylint tests --rcfile=tests/.pylintrc` to lint tests
 
 # Bundling
 

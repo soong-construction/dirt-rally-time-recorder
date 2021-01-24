@@ -1,3 +1,6 @@
+'''
+This will handle ambiguities in observed telemetry, e.g. by applying heuristics
+'''
 import random
 
 from . import config
@@ -5,40 +8,39 @@ from .gearShiftHeuristics import GearShiftHeuristics
 from .luckyGuessHeuristics import LuckyGuessHeuristics
 from .userSignalsHeuristics import UserSignalsHeuristics
 from .log import getLogger, getProjectUrl
-from .databaseAccess import identify
 from .updateScriptHandler import UpdateScriptHandler
 from .database import Database
 
 logger = getLogger(__name__)
 
-instruction = "Please run one of the scripts below to link the recorded laptime to %s:"
+INSTRUCTION = "Please run one of the scripts below to link the recorded laptime to %s:"
 
 class AmbiguousResultHandler():
 
     def __init__(self, databaseAccess, approot):
-        self.databaseAccess = databaseAccess
-        self.updateScriptHandler = UpdateScriptHandler(Database.laptimesDbName)
-        self.updateScriptHandler.cleanUp(approot)
+        self.database_access = databaseAccess
+        self.update_script_handler = UpdateScriptHandler(Database.laptimesDbName)
+        self.update_script_handler.cleanUp(approot)
 
         self.seed = random.randrange(1000)
 
-    def applyHeuristics(self, car_candidates, gearTracker, inputTracker):
-        heuristics = LuckyGuessHeuristics(car_candidates, random.seed(self.seed))
+    def _applyHeuristics(self, carCandidates, gearTracker, inputTracker):
+        heuristics = LuckyGuessHeuristics(carCandidates, random.seed(self.seed))
 
-        if config.get.authentic_shifting:
-            car_shift_map = self.databaseAccess.mapCarsToShifting(car_candidates)
-            gearShiftHeuristics = GearShiftHeuristics(list(car_shift_map), gearTracker)
+        if config.GET.authentic_shifting:
+            carShiftMap = self.database_access.mapCarsToShifting(carCandidates)
+            gearShiftHeuristics = GearShiftHeuristics(list(carShiftMap), gearTracker)
             gearShiftHeuristics.withFallback(heuristics)
             heuristics = gearShiftHeuristics
 
-        if config.get.user_signals:
-            userSignalHeuristics = UserSignalsHeuristics(car_candidates, inputTracker)
+        if config.GET.user_signals:
+            userSignalHeuristics = UserSignalsHeuristics(carCandidates, inputTracker)
             userSignalHeuristics.withFallback(heuristics)
             heuristics = userSignalHeuristics
 
         return heuristics.guessCar()
 
-    def logFailedRecognition(self, incompleteUpdate, logLine):
+    def _logFailedRecognition(self, incompleteUpdate, logLine):
         logger.error(logLine)
         logger.debug(incompleteUpdate)
 
@@ -49,20 +51,20 @@ class AmbiguousResultHandler():
         if len(car) == 0:
             incompleteUpdate = Database.getCarUpdateStatements(timestamp, ['???'])[0]
 
-            self.logFailedRecognition(incompleteUpdate, 'Unmapped car telemetry. Please report at %s' % (getProjectUrl(),))
+            self._logFailedRecognition(incompleteUpdate, f'Unmapped car telemetry. Please report at {getProjectUrl()}')
             return car
 
-        if config.get.heuristics_activated:
-            guessed_car = self.applyHeuristics(car, gearTracker, inputTracker)
+        if config.GET.heuristics_activated:
+            guessedCar = self._applyHeuristics(car, gearTracker, inputTracker)
 
-            if guessed_car is not None:
+            if guessedCar is not None:
                 logger.info("If heuristics-based guess IS WRONG, RUN THE SCRIPT provided to fix the recorded car:")
-                dismissedCars = [c for c in car if c != guessed_car]
-                self.databaseAccess.handleCarUpdates(dismissedCars, timestamp, track, self.handleUpdate)
-                return guessed_car
+                dismissedCars = [c for c in car if c != guessedCar]
+                self.database_access.handleCarUpdates(dismissedCars, timestamp, track, self._handleUpdate)
+                return guessedCar
 
-        logger.info(instruction, "the correct car")
-        self.databaseAccess.handleCarUpdates(car, timestamp, track, self.handleUpdate)
+        logger.info(INSTRUCTION, "the correct car")
+        self.database_access.handleCarUpdates(car, timestamp, track, self._handleUpdate)
 
         return car
 
@@ -73,14 +75,14 @@ class AmbiguousResultHandler():
         if len(track) == 0:
             incompleteUpdate = Database.getTrackUpdateStatements(timestamp, ['???'])[0]
 
-            self.logFailedRecognition(incompleteUpdate, 'Unmapped track telemetry. Please report at %s' % (getProjectUrl(),))
+            self._logFailedRecognition(incompleteUpdate, f'Unmapped track telemetry. Please report at {getProjectUrl()}')
             return track
 
-        logger.info(instruction, "the correct track")
-        self.databaseAccess.handleTrackUpdates(track, timestamp, car, self.handleUpdate)
+        logger.info(INSTRUCTION, "the correct track")
+        self.database_access.handleTrackUpdates(track, timestamp, car, self._handleUpdate)
 
         return track
 
-    def handleUpdate(self, trackName, carName, timestamp, update):
-        scriptName = self.updateScriptHandler.writeScript(trackName, carName, timestamp, update)
+    def _handleUpdate(self, trackName, carName, timestamp, update):
+        scriptName = self.update_script_handler.writeScript(trackName, carName, timestamp, update)
         logger.info(" ==> %s", scriptName)

@@ -17,8 +17,12 @@ class TestUpdateScriptHandler(TestBase):
     def tearDown(self):
         pass
 
+    def testBuildSqlite3Call(self):
+        result = self.thing._buildScript("update table set x=1")
+        self.assertEqual('sqlite3 db "update table set x=1"', result)
+
     def testBuildFileName(self):
-        result = self.thing.buildFileName('Flugzeugring Reverse', 'Audi Quattro', self.now.timestamp())
+        result = self.thing._buildFileName('Flugzeugring Reverse', 'Audi Quattro', self.now.timestamp())
         self.assertEqual(result, '1571529600_FlugzeugringReverse_AudiQuattro.bat', 'did not build file name correctly')
 
     def testIsUpdateScript(self):
@@ -31,47 +35,47 @@ class TestUpdateScriptHandler(TestBase):
 
     def testFindsOldUpdateScripts(self):
         scripts = ['1570011200_ElRodeo_AudiQuattro.bat', '1571511200_ElRodeo_PoloGTIR5.bat']
-        self.thing.listUpdateScripts = MagicMock(return_value = scripts)
+        self.thing._listUpdateScripts = MagicMock(return_value=scripts)
 
-        result = self.thing.listOldUpdateScripts(self.now, 'test')
+        result = self.thing._listOldUpdateScripts(self.now, 'test')
 
         self.assertEqual(result, scripts[:1])
 
     def testFindsOldUpdateScriptsForUserConfiguredRetentionTime(self):
         scripts = ['1570011200_ElRodeo_AudiQuattro.bat', '1571511200_ElRodeo_PoloGTIR5.bat']
-        config.get.keep_update_scripts_days = 0
-        self.thing.listUpdateScripts = MagicMock(return_value = scripts)
-        self.thing.warnShortRetentionTime = MagicMock()
+        config.GET.keep_update_scripts_days = 0
+        self.thing._listUpdateScripts = MagicMock(return_value=scripts)
+        self.thing._warnShortRetentionTime = MagicMock()
 
-        result = self.thing.listOldUpdateScripts(self.now, 'test')
+        result = self.thing._listOldUpdateScripts(self.now, 'test')
 
         self.assertEqual(result, scripts)
-        self.thing.warnShortRetentionTime.assert_called_once()
+        self.thing._warnShortRetentionTime.assert_called_once()
 
     def testNoMatchForNewUpdateScripts(self):
         scripts = ['1586335179_ElRodeo_AudiQuattro.bat', '1586335180_ElRodeo_PoloGTIR5.bat']
-        self.thing.listUpdateScripts = MagicMock(return_value = scripts)
+        self.thing._listUpdateScripts = MagicMock(return_value=scripts)
 
-        result = self.thing.listOldUpdateScripts(self.now, 'test')
+        result = self.thing._listOldUpdateScripts(self.now, 'test')
         self.assertEqual(result, [])
 
     def testNoMatchForEmptyUpdateScripts(self):
         scripts = []
-        self.thing.listUpdateScripts = MagicMock(return_value = scripts)
+        self.thing._listUpdateScripts = MagicMock(return_value=scripts)
 
-        result = self.thing.listOldUpdateScripts(self.now, 'test')
+        result = self.thing._listOldUpdateScripts(self.now, 'test')
         self.assertEqual(result, [])
 
     def testCleanUp(self):
         directory = MagicMock()
 
-        self.thing.delete = MagicMock()
+        self.thing._delete = MagicMock()
 
-        self.thing.listOldUpdateScripts = MagicMock(return_value = ['dir/file'])
+        self.thing._listOldUpdateScripts = MagicMock(return_value=['dir/file'])
 
         self.thing.cleanUp(directory)
 
-        self.thing.delete.assert_called_with('dir/file')
+        self.thing._delete.assert_called_with('dir/file')
 
 if __name__ == "__main__":
     unittest.main()

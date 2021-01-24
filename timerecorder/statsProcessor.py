@@ -1,3 +1,6 @@
+'''
+More or less a state machine for the game, and really the heart of this tool
+'''
 from datetime import timedelta
 import time
 import simpleaudio as sa
@@ -16,172 +19,171 @@ from .speedTracker import SpeedTracker
 from .timeTracker import TimeTracker
 from .baseTracker import BaseTracker
 
-
-goLineProgress = 0.0
-completionProgress = 0.999
+GO_LINE_PROGRESS = 0.0
+COMPLETION_PROGRESS = 0.999
 
 logger = getLogger(__name__)
 
 class StatsProcessor():
 
     def __init__(self, approot):
-        self.speed_unit = config.get.speed_unit
-        self.speed_modifier = self.speed_unit == 'mph' and 0.6214 or 1
+        self.speed_unit = config.GET.speed_unit
+        self.speed_modifier = 0.6214 if self.speed_unit == 'mph' else 1
         self.approot = approot
 
         self.track = 0
         self.car = 0
 
-        self.database = self.updateResources(approot)
-        self.databaseAccess = DatabaseAccess(self.database)
-        self.ambiguousResultHandler = AmbiguousResultHandler(self.databaseAccess, approot)
+        self.database = self._updateResources(approot)
+        self.database_access = DatabaseAccess(self.database)
+        self.ambiguous_result_handler = AmbiguousResultHandler(self.database_access, approot)
 
-        self.userArray = self.database.initializeLaptimesDb()
-        self.initTrackers()
+        self.user_array = self.database.initializeLaptimesDb()
+        self._initTrackers()
 
-    def updateResources(self, approot):
-        database = Database(approot).setup()
+    def _updateResources(self, approot):
+        database = Database(approot).setUp()
         return database
 
-    def formatTopSpeed(self):
-        topSpeed_kmh = self.speedTracker.getTopSpeed() * 3.6
-        return '%.1f' % (topSpeed_kmh * self.speed_modifier,)
+    def _formatTopSpeed(self):
+        topSpeedKmh = self.speed_tracker.getTopSpeed() * 3.6
+        return '{:.1f}'.format(topSpeedKmh * self.speed_modifier)
 
-    def formatLapTime(self, laptime):
-        return '%.2f' % (laptime,)
+    def _formatLapTime(self, laptime):
+        return '{:.2f}'.format(laptime)
 
-    def prettyLapTime(self, laptime_seconds):
-        fullDuration = str(timedelta(seconds=laptime_seconds))
+    def _prettyLapTime(self, laptimeSeconds):
+        fullDuration = str(timedelta(seconds=laptimeSeconds))
         hours, minuteDuration = fullDuration.split(':', 1)
         thousandthsDuration = minuteDuration[:-3]
-        return thousandthsDuration if hours == '0' else hours + ':' + thousandthsDuration
+        return thousandthsDuration if hours == '0' else f'{hours}:{thousandthsDuration}'
 
-    def logResults(self, laptime, track, car, previousBestTime = None):
-        logger.debug("%s.%s.%s.time:%s|s", self.userArray[0], track, car, self.formatLapTime(laptime))
-        logger.debug("%s.%s.%s.topspeed:%s|%s", self.userArray[0], track, car, self.formatTopSpeed(), self.speed_unit)
-        logger.info("Completed stage in %s.", self.prettyLapTime(laptime))
+    def _logResults(self, laptime, track, car, previousBestTime=None):
+        logger.debug("%s.%s.%s.time:%s|s", self.user_array[0], track, car, self._formatLapTime(laptime))
+        logger.debug("%s.%s.%s.topspeed:%s|%s", self.user_array[0], track, car, self._formatTopSpeed(), self.speed_unit)
+        logger.info("Completed stage in %s.", self._prettyLapTime(laptime))
 
         if previousBestTime is not None:
-            logger.info("Beating previous best time of %s.", self.prettyLapTime(previousBestTime))
+            logger.info("Beating previous best time of %s.", self._prettyLapTime(previousBestTime))
 
-    def logTrack(self, trackId):
+    def _logTrack(self, trackId):
         trackName = self.database.getTrackName(trackId)
         logger.info("TRACK: %s", trackName)
 
-    def logCar(self, carId):
+    def _logCar(self, carId):
         carName = self.database.getCarName(carId)
         logger.info("CAR: %s", carName)
 
-    def showCarControlInformation(self):
+    def _showCarControlInformation(self):
         if identify(self.car) == AMBIGUOUS:
             for car in self.car:
-                logger.info(self.databaseAccess.describeCarInterfaces(car))
+                logger.info(self.database_access.describeCarInterfaces(car))
         else:
-            logger.info(self.databaseAccess.describeCarInterfaces(self.car))
+            logger.info(self.database_access.describeCarInterfaces(self.car))
 
-    def allZeroStats(self, stats):
+    def _allZeroStats(self, stats):
         return stats.count(0) == len(stats)
 
-    def statsWithTelemetry(self, stats):
-        return not self.allZeroStats(stats)
+    def _statsWithTelemetry(self, stats):
+        return not self._allZeroStats(stats)
 
-    def stageAborted(self):
-        timeDelta = self.timeTracker.getTimeDelta()
-        isAborted = self.respawnTracker.isRestart() or timeDelta < 0
+    def _stageAborted(self):
+        timeDelta = self.time_tracker.getTimeDelta()
+        isAborted = self.respawn_tracker.isRestart() or timeDelta < 0
         return isAborted
 
     def handleStats(self, stats):
-        if self.statsWithTelemetry(stats):
-            self.respawnTracker.track(stats)
-            self.timeTracker.track(stats)
-            self.progressTracker.track(stats)
-            self.gearTracker.track(stats)
-            self.speedTracker.track(stats)
+        if self._statsWithTelemetry(stats):
+            self.respawn_tracker.track(stats)
+            self.time_tracker.track(stats)
+            self.progress_tracker.track(stats)
+            self.gear_tracker.track(stats)
+            self.speed_tracker.track(stats)
 
-            self.inputTracker.track(stats)
+            self.input_tracker.track(stats)
 
-        lap = self.progressTracker.getLap()
-        stageProgress = self.progressTracker.getProgress()
+        lap = self.progress_tracker.getLap()
+        stageProgress = self.progress_tracker.getProgress()
 
-        self.handleGameState(self.stageAborted(), self.inStage(), lap, stageProgress, stats)
+        self._handleGameState(self._stageAborted(), self._inStage(), lap, stageProgress, stats)
 
     def resetRecognition(self):
         self.track = 0
         self.car = 0
-        self.initTrackers()
+        self._initTrackers()
 
-    def inStage(self):
+    def _inStage(self):
         return self.track != 0 and self.car != 0
 
-    def initTrackers(self):
-        self.respawnTracker = RespawnTracker()
-        self.timeTracker = TimeTracker()
-        self.gearTracker = GearTracker(self.respawnTracker)
-        self.progressTracker = ProgressTracker()
-        self.speedTracker = SpeedTracker()
-        self.inputTracker = InputTracker(self.speedTracker, self.playNotificationSound) if config.get.user_signals else BaseTracker()
+    def _initTrackers(self):
+        self.respawn_tracker = RespawnTracker()
+        self.time_tracker = TimeTracker()
+        self.gear_tracker = GearTracker(self.respawn_tracker)
+        self.progress_tracker = ProgressTracker()
+        self.speed_tracker = SpeedTracker()
+        self.input_tracker = InputTracker(self.speed_tracker, self._playNotificationSound) if config.GET.user_signals else BaseTracker()
 
-    def startStage(self, stats):
-        dbAccess = self.databaseAccess
+    def _startStage(self, stats):
+        dbAccess = self.database_access
 
-        track_z = stats[6]
-        track_length = self.progressTracker.getTrackLength()
-        self.track = dbAccess.identifyTrack(track_z, track_length)
+        trackZ = stats[6]
+        trackLength = self.progress_tracker.getTrackLength()
+        self.track = dbAccess.identifyTrack(trackZ, trackLength)
         trackId = identify(self.track)
         if trackId != AMBIGUOUS:
-            self.logTrack(trackId)
+            self._logTrack(trackId)
 
-        car_data = stats[63:66]  # max_rpm, idle_rpm, top_gear
-        self.car = dbAccess.identifyCar(*tuple(car_data))
+        carData = stats[63:66]  # max_rpm, idle_rpm, top_gear
+        self.car = dbAccess.identifyCar(*tuple(carData))
         carId = identify(self.car)
         if carId != AMBIGUOUS:
-            self.logCar(carId)
+            self._logCar(carId)
 
-        logger.debug("%s.%s.%s.started", self.userArray[0], trackId, carId)
+        logger.debug("%s.%s.%s.started", self.user_array[0], trackId, carId)
 
-        if config.get.show_car_controls:
-            self.showCarControlInformation()
+        if config.GET.show_car_controls:
+            self._showCarControlInformation()
 
-    def finishStage(self, stats):
+    def _finishStage(self, stats):
         laptime = stats[62]
         timestamp = time.time()
 
-        track, car = self.handleAmbiguities(timestamp)
-        previousBest = self.databaseAccess.recordResults(track, car, timestamp, laptime, self.formatTopSpeed())
+        track, car = self._handleAmbiguities(timestamp)
+        previousBest = self.database_access.recordResults(track, car, timestamp, laptime, self._formatTopSpeed())
         ambiguities = identify(self.car) == AMBIGUOUS or identify(self.track) == AMBIGUOUS
 
         if ambiguities or previousBest is None:
-            self.logResults(laptime, track, car)
+            self._logResults(laptime, track, car)
         else:
             previousBestTime = previousBest[1]
-            self.logResults(laptime, track, car, previousBestTime)
+            self._logResults(laptime, track, car, previousBestTime)
 
-    def handleAmbiguities(self, timestamp):
-        car = self.ambiguousResultHandler.handleAmbiguousCars(timestamp, self.car, self.track, self.gearTracker, self.inputTracker)
+    def _handleAmbiguities(self, timestamp):
+        car = self.ambiguous_result_handler.handleAmbiguousCars(timestamp, self.car, self.track, self.gear_tracker, self.input_tracker)
         if identify(self.car) == AMBIGUOUS and identify(car) != AMBIGUOUS:
-            self.logCar(car)
+            self._logCar(car)
 
-        track = self.ambiguousResultHandler.handleAmbiguousTracks(timestamp, car, self.track)
+        track = self.ambiguous_result_handler.handleAmbiguousTracks(timestamp, car, self.track)
 
         return identify(track), identify(car)
 
-    def finishedDR2TimeTrial(self, stats, trackProgess):
-        return trackProgess >= completionProgress and self.allZeroStats(stats)
+    def _finishedDR2TimeTrial(self, stats, trackProgess):
+        return trackProgess >= COMPLETION_PROGRESS and self._allZeroStats(stats)
 
-    def handleGameState(self, isAborted, inStage, lap, stageProgress, stats):
-        if inStage and (lap == 1 or self.finishedDR2TimeTrial(stats, stageProgress)):
-            self.finishStage(stats)
+    def _handleGameState(self, isAborted, inStage, lap, stageProgress, stats):
+        if inStage and (lap == 1 or self._finishedDR2TimeTrial(stats, stageProgress)):
+            self._finishStage(stats)
             self.resetRecognition()
 
         elif isAborted:
             self.resetRecognition()
 
-        elif self.statsWithTelemetry(stats) and stageProgress <= goLineProgress and not inStage:
-            self.startStage(stats)
+        elif self._statsWithTelemetry(stats) and stageProgress <= GO_LINE_PROGRESS and not inStage:
+            self._startStage(stats)
 
-    def playNotificationSound(self):
+    def _playNotificationSound(self):
         try:
             waveObj = sa.WaveObject.from_wave_file('notify.wav')
             waveObj.play()
-        except:
+        except:  #pylint: disable=bare-except
             logger.debug('Failed to play notification')

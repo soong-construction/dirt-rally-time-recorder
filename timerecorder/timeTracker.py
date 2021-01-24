@@ -1,17 +1,20 @@
+'''
+Essential time tracking.
+Note: Field Time is not reset when restarting events (but for: new/proceeding events, second runs on PP).
+'''
 from .baseTracker import BaseTracker
 
-# Field Time is not reset when restarting events (but for: new/proceeding events, second runs on PP).
 class TimeTracker(BaseTracker):
-    
+
     def __init__(self):
         self.time = 0
-        self.previousTime = None
+        self.previous_time = None
 
     def track(self, stats):
-        self.previousTime = self.time
+        self.previous_time = self.time
         self.time = stats[0]
-            
+
     def getTimeDelta(self):
-        if self.previousTime is None:
+        if self.previous_time is None:
             return 0
-        return self.time - self.previousTime
+        return self.time - self.previous_time

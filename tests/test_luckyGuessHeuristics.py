@@ -8,21 +8,22 @@ class TestLuckyGuessHeuristics(unittest.TestCase):
         unittest.TestCase.__init__(self, methodName)
 
     def testReturnsMatchingCandidate(self):
-        car_candidates = [100, 200]
-        self.thing = LuckyGuessHeuristics(car_candidates)
-        self.assertIn(self.thing.guessCar(), car_candidates, 'Did not return candidate')
+        carCandidates = [100, 200]
+        self.thing = LuckyGuessHeuristics(carCandidates)
+        self.assertIn(self.thing.guessCar(), carCandidates, 'Did not return candidate')
 
     def testNotApplicableForManyCandidates(self):
-        car_candidates = [100, 200, 300, 400]
-        self.thing = LuckyGuessHeuristics(car_candidates)
+        carCandidates = [100, 200, 300, 400]
+        self.thing = LuckyGuessHeuristics(carCandidates)
         self.assertIsNone(self.thing.guessCar())
 
     def testReturnsSameCandidateForSeededRandom(self):
-        car_candidates = [100, 200, 300]
-        
-        self.thing = LuckyGuessHeuristics(car_candidates, random.seed(0))
-        self.thing2 = LuckyGuessHeuristics(car_candidates, random.seed(0)) 
-        self.assertEqual(self.thing.guessCar(), self.thing2.guessCar())
+        carCandidates = [100, 200, 300]
+
+        for _ in range(0, 1000):
+            thing = LuckyGuessHeuristics(carCandidates, random.seed(0))
+            thing2 = LuckyGuessHeuristics(carCandidates, random.seed(0))
+            self.assertEqual(thing.guessCar(), thing2.guessCar())
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,78 +1,79 @@
+'''
+Manages update scripts necessary for resolution of ambiguous recordings
+'''
+import os
+import time
 import re
 from datetime import datetime, timedelta
 from _datetime import timezone
-import time
 from .log import getLogger
-import os
 from . import config
 
-scriptRegex = r"(\d{9,10})_\S+_\S+\.bat"
-scriptTemplate = 'sqlite3 %s "%s"'
+SCRIPT_REGEX = r"(\d{9,10})_\S+_\S+\.bat"
+SCRIPT_TEMPLATE = 'sqlite3 {} "{}"'
 
 logger = getLogger(__name__)
 
 def isUpdateScript(file):
-    return re.match(scriptRegex, file)
+    return re.match(SCRIPT_REGEX, file)
 
-class UpdateScriptHandler(object):
+class UpdateScriptHandler():
 
     def __init__(self, dbName):
-        self.dbName = dbName
-        pass
+        self.db_name = dbName
 
-    def buildFileName(self, track, car, timestamp):
-        return str(int(timestamp)) + '_' + track.replace(' ', '') + '_' + car.replace(' ', '') + '.bat'
+    def _buildFileName(self, track, car, timestamp):
+        return '{}_{}_{}.bat'.format(int(timestamp), track.replace(' ', ''), car.replace(' ', ''))
 
-    def buildScript(self, statement):
-        return scriptTemplate % (self.dbName, statement)
+    def _buildScript(self, statement):
+        return SCRIPT_TEMPLATE.format(self.db_name, statement)
 
     def writeScript(self, track, car, timestamp, updateStatement):
 
-        fileName = self.buildFileName(track, car, timestamp)
+        fileName = self._buildFileName(track, car, timestamp)
 
         insertFile = open(file=fileName, mode='w', encoding='utf-8', newline='\n')
-        insertFile.write(self.buildScript(updateStatement))
+        insertFile.write(self._buildScript(updateStatement))
 
         return fileName
 
-    def listUpdateScripts(self, directory):
-        file_list = os.listdir(directory)
-        return [directory + '/' + file for file in file_list if isUpdateScript(file)]
+    def _listUpdateScripts(self, directory):
+        fileList = os.listdir(directory)
+        return [directory + '/' + file for file in fileList if isUpdateScript(file)]
 
-    def isBeforeDeadline(self, time, keep_for_days, script):
-        matches = re.finditer(scriptRegex, script)
+    def _isBeforeDeadline(self, _datetime, keepForDays, script):
+        matches = re.finditer(SCRIPT_REGEX, script)
         match = next(matches)
-        
-        deadline = time - timedelta(days = keep_for_days)
 
-        creation_timestamp = int(match.group(1))
-        creation_time = datetime.fromtimestamp(creation_timestamp, timezone.utc)
+        deadline = _datetime - timedelta(days=keepForDays)
 
+        creationTimestamp = int(match.group(1))
+        creationTime = _datetime.fromtimestamp(creationTimestamp, timezone.utc)
 
-        return creation_time < deadline
+        return creationTime < deadline
 
-    def warnShortRetentionTime(self):
+    def _warnShortRetentionTime(self):
         return logger.warning(
             ('CAUTION: Keeping update scripts for less than %s days. '
-                'Follow possible hints to update scripts directly after your session.'), config.keep_update_scripts_days_default)
+                'Follow possible hints to update scripts directly after your session.'), config.KEEP_UPDATE_SCRIPTS_DAYS_DEFAULT)
 
-    def listOldUpdateScripts(self, time, directory):
-        keep_for_days = config.get.keep_update_scripts_days
-        if keep_for_days < config.keep_update_scripts_days_default:
-            self.warnShortRetentionTime()
+    def _listOldUpdateScripts(self, _time, directory):
+        keepForDays = config.GET.keep_update_scripts_days
+        if keepForDays < config.KEEP_UPDATE_SCRIPTS_DAYS_DEFAULT:
+            self._warnShortRetentionTime()
 
-        scripts = self.listUpdateScripts(directory)
+        scripts = self._listUpdateScripts(directory)
 
-        old_scripts = filter(lambda script: self.isBeforeDeadline(time, keep_for_days, script), scripts)
+        oldScripts = filter(lambda script: self._isBeforeDeadline(_time, keepForDays, script), scripts)
 
-        return list(old_scripts)
+        return list(oldScripts)
 
-    def delete(self, file):
+    def _delete(self, file):
         os.remove(file)
 
     def cleanUp(self, directory):
         logger.debug('Cleaning up update scripts...')
         now = datetime.fromtimestamp(time.time(), timezone.utc)
-        for file in self.listOldUpdateScripts(now, directory):
+        for file in self._listOldUpdateScripts(now, directory):
             logger.debug('Deleting %s', os.path.basename(file))
-            self.delete(file)
+            self._delete(file)

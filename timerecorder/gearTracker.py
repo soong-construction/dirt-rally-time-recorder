@@ -6,41 +6,41 @@ logger = getLogger(__name__)
 class GearTracker(BaseTracker):
 
     def __init__(self, respawnTracker):
-        self.respawnTracker = respawnTracker
-        self.lastGear = None
-        self.changeCount = 0
-        self.skipCount = 0
+        self.respawn_tracker = respawnTracker
+        self.last_gear = None
+        self.change_count = 0
+        self.skip_count = 0
 
-    def checkGearChanged(self, current_gear):
-        if current_gear != self.lastGear:
-            self.changeCount += 1
+    def checkGearChanged(self, currentGear):
+        if currentGear != self.last_gear:
+            self.change_count += 1
 
-    def checkGearSkipped(self, current_gear):
-        distance = self.lastGear - current_gear
+    def checkGearSkipped(self, currentGear):
+        distance = self.last_gear - currentGear
         if abs(distance) > 1:
-            self.skipCount += 1
-            logger.log(VERBOSE, 'GEAR SKIPPED: %s -> %s', self.lastGear, current_gear)
+            self.skip_count += 1
+            logger.log(VERBOSE, 'GEAR SKIPPED: %s -> %s', self.last_gear, currentGear)
 
     def track(self, stats):
-        current_gear = stats[33]
+        currentGear = stats[33]
         # Ignore neutral = 0
-        if current_gear == 0:
+        if currentGear == 0:
             return
 
         # Handle reverse gear = -1 (DR1: 10.0)
-        if current_gear == -1 or current_gear == 10:
-            current_gear = 0
+        if currentGear in (-1, 10):
+            currentGear = 0
 
-        respawn = self.respawnTracker.isRecover() or self.respawnTracker.isRestart()
-        
-        if not (respawn or self.lastGear is None):
-            self.checkGearChanged(current_gear)
-            self.checkGearSkipped(current_gear)
+        respawn = self.respawn_tracker.isRecover() or self.respawn_tracker.isRestart()
 
-        self.lastGear = current_gear
+        if not (respawn or self.last_gear is None):
+            self.checkGearChanged(currentGear)
+            self.checkGearSkipped(currentGear)
+
+        self.last_gear = currentGear
 
     def getGearChangeCount(self):
-        return self.changeCount
+        return self.change_count
 
     def getGearSkipCount(self):
-        return self.skipCount
+        return self.skip_count

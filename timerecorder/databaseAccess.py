@@ -1,3 +1,6 @@
+'''
+Abstraction for the database, allowing for tests
+'''
 from .log import getLogger, VERBOSE
 
 logger = getLogger(__name__)
@@ -11,91 +14,91 @@ class DatabaseAccess:
     def __init__(self, database):
         self.database = database
 
-    def tryIdentify(self, it, it_list, debug_log, verbose_log):
-        if (len(it_list) == 0):
+    def _tryIdentify(self, it, itList, debugLog, verboseLog):
+        if len(itList) == 0:
             logger.warning("Failed to identify %s", it)
-            debug_log(logger)
-            verbose_log(logger, self.database)
+            debugLog(logger)
+            verboseLog(logger, self.database)
 
             return []
 
-        elif (len(it_list) == 1):
-            index, _ = it_list[0]
+        if len(itList) == 1:
+            index, _ = itList[0]
             return index
 
-        logger.warning("Ambiguous %s data, %s matches", it, len(it_list))
-        debug_log(logger)
+        logger.warning("Ambiguous %s data, %s matches", it, len(itList))
+        debugLog(logger)
 
-        return list(index for (index, _) in it_list)
+        return list(index for (index, _) in itList)
 
-    def identifyTrack(self, z, tracklength):
-        debug_log = lambda logger: logger.debug("Length: %s (Z: %s)", str(tracklength), str(z))
-        verbose_log = lambda logger, db: logger.log(VERBOSE, db.getTrackInsertStatement(tracklength, z))
+    def identifyTrack(self, startZ, tracklength):
+        debugLog = lambda logger: logger.debug("Length: %s (Z: %s)", str(tracklength), str(startZ))
+        verboseLog = lambda logger, db: logger.log(VERBOSE, db.getTrackInsertStatement(tracklength, startZ))
 
-        it_list = self.database.loadTracks(tracklength, z)
-        return self.tryIdentify("track", it_list, debug_log, verbose_log)
+        itList = self.database.loadTracks(tracklength, startZ)
+        return self._tryIdentify("track", itList, debugLog, verboseLog)
 
-    def identifyCar(self, max_rpm, idle_rpm, top_gear):
-        debug_log = lambda logger: logger.debug("Idle/Max RPM: %s - %s", str(idle_rpm), str(max_rpm))
-        verbose_log = lambda logger, db: logger.log(VERBOSE, db.getCarInsertStatement(max_rpm, idle_rpm))
+    def identifyCar(self, maxRpm, idleRpm, topGear):
+        debugLog = lambda logger: logger.debug("Idle/Max RPM: %s - %s", str(idleRpm), str(maxRpm))
+        verboseLog = lambda logger, db: logger.log(VERBOSE, db.getCarInsertStatement(maxRpm, idleRpm))
 
-        it_list = self.database.loadCars(idle_rpm, max_rpm, top_gear)
+        itList = self.database.loadCars(idleRpm, maxRpm, topGear)
 
-        return self.tryIdentify("car", it_list, debug_log, verbose_log)
+        return self._tryIdentify("car", itList, debugLog, verboseLog)
 
-    def handleCarUpdates(self, car_list, timestamp, track, updateHandler):
-        updates = self.database.getCarUpdateStatements(timestamp, car_list)
+    def handleCarUpdates(self, carList, timestamp, track, updateHandler):
+        updates = self.database.getCarUpdateStatements(timestamp, carList)
         for index, update in enumerate(updates):
-            elementId = car_list[index]
+            elementId = carList[index]
             carName = self.database.getCarName(elementId)
             trackName = self.database.getTrackName(track) if identify(track) != AMBIGUOUS else 'UNKNOWN'
 
             updateHandler(trackName, carName, timestamp, update)
 
-    def handleTrackUpdates(self, track_list, timestamp, car, updateHandler):
-        updates = self.database.getTrackUpdateStatements(timestamp, track_list)
+    def handleTrackUpdates(self, trackList, timestamp, car, updateHandler):
+        updates = self.database.getTrackUpdateStatements(timestamp, trackList)
         for index, update in enumerate(updates):
-            elementId = track_list[index]
+            elementId = trackList[index]
             trackName = self.database.getTrackName(elementId)
             carName = self.database.getCarName(car) if identify(car) != AMBIGUOUS else 'UNKNOWN'
 
             updateHandler(trackName, carName, timestamp, update)
 
-    def mapCarsToShifting(self, car_candidates):
-        shifting_data = map(self.database.loadShiftingData, car_candidates)
-        return zip(car_candidates, shifting_data)
+    def mapCarsToShifting(self, carCandidates):
+        shiftingData = map(self.database.loadShiftingData, carCandidates)
+        return zip(carCandidates, shiftingData)
 
     def recordResults(self, track, car, timestamp, laptime, topspeed):
         return self.database.recordResults(track, car, timestamp, laptime, topspeed)
 
-    def describeHandbrake(self, car):
+    def _describeHandbrake(self, car):
         hasHandbrake = self.database.loadHandbrakeData(car)
-        if (hasHandbrake):
+        if hasHandbrake:
             return "with HANDBRAKE" + ", "
         return ""
 
-    def describeShifting(self, car):
+    def _describeShifting(self, car):
         shiftingData = self.database.loadShiftingData(car)
         return shiftingData + " shifting, " if shiftingData else ""
 
-    def describeGears(self, car):
+    def _describeGears(self, car):
         gearData = self.database.loadGearsData(car)
         return str(gearData) + " speed, " if gearData else ""
 
-    def describeClutch(self, car):
+    def _describeClutch(self, car):
         hasClutchPedal = self.database.loadClutchData(car)
-        if (hasClutchPedal):
+        if hasClutchPedal:
             return "with manual CLUTCH" + ", "
         return ""
 
     def describeCarInterfaces(self, car):
         line = ""
-        line += self.describeShifting(car)
-        line += self.describeGears(car)
-        line += self.describeClutch(car)
-        line += self.describeHandbrake(car)
+        line += self._describeShifting(car)
+        line += self._describeGears(car)
+        line += self._describeClutch(car)
+        line += self._describeHandbrake(car)
 
-        if (line == ""):
+        if line == "":
             line = "NO CONTROL DATA"
         else:
             line = line[:-2]

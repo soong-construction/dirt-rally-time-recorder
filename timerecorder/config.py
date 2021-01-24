@@ -1,100 +1,113 @@
-from .log import getLogger
-import yaml
+'''
+Generates and parses config.yml and provides dict-like access to it
+'''
 import os
+import yaml
+from .log import getLogger
 
 logger = getLogger(__name__)
 # Never import as identifier directly, as this has copy-by-value semantics
-get = None
+GET = None
 
-telemetry_server = 'telemetry_server'
-host = 'host'
-port = 'port'
-speed_unit = 'speed_unit'
-show_car_controls = 'show_car_controls'
-keep_update_scripts_days = 'keep_update_scripts_days'
-keep_update_scripts_days_default = 7
+SPEED_UNIT = 'speed_unit'
+SHOW_CAR_CONTROLS = 'show_car_controls'
+KEEP_UPDATE_SCRIPTS_DAYS = 'keep_update_scripts_days'
+KEEP_UPDATE_SCRIPTS_DAYS_DEFAULT = 7
 
-heuristics_settings = 'heuristics'
-heuristics_activate = 'activate'
-authentic_shifting = 'authentic_shifting'
-user_signals = 'user_signals'
+HEURISTICS_SETTINGS = 'heuristics'
+HEURISTICS_ACTIVATE = 'activate'
+AUTHENTIC_SHIFTING = 'authentic_shifting'
+USER_SIGNALS = 'user_signals'
+
+TELEMETRY_SERVER = 'telemetry_server'
+HOST = 'host'
+PORT = 'port'
 
 def readVersion(approot):
     with open(approot + '/VERSION', encoding='utf-8', newline='\n') as file:
         return file.readline().strip()
-    
+
 def init(filename):
-    global get
+    global GET  #pylint: disable=global-statement
     config = Config(filename)
     config.load()
-    get = config
+    GET = config
 
 # After https://codereview.stackexchange.com/a/186672 by Graipher
-class Config(dict):
+class Config(dict):  #pylint: disable=too-many-instance-attributes
 
     def readFromFile(self, filename):
         try:
-            with open(filename, encoding='utf-8', newline='\n') as f:
-                super(Config, self).update(yaml.load(f, yaml.SafeLoader) or {})
+            with open(filename, encoding='utf-8', newline='\n') as file:
+                super().update(yaml.load(file, yaml.SafeLoader) or {})
         except:
-            raise IOError(os.path.basename(filename) + ' seems to be corrupt, please check or delete file.')
+            raise IOError(f'{os.path.basename(filename)} seems to be corrupt, please check or delete file.')  #pylint: disable=raise-missing-from
 
-    def __init__(self, filename):
+    def __init__(self, filename):  #pylint: disable=super-init-not-called
         self.filename = filename
         if os.path.isfile(filename):
             self.readFromFile(filename)
-        
-        self.migrate()
+
+        self.server = None
+        self.speed_unit = None
+        self.show_car_controls = None
+        self.keep_update_scripts_days = None
+
+        self.heuristics_activated = None
+        self.authentic_shifting = None
+        self.user_signals = None
+
+        self._migrate()
 
     def dump(self):
-        with open(file=self.filename, mode='w', encoding='utf-8', newline='\n') as f:
-            yaml.dump(self.copy(), f)
+        with open(file=self.filename, mode='w', encoding='utf-8', newline='\n') as file:
+            yaml.dump(self.copy(), file)
 
     def __setitem__(self, key, value):
-        super(Config, self).__setitem__(key, value)
+        super().__setitem__(key, value)
         self.dump()
 
     def __delitem__(self, key):
-        super(Config, self).__delitem__(key)
+        super().__delitem__(key)
         self.dump()
 
     def update(self, kwargs):
-        super(Config, self).update(kwargs)
-        self.dump()
-    
-    def setDefaultHeuristics(self):
-        default_heuristics = {heuristics_activate: 0, authentic_shifting: 0, user_signals: 0}
-        self.setdefault(heuristics_settings, default_heuristics)
-        self[heuristics_settings].setdefault(heuristics_activate, default_heuristics[heuristics_activate])
-        self[heuristics_settings].setdefault(authentic_shifting, default_heuristics[authentic_shifting])
-        self[heuristics_settings].setdefault(user_signals, default_heuristics[user_signals])
-
-    def migrate(self):
-        default_server = {host:'127.0.0.1', port:20777}
-        self.setdefault(telemetry_server, default_server)
-        self[telemetry_server].setdefault(host, default_server[host])
-        self[telemetry_server].setdefault(port, default_server[port])
-        
-        self.setdefault(speed_unit, 'kph')
-        self.setdefault(show_car_controls, 1)
-        self.setdefault(keep_update_scripts_days, keep_update_scripts_days_default)
-        
-        self.setDefaultHeuristics()
+        super().update(kwargs)
         self.dump()
 
-    def loadBasicSettings(self):
-        telemetry = self[telemetry_server]
-        self.server = telemetry[host], int(telemetry[port])
-        self.speed_unit = self[speed_unit]
-        self.show_car_controls = int(self[show_car_controls])
-        self.keep_update_scripts_days = int(self[keep_update_scripts_days])
+    def _setDefaultHeuristics(self):
+        defaultHeuristics = {HEURISTICS_ACTIVATE: 0, AUTHENTIC_SHIFTING: 0, USER_SIGNALS: 0}
+        self.setdefault(HEURISTICS_SETTINGS, defaultHeuristics)
+        self[HEURISTICS_SETTINGS].setdefault(HEURISTICS_ACTIVATE, defaultHeuristics[HEURISTICS_ACTIVATE])
+        self[HEURISTICS_SETTINGS].setdefault(AUTHENTIC_SHIFTING, defaultHeuristics[AUTHENTIC_SHIFTING])
+        self[HEURISTICS_SETTINGS].setdefault(USER_SIGNALS, defaultHeuristics[USER_SIGNALS])
 
-    def loadHeuristics(self):
-        heuristics = self[heuristics_settings]
-        self.heuristics_activated = int(heuristics[heuristics_activate])
-        self.authentic_shifting = int(heuristics[authentic_shifting])
-        self.user_signals = int(heuristics[user_signals])
-        
+    def _migrate(self):
+        defaultServer = {HOST:'127.0.0.1', PORT:20777}
+        self.setdefault(TELEMETRY_SERVER, defaultServer)
+        self[TELEMETRY_SERVER].setdefault(HOST, defaultServer[HOST])
+        self[TELEMETRY_SERVER].setdefault(PORT, defaultServer[PORT])
+
+        self.setdefault(SPEED_UNIT, 'kph')
+        self.setdefault(SHOW_CAR_CONTROLS, 1)
+        self.setdefault(KEEP_UPDATE_SCRIPTS_DAYS, KEEP_UPDATE_SCRIPTS_DAYS_DEFAULT)
+
+        self._setDefaultHeuristics()
+        self.dump()
+
+    def _loadBasicSettings(self):
+        telemetry = self[TELEMETRY_SERVER]
+        self.server = telemetry[HOST], int(telemetry[PORT])
+        self.speed_unit = self[SPEED_UNIT]
+        self.show_car_controls = int(self[SHOW_CAR_CONTROLS])
+        self.keep_update_scripts_days = int(self[KEEP_UPDATE_SCRIPTS_DAYS])
+
+    def _loadHeuristics(self):
+        heuristics = self[HEURISTICS_SETTINGS]
+        self.heuristics_activated = int(heuristics[HEURISTICS_ACTIVATE])
+        self.authentic_shifting = int(heuristics[AUTHENTIC_SHIFTING])
+        self.user_signals = int(heuristics[USER_SIGNALS])
+
         if self.heuristics_activated:
             logger.info('HEURISTICS activated')
 
@@ -103,9 +116,9 @@ class Config(dict):
         file = os.path.basename(self.filename)
 
         try:
-            self.loadBasicSettings()
-            self.loadHeuristics()
-            
-        except Exception as e:
-            logger.debug('Failed to load config file %s: %s', file, e)
-            raise IOError(file + ' seems to be corrupt, please check or delete file.') from None
+            self._loadBasicSettings()
+            self._loadHeuristics()
+
+        except Exception as ex:
+            logger.debug('Failed to load config file %s: %s', file, ex)
+            raise IOError(f'{file} seems to be corrupt, please check or delete file.') from None
