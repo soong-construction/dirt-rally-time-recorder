@@ -286,7 +286,7 @@ module-naming-style=camelCase
 
 # Regular expression matching correct module names. Overrides module-naming-
 # style.
-module-rgx=test_[^_]+
+module-rgx=test(s|_[^_]+)
 
 # Colon-delimited sets of names that determine each other's naming style when
 # the name regexes allow several styles.
@@ -373,7 +373,7 @@ ignore-docstrings=yes
 ignore-imports=no
 
 # Minimum lines number of a similarity.
-min-similarity-lines=4
+min-similarity-lines=8
 
 
 [SPELLING]
