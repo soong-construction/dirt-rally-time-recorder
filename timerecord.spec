@@ -9,10 +9,10 @@ index = sys.argv.index('--name')
 namearg = str(sys.argv[index + 1])
 
 # Avoid Tk/Tcl dependency: https://github.com/pyinstaller/pyinstaller/wiki/Recipe-remove-tkinter-tcl
-sys.modules['FixTk'] = None
-tkExcludes = ['FixTk', 'tcl', 'tk', '_tkinter', 'tkinter', 'Tkinter']
+# sys.modules['FixTk'] = None
+tkExcludes = []# ['FixTk', 'tcl', 'tk', '_tkinter', 'tkinter', 'Tkinter']
 
-stdlibExcludes = ['_bz2', '_ctypes', '_hashlib', '_lzma', '_ssl', 'pyexpat', 'lib2to3', 'asyncio']
+stdlibExcludes = []# ['_bz2', '_ctypes', '_hashlib', '_lzma', '_ssl', 'pyexpat', 'lib2to3', 'asyncio']
 
 a = Analysis(['timerecorder/timerecord.py'],
              pathex=['.'],
@@ -51,10 +51,10 @@ exe = EXE(pyz,
           console=True )
 
 # Exclude Universal CRT to spare licensing issues
-a.binaries = [x for x in a.binaries if not x[0] == 'VCRUNTIME140.dll']
-a.binaries = [x for x in a.binaries if not x[0] == 'ucrtbase.dll']
-a.binaries = [x for x in a.binaries if not x[0].startswith('api-ms-win-core-')]
-a.binaries = [x for x in a.binaries if not x[0].startswith('api-ms-win-crt-')]
+# a.binaries = [x for x in a.binaries if not x[0] == 'VCRUNTIME140.dll']
+# a.binaries = [x for x in a.binaries if not x[0] == 'ucrtbase.dll']
+# a.binaries = [x for x in a.binaries if not x[0].startswith('api-ms-win-core-')]
+# a.binaries = [x for x in a.binaries if not x[0].startswith('api-ms-win-crt-')]
 
 coll = COLLECT(exe,
                a.binaries,
