@@ -8,7 +8,7 @@ import sys
 index = sys.argv.index('--name')
 namearg = str(sys.argv[index + 1])
 
-stdlibExcludes = ['_bz2', '_ctypes', '_hashlib', '_lzma', '_ssl', 'pyexpat', 'asyncio']
+stdlibExcludes = ['_bz2', '_ctypes', '_hashlib', '_lzma', '_ssl', 'pyexpat', 'asyncio', '_decimal']
 
 a = Analysis(['timerecorder/timerecord.py'],
              pathex=['.'],
