@@ -4,6 +4,7 @@ Using an IDE is recommended, the author has been content with using [PyDev](http
 
 ## Requirements
 Cf. job `build` in `.github/workflows/main.yml`
+- some dependencies require a C++ compiler with SDK, cf. [this hint](https://stackoverflow.com/a/44953739)  
 Install coverage
 
 ## Tasks
