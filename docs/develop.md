@@ -4,6 +4,7 @@ Using an IDE is recommended, the author has been content with using [PyDev](http
 
 ## Requirements
 - to set up a Python enviroment with the necessary dependencies, cf. to the job `build` in `.github/workflows/main.yml`
+- some dependencies require a C++ compiler with SDK, cf. [this hint](https://stackoverflow.com/a/44953739)  
 - optionally, install coverage
 
 ## Tasks
@@ -65,8 +66,8 @@ The `LICENSE` must be kept up-to-date, although it should rarely change.
 The `THIRD_PARTY_LICENSES` include all works from outside this project, which must be compatible to the chosen `LICENSE`.
 - All used libraries like PyYAML: Include necessary texts
 - All used build tools like pytest: same
-- PyInstaller because we built bundles with it that are not bound to its license
-- CPython license including special module licenses for the bundles: https://docs.python.org/3.8/license.html#psf-license-agreement-for-python-release
+- PyInstaller because we build bundles with it that are not bound to its license
+- CPython including special module licenses for the bundles: https://docs.python.org/3.9/license.html#psf-license-agreement-for-python-release
 - All used binaries like sounds
 
 `xref-timerecord.html` from the bundling process can help identify dependencies.

@@ -14,7 +14,7 @@ def getProjectUrl():
 
 def init(filename):
     logFormat = '%(asctime)s %(levelname)s [%(name)s] %(message)s'
-    logging.basicConfig(format=logFormat, filename=filename, level=logging.DEBUG)
+    logging.basicConfig(format=logFormat, filename=filename, encoding='utf-8', level=logging.DEBUG)
     logging.log(VERBOSE, 'VERBOSE logging active if this line seen')
 
 def getLogger(module):

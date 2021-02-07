@@ -8,11 +8,7 @@ import sys
 index = sys.argv.index('--name')
 namearg = str(sys.argv[index + 1])
 
-# Avoid Tk/Tcl dependency: https://github.com/pyinstaller/pyinstaller/wiki/Recipe-remove-tkinter-tcl
-sys.modules['FixTk'] = None
-tkExcludes = ['FixTk', 'tcl', 'tk', '_tkinter', 'tkinter', 'Tkinter']
-
-stdlibExcludes = ['_bz2', '_ctypes', '_hashlib', '_lzma', '_ssl', 'pyexpat', 'lib2to3', 'asyncio']
+stdlibExcludes = ['_bz2', '_ctypes', '_hashlib', '_lzma', '_ssl', 'pyexpat', 'asyncio', '_decimal']
 
 a = Analysis(['timerecorder/timerecord.py'],
              pathex=['.'],
@@ -32,7 +28,7 @@ a = Analysis(['timerecorder/timerecord.py'],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
-             excludes=stdlibExcludes+tkExcludes,
+             excludes=stdlibExcludes,
              win_no_prefer_redirects=False,
              win_private_assemblies=False,
              cipher=block_cipher,
