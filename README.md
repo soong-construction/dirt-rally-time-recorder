@@ -88,7 +88,7 @@ Contributors cf. to `docs/develop.md`.
 ## Remainder
 Tested with
 - DiRT Rally (v1.22)
-- DiRT Rally 2.0 (v1.17)
+- DiRT Rally 2.0 (v1.18)
 
 UDP data recognition in collaboration with ErlerPhilipp: https://github.com/ErlerPhilipp/dr2_logger 
 
