@@ -90,10 +90,12 @@ Tested with
 - DiRT Rally (v1.22)
 - DiRT Rally 2.0 (v1.16)
 
-UDP data recognition in collaboration with ErlerPhilipp: https://github.com/ErlerPhilipp/dr2_logger 
+Ships with SQLite [3.35.5](https://www.sqlite.org/2021/sqlite-tools-win32-x86-3350500.zip).
 
-Thanks to Slocan for the initial version: https://github.com/Slocan/timerecord
+UDP data recognition in collaboration with ErlerPhilipp: https://github.com/ErlerPhilipp/dr2_logger.
 
-Credits to Billiam for the core code: https://github.com/Billiam/pygauge
+Thanks to Slocan for the initial version: https://github.com/Slocan/timerecord.
+
+Credits to Billiam for the core code: https://github.com/Billiam/pygauge.
 
 See `LICENSE` and `THIRD_PARTY_LICENSES.txt` for works used under license.
